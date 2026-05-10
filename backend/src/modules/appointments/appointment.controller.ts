@@ -1,0 +1,107 @@
+import { NextFunction, Request, Response } from 'express';
+import { AppointmentStatus } from '../../common/enums/appointment-status.enum';
+import { ApiError } from '../../middlewares/error.middleware';
+import * as appointmentService from './appointment.service';
+
+export const createAppointment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    if (!req.user) {
+      throw new ApiError(401, 'Unauthorized');
+    }
+
+    const { doctor, appointmentDate, startTime, endTime, reason } = req.body;
+
+    const data = await appointmentService.createAppointment(req.user, {
+      doctor,
+      appointmentDate,
+      startTime,
+      endTime,
+      reason,
+    });
+
+    res.status(201).json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const listAppointments = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    if (!req.user) {
+      throw new ApiError(401, 'Unauthorized');
+    }
+
+    const data = await appointmentService.listAppointments(req.user);
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAppointmentById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    if (!req.user) {
+      throw new ApiError(401, 'Unauthorized');
+    }
+
+    const data = await appointmentService.getAppointmentById(
+      String(req.params.id),
+      req.user,
+    );
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateAppointmentStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    if (!req.user) {
+      throw new ApiError(401, 'Unauthorized');
+    }
+
+    const { status } = req.body;
+
+    const data = await appointmentService.updateAppointmentStatus(
+      String(req.params.id),
+      status,
+      req.user,
+    );
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteAppointment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    if (!req.user) {
+      throw new ApiError(401, 'Unauthorized');
+    }
+
+    await appointmentService.deleteAppointment(String(req.params.id), req.user);
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+};
