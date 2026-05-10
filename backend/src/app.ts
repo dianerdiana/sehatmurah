@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express from 'express';
+import { HttpResponse } from './common/http-response';
 import { authRouter } from './modules/auth/auth.routes';
 import { doctorRouter } from './modules/doctors/doctor.routes';
 import { appointmentRouter } from './modules/appointments/appointment.routes';
@@ -14,7 +15,12 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/health', (_req, res) => {
-  res.json({ status: 'ok' });
+  res.json(
+    HttpResponse.success({
+      message: 'Health check ok',
+      data: { status: 'ok' },
+    }),
+  );
 });
 
 app.use('/api/auth', authRouter);
