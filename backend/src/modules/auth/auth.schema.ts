@@ -14,5 +14,5 @@ export const loginSchema = z.object({
   password: z.string().min(1, 'password is required').max(128),
 });
 
-export type RegisterSchema = z.infer<typeof registerSchema>;
-export type LoginSchema = z.infer<typeof loginSchema>;
+export type RegisterDto = z.infer<typeof registerSchema>;
+export type LoginDto = z.infer<typeof loginSchema>;

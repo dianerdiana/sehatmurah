@@ -5,9 +5,9 @@ import { UserModel } from '../../models/user.model';
 import { signAccessToken } from '../../utils/jwt';
 import { comparePassword, hashPassword } from '../../utils/password';
 
-import { LoginSchema, RegisterSchema } from './auth.schema';
+import { LoginDto, RegisterDto } from './auth.schema';
 
-export const register = async (payload: RegisterSchema) => {
+export const register = async (payload: RegisterDto) => {
   const role = payload.role ?? UserRole.PATIENT;
 
   const existingUser = await UserModel.findOne({
@@ -49,7 +49,7 @@ export const register = async (payload: RegisterSchema) => {
   };
 };
 
-export const login = async (payload: LoginSchema) => {
+export const login = async (payload: LoginDto) => {
   const user = await UserModel.findOne({
     email: payload.email.toLowerCase(),
   }).select('+password');
