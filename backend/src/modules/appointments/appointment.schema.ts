@@ -22,7 +22,7 @@ export const createAppointmentBodySchema = z.object({
 });
 
 export const updateAppointmentStatusBodySchema = z.object({
-  status: z.nativeEnum(AppointmentStatus),
+  status: z.enum(AppointmentStatus),
 });
 
 export const listAppointmentsQuerySchema = z.object({

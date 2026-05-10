@@ -9,7 +9,7 @@ export const registerBodySchema = z.object({
     .string()
     .min(8, 'password must be at least 8 characters')
     .max(128),
-  role: z.nativeEnum(UserRole).optional(),
+  role: z.enum(UserRole).optional(),
 });
 
 export const loginBodySchema = z.object({
