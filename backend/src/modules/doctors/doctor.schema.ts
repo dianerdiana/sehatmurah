@@ -39,7 +39,7 @@ export const createDoctorBodySchema = z.object({
   user: z.string().trim().min(1, 'user is required'),
   fullName: z.string().trim().min(1, 'fullName is required'),
   specialist: z.string().trim().min(1, 'specialist is required'),
-  profilePhoto: z.string().trim().url().optional(),
+  profilePhoto: z.url().optional(),
   experienceYears: z.number().int().min(0).optional(),
   description: z.string().trim().optional(),
   practiceLocation: practiceLocationSchema,
