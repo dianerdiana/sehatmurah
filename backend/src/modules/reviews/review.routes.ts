@@ -6,22 +6,22 @@ import { roleMiddleware } from '../../middlewares/role.middleware';
 import { validateRequest } from '../../middlewares/validate-request.middleware';
 
 import * as reviewController from './review.controller';
-import { createReviewBodySchema, reviewIdParamSchema } from './review.schema';
+import { createReviewSchema, reviewIdSchema } from './review.schema';
 
 export const reviewRouter = Router();
 
+reviewRouter.use(authMiddleware);
+
 reviewRouter.post(
   '/',
-  authMiddleware,
   roleMiddleware(UserRole.PATIENT),
-  validateRequest({ body: createReviewBodySchema }),
+  validateRequest({ body: createReviewSchema }),
   reviewController.createReview,
 );
 
 reviewRouter.delete(
   '/:id',
-  authMiddleware,
   roleMiddleware(UserRole.ADMIN),
-  validateRequest({ params: reviewIdParamSchema }),
+  validateRequest({ params: reviewIdSchema }),
   reviewController.deleteReview,
 );

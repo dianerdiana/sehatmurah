@@ -2,25 +2,14 @@ import { Types } from 'mongoose';
 
 import { ApiError } from '../../common/api-error';
 import { AppointmentStatus } from '../../common/enums/appointment-status.enum';
-import { UserRole } from '../../common/enums/user-role.enum';
 import { normalizePagination } from '../../common/pagination';
 import { AppointmentModel } from '../../models/appointment.model';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
 import { PatientProfileModel } from '../../models/patient-profile.model';
 import { ReviewModel } from '../../models/review.model';
-import { ListReviewsByDoctorQuery } from './review.schema';
+import { AuthUser } from '../../types/auth-user.type';
 
-interface AuthUser {
-  id: string;
-  role: UserRole;
-}
-
-interface CreateReviewInput {
-  doctor: string;
-  appointment?: string;
-  rating: number;
-  comment?: string;
-}
+import { CreateReviewDto, ListReviewsByDoctorDto } from './review.schema';
 
 const getPatientProfileId = async (userId: string): Promise<string> => {
   const patientProfile = await PatientProfileModel.findOne({ user: userId });
@@ -55,14 +44,7 @@ const recalculateDoctorRating = async (doctorId: string): Promise<void> => {
   });
 };
 
-export const createReview = async (
-  user: AuthUser,
-  payload: CreateReviewInput,
-) => {
-  if (user.role !== UserRole.PATIENT) {
-    throw new ApiError(403, 'Only PATIENT can create review');
-  }
-
+export const createReview = async (user: AuthUser, payload: CreateReviewDto) => {
   const doctor = await DoctorProfileModel.findById(payload.doctor);
   if (!doctor) {
     throw new ApiError(404, 'Doctor not found');
@@ -86,10 +68,7 @@ export const createReview = async (
     }
 
     if (appointment.status !== AppointmentStatus.COMPLETED) {
-      throw new ApiError(
-        400,
-        'Review is only allowed for completed appointment',
-      );
+      throw new ApiError(400, 'Review is only allowed for completed appointment');
     }
   }
 
@@ -106,11 +85,9 @@ export const createReview = async (
   return review;
 };
 
-export const listReviewsByDoctor = async (
-  doctorId: string,
-  query: ListReviewsByDoctorQuery,
-) => {
+export const listReviewsByDoctor = async (doctorId: string, query: ListReviewsByDoctorDto) => {
   const doctor = await DoctorProfileModel.findById(doctorId);
+
   if (!doctor) {
     throw new ApiError(404, 'Doctor not found');
   }
@@ -129,6 +106,7 @@ export const listReviewsByDoctor = async (
 
 export const deleteReview = async (reviewId: string) => {
   const review = await ReviewModel.findByIdAndDelete(reviewId);
+
   if (!review) {
     throw new ApiError(404, 'Review not found');
   }
