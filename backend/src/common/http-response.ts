@@ -1,3 +1,5 @@
+import { ApiErrorItem } from './api-error';
+
 export type ResponseMeta = {
   page?: number;
   limit?: number;
@@ -6,11 +8,6 @@ export type ResponseMeta = {
   sort?: 'asc' | 'desc';
   totalItems?: number;
   totalPages?: number;
-};
-
-export type ApiErrorItem = {
-  field?: string;
-  message: string;
 };
 
 export class HttpResponse<TData = unknown> {
