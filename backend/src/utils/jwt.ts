@@ -1,6 +1,7 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
-import { env } from '../config/env';
+
 import { UserRole } from '../common/enums/user-role.enum';
+import { env } from '../config/env';
 
 export interface AccessTokenPayload {
   sub: string;

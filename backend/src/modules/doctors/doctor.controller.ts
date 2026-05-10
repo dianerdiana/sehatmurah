@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { HttpResponse } from '../../common/http-response';
+
 import { ApiError } from '../../common/api-error';
+import { HttpResponse } from '../../common/http-response';
+
 import * as doctorService from './doctor.service';
 
 export const listDoctors = async (

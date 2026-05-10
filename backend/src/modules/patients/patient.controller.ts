@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
+
+import { ApiError } from '../../common/api-error';
 import { UserRole } from '../../common/enums/user-role.enum';
 import { HttpResponse } from '../../common/http-response';
-import { ApiError } from '../../common/api-error';
+
 import * as patientService from './patient.service';
 
 export const getMyProfile = async (

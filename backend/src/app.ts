@@ -1,13 +1,14 @@
 import cors from 'cors';
 import express from 'express';
+
 import { HttpResponse } from './common/http-response';
+import { errorHandler, notFoundHandler } from './middlewares/error.middleware';
+import { appointmentRouter } from './modules/appointments/appointment.routes';
 import { authRouter } from './modules/auth/auth.routes';
 import { doctorRouter } from './modules/doctors/doctor.routes';
-import { appointmentRouter } from './modules/appointments/appointment.routes';
 import { patientRouter } from './modules/patients/patient.routes';
-import { specialistRouter } from './modules/specialists/specialist.routes';
 import { reviewRouter } from './modules/reviews/review.routes';
-import { errorHandler, notFoundHandler } from './middlewares/error.middleware';
+import { specialistRouter } from './modules/specialists/specialist.routes';
 
 export const app = express();
 

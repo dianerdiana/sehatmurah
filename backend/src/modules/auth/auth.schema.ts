@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { UserRole } from '../../common/enums/user-role.enum';
 
 export const registerBodySchema = z.object({

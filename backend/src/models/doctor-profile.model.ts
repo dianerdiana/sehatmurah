@@ -1,4 +1,4 @@
-import { Document, Schema, Types, model } from 'mongoose';
+import { Document, model,Schema, Types } from 'mongoose';
 
 export interface IPracticeLocation {
   clinicName: string;

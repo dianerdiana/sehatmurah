@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { HttpResponse } from '../common/http-response';
+
 import { ApiError } from '../common/api-error';
+import { HttpResponse } from '../common/http-response';
 
 export const notFoundHandler = (_req: Request, res: Response): void => {
   res

@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import { HttpResponse } from '../../common/http-response';
-import * as appointmentService from './appointment.service';
+
 import { ApiError } from '../../common/api-error';
+import { HttpResponse } from '../../common/http-response';
+
+import * as appointmentService from './appointment.service';
 
 export const createAppointment = async (
   req: Request,

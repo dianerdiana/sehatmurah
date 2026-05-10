@@ -1,5 +1,4 @@
 import js from '@eslint/js';
-import vitest from '@vitest/eslint-plugin';
 import { defineConfig } from 'eslint/config';
 import prettier from 'eslint-config-prettier';
 import prettierPlugin from 'eslint-plugin-prettier';
@@ -10,9 +9,6 @@ import tseslint from 'typescript-eslint';
 export default defineConfig([
   {
     ignores: ['dist', 'node_modules', '.env'],
-  },
-  {
-    plugins: { vitest },
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -28,7 +24,6 @@ export default defineConfig([
       },
       globals: {
         ...globals.node,
-        ...globals.vitest,
       },
     },
     plugins: {
@@ -89,11 +84,7 @@ export default defineConfig([
       },
       globals: {
         ...globals.node,
-        ...vitest.environments.env.globals,
-        ...globals.vitest,
       },
     },
-    plugins: { vitest },
-    ...vitest.configs.recommended,
   },
 ]);

@@ -1,14 +1,16 @@
 import { Router } from 'express';
+
 import { UserRole } from '../../common/enums/user-role.enum';
 import { authMiddleware } from '../../middlewares/auth.middleware';
 import { roleMiddleware } from '../../middlewares/role.middleware';
 import { validateRequest } from '../../middlewares/validate-request.middleware';
+
+import * as appointmentController from './appointment.controller';
 import {
   appointmentIdParamSchema,
   createAppointmentBodySchema,
   updateAppointmentStatusBodySchema,
 } from './appointment.schema';
-import * as appointmentController from './appointment.controller';
 
 export const appointmentRouter = Router();
 

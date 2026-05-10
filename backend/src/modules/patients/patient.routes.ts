@@ -1,13 +1,15 @@
 import { Router } from 'express';
+
 import { UserRole } from '../../common/enums/user-role.enum';
 import { authMiddleware } from '../../middlewares/auth.middleware';
 import { roleMiddleware } from '../../middlewares/role.middleware';
 import { validateRequest } from '../../middlewares/validate-request.middleware';
+
+import * as patientController from './patient.controller';
 import {
   patientIdParamSchema,
   updateMyProfileBodySchema,
 } from './patient.schema';
-import * as patientController from './patient.controller';
 
 export const patientRouter = Router();
 

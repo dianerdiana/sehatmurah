@@ -1,9 +1,9 @@
+import { ApiError } from '../../common/api-error';
 import { UserRole } from '../../common/enums/user-role.enum';
 import { PatientProfileModel } from '../../models/patient-profile.model';
 import { UserModel } from '../../models/user.model';
-import { ApiError } from '../../common/api-error';
-import { comparePassword, hashPassword } from '../../utils/password';
 import { signAccessToken } from '../../utils/jwt';
+import { comparePassword, hashPassword } from '../../utils/password';
 
 interface RegisterInput {
   name: string;

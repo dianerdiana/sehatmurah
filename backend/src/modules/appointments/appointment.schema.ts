@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { AppointmentStatus } from '../../common/enums/appointment-status.enum';
 
 export const appointmentIdParamSchema = z.object({

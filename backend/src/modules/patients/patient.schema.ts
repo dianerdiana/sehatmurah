@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { Gender } from '../../common/enums/gender.enum';
 
 export const patientIdParamSchema = z.object({

@@ -1,15 +1,17 @@
 import { Router } from 'express';
+
 import { UserRole } from '../../common/enums/user-role.enum';
 import { authMiddleware } from '../../middlewares/auth.middleware';
 import { roleMiddleware } from '../../middlewares/role.middleware';
 import { validateRequest } from '../../middlewares/validate-request.middleware';
+
+import * as specialistController from './specialist.controller';
 import {
   createSpecialistBodySchema,
   listSpecialistsQuerySchema,
   specialistIdParamSchema,
   updateSpecialistBodySchema,
 } from './specialist.schema';
-import * as specialistController from './specialist.controller';
 
 export const specialistRouter = Router();
 

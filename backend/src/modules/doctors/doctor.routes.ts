@@ -1,8 +1,13 @@
 import { Router } from 'express';
+
 import { UserRole } from '../../common/enums/user-role.enum';
 import { authMiddleware } from '../../middlewares/auth.middleware';
 import { roleMiddleware } from '../../middlewares/role.middleware';
 import { validateRequest } from '../../middlewares/validate-request.middleware';
+import { listReviewsByDoctor } from '../reviews/review.controller';
+import { doctorIdParamSchema as doctorReviewParamSchema } from '../reviews/review.schema';
+
+import * as doctorController from './doctor.controller';
 import {
   createDoctorBodySchema,
   doctorIdParamSchema,
@@ -10,9 +15,6 @@ import {
   updateDoctorBodySchema,
   updateDoctorScheduleBodySchema,
 } from './doctor.schema';
-import { doctorIdParamSchema as doctorReviewParamSchema } from '../reviews/review.schema';
-import { listReviewsByDoctor } from '../reviews/review.controller';
-import * as doctorController from './doctor.controller';
 
 export const doctorRouter = Router();
 

@@ -1,8 +1,10 @@
 import { Router } from 'express';
+
 import { authMiddleware } from '../../middlewares/auth.middleware';
 import { validateRequest } from '../../middlewares/validate-request.middleware';
-import { loginBodySchema, registerBodySchema } from './auth.schema';
+
 import * as authController from './auth.controller';
+import { loginBodySchema, registerBodySchema } from './auth.schema';
 
 export const authRouter = Router();
 

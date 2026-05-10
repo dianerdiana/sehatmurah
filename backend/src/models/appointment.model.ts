@@ -1,4 +1,5 @@
-import { Document, Schema, Types, model } from 'mongoose';
+import { Document, model,Schema, Types } from 'mongoose';
+
 import { AppointmentStatus } from '../common/enums/appointment-status.enum';
 
 export interface IAppointment extends Document {

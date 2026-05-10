@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { verifyAccessToken } from '../utils/jwt';
+
 import { ApiError } from '../common/api-error';
+import { verifyAccessToken } from '../utils/jwt';
 
 export const authMiddleware = (
   req: Request,
