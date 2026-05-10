@@ -6,16 +6,16 @@ import { buildResponseMeta } from '../../common/pagination';
 
 import * as appointmentService from './appointment.service';
 import {
-  CreateAppointmentSchema,
-  ListAppointmentsSchema,
-  UpdateAppointmentStatusSchema,
+  CreateAppointmentDto,
+  ListAppointmentsDto,
+  UpdateAppointmentStatusDto,
 } from './appointment.schema';
 import { AuthUser } from '../../types/auth-user.type';
 
 export const createAppointment = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authUser = req.user as AuthUser;
-    const payload = req.body as CreateAppointmentSchema;
+    const payload = req.body as CreateAppointmentDto;
 
     const data = await appointmentService.createAppointment(authUser, payload);
 
@@ -28,7 +28,7 @@ export const createAppointment = async (req: Request, res: Response, next: NextF
 export const listAppointments = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authUser = req.user as AuthUser;
-    const payload = req.query as unknown as ListAppointmentsSchema;
+    const payload = req.query as unknown as ListAppointmentsDto;
     const result = await appointmentService.listAppointments(authUser, payload);
 
     res.json(
@@ -61,7 +61,7 @@ export const getAppointmentById = async (req: Request, res: Response, next: Next
 export const updateAppointmentStatus = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authUser = req.user as AuthUser;
-    const { status } = req.body as UpdateAppointmentStatusSchema;
+    const { status } = req.body as UpdateAppointmentStatusDto;
     const appointmentId = String(req.params.id);
 
     const data = await appointmentService.updateAppointmentStatus(appointmentId, status, authUser);

@@ -26,7 +26,7 @@ export const listAppointmentsSchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(10),
 });
 
-export type AppointmentIdSchema = z.infer<typeof appointmentIdSchema>;
-export type CreateAppointmentSchema = z.infer<typeof createAppointmentSchema>;
-export type UpdateAppointmentStatusSchema = z.infer<typeof updateAppointmentStatusSchema>;
-export type ListAppointmentsSchema = z.infer<typeof listAppointmentsSchema>;
+export type AppointmentIdDto = z.infer<typeof appointmentIdSchema>;
+export type CreateAppointmentDto = z.infer<typeof createAppointmentSchema>;
+export type UpdateAppointmentStatusDto = z.infer<typeof updateAppointmentStatusSchema>;
+export type ListAppointmentsDto = z.infer<typeof listAppointmentsSchema>;

@@ -8,10 +8,11 @@ import { PatientProfileModel } from '../../models/patient-profile.model';
 import { AuthUser } from '../../types/auth-user.type';
 import { generateBookingCode } from '../../utils/generate-booking-code';
 
-import { CreateAppointmentSchema, ListAppointmentsSchema } from './appointment.schema';
+import { CreateAppointmentDto, ListAppointmentsDto } from './appointment.schema';
 
 const getPatientProfileId = async (userId: string): Promise<string> => {
   const patientProfile = await PatientProfileModel.findOne({ user: userId });
+
   if (!patientProfile) {
     throw new ApiError(404, 'Patient profile not found');
   }
@@ -21,6 +22,7 @@ const getPatientProfileId = async (userId: string): Promise<string> => {
 
 const getDoctorProfileIdByUserId = async (userId: string): Promise<string> => {
   const doctorProfile = await DoctorProfileModel.findOne({ user: userId });
+
   if (!doctorProfile) {
     throw new ApiError(404, 'Doctor profile not found');
   }
@@ -28,11 +30,7 @@ const getDoctorProfileIdByUserId = async (userId: string): Promise<string> => {
   return doctorProfile._id.toString();
 };
 
-export const createAppointment = async (user: AuthUser, payload: CreateAppointmentSchema) => {
-  if (user.role !== UserRole.PATIENT) {
-    throw new ApiError(403, 'Only Patient can create appointment');
-  }
-
+export const createAppointment = async (user: AuthUser, payload: CreateAppointmentDto) => {
   const patientId = await getPatientProfileId(user.id);
 
   const doctor = await DoctorProfileModel.findById(payload.doctor);
@@ -58,7 +56,7 @@ export const createAppointment = async (user: AuthUser, payload: CreateAppointme
   return appointment;
 };
 
-export const listAppointments = async (user: AuthUser, payload: ListAppointmentsSchema) => {
+export const listAppointments = async (user: AuthUser, payload: ListAppointmentsDto) => {
   const filter: Record<string, unknown> = {};
 
   if (user.role === UserRole.PATIENT) {
@@ -118,11 +116,8 @@ export const updateAppointmentStatus = async (
   status: AppointmentStatus,
   user: AuthUser,
 ) => {
-  if (![UserRole.ADMIN, UserRole.DOCTOR].includes(user.role)) {
-    throw new ApiError(403, 'Forbidden');
-  }
-
   const appointment = await AppointmentModel.findById(appointmentId).populate('doctor', 'user');
+
   if (!appointment) {
     throw new ApiError(404, 'Appointment not found');
   }
