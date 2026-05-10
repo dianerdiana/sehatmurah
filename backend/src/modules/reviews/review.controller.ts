@@ -2,8 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 
 import { ApiError } from '../../common/api-error';
 import { HttpResponse } from '../../common/http-response';
+import { buildResponseMeta } from '../../common/pagination';
 
 import * as reviewService from './review.service';
+import { ListReviewsByDoctorQuery } from './review.schema';
 
 export const createReview = async (
   req: Request,
@@ -28,10 +30,21 @@ export const listReviewsByDoctor = async (
   next: NextFunction,
 ) => {
   try {
-    const data = await reviewService.listReviewsByDoctor(
+    const query = req.query as unknown as ListReviewsByDoctorQuery;
+    const result = await reviewService.listReviewsByDoctor(
       String(req.params.doctorId),
+      query,
     );
-    res.json(HttpResponse.success({ data }));
+
+    res.json(
+      HttpResponse.success({
+        data: result.items,
+        meta: buildResponseMeta({
+          ...query,
+          totalItems: result.totalItems,
+        }),
+      }),
+    );
   } catch (error) {
     next(error);
   }

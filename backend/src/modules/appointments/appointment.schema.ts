@@ -24,3 +24,10 @@ export const createAppointmentBodySchema = z.object({
 export const updateAppointmentStatusBodySchema = z.object({
   status: z.nativeEnum(AppointmentStatus),
 });
+
+export const listAppointmentsQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(10),
+});
+
+export type ListAppointmentsQuery = z.infer<typeof listAppointmentsQuerySchema>;

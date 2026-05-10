@@ -3,10 +3,12 @@ import { Types } from 'mongoose';
 import { ApiError } from '../../common/api-error';
 import { AppointmentStatus } from '../../common/enums/appointment-status.enum';
 import { UserRole } from '../../common/enums/user-role.enum';
+import { normalizePagination } from '../../common/pagination';
 import { AppointmentModel } from '../../models/appointment.model';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
 import { PatientProfileModel } from '../../models/patient-profile.model';
 import { ReviewModel } from '../../models/review.model';
+import { ListReviewsByDoctorQuery } from './review.schema';
 
 interface AuthUser {
   id: string;
@@ -104,15 +106,25 @@ export const createReview = async (
   return review;
 };
 
-export const listReviewsByDoctor = async (doctorId: string) => {
+export const listReviewsByDoctor = async (
+  doctorId: string,
+  query: ListReviewsByDoctorQuery,
+) => {
   const doctor = await DoctorProfileModel.findById(doctorId);
   if (!doctor) {
     throw new ApiError(404, 'Doctor not found');
   }
 
-  return ReviewModel.find({ doctor: doctorId })
+  const { page, limit, skip } = normalizePagination(query);
+  const totalItems = await ReviewModel.countDocuments({ doctor: doctorId });
+
+  const items = await ReviewModel.find({ doctor: doctorId })
     .populate('patient', 'fullName')
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  return { items, totalItems, page, limit };
 };
 
 export const deleteReview = async (reviewId: string) => {

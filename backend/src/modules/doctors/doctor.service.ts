@@ -1,15 +1,11 @@
 import { ApiError } from '../../common/api-error';
 import { UserRole } from '../../common/enums/user-role.enum';
+import { normalizePagination } from '../../common/pagination';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
 import { UserModel } from '../../models/user.model';
+import { CreateDoctorSchema, ListDoctorsQuery } from './doctor.schema';
 
-interface DoctorQuery {
-  specialist?: string;
-  city?: string;
-  search?: string;
-}
-
-export const listDoctors = async (query: DoctorQuery) => {
+export const listDoctors = async (query: ListDoctorsQuery) => {
   const filter: Record<string, unknown> = {};
 
   if (query.specialist) {
@@ -24,9 +20,16 @@ export const listDoctors = async (query: DoctorQuery) => {
     filter.fullName = { $regex: query.search, $options: 'i' };
   }
 
-  return DoctorProfileModel.find(filter)
+  const { page, limit, skip } = normalizePagination(query);
+  const totalItems = await DoctorProfileModel.countDocuments(filter);
+
+  const items = await DoctorProfileModel.find(filter)
     .populate('specialist', 'name slug icon')
-    .sort({ ratingAverage: -1, createdAt: -1 });
+    .sort({ ratingAverage: -1, createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  return { items, totalItems, page, limit };
 };
 
 export const getDoctorById = async (doctorId: string) => {
@@ -41,8 +44,8 @@ export const getDoctorById = async (doctorId: string) => {
   return doctor;
 };
 
-export const createDoctor = async (payload: Record<string, unknown>) => {
-  const userId = String(payload.user ?? '');
+export const createDoctor = async (payload: CreateDoctorSchema) => {
+  const userId = String(payload.userId ?? '');
   if (!userId) {
     throw new ApiError(400, 'user is required');
   }

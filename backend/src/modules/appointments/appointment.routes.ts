@@ -9,6 +9,7 @@ import * as appointmentController from './appointment.controller';
 import {
   appointmentIdParamSchema,
   createAppointmentBodySchema,
+  listAppointmentsQuerySchema,
   updateAppointmentStatusBodySchema,
 } from './appointment.schema';
 
@@ -26,6 +27,7 @@ appointmentRouter.post(
 appointmentRouter.get(
   '/',
   roleMiddleware(UserRole.PATIENT, UserRole.DOCTOR, UserRole.ADMIN),
+  validateRequest({ query: listAppointmentsQuerySchema }),
   appointmentController.listAppointments,
 );
 

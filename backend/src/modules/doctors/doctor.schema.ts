@@ -8,7 +8,11 @@ export const listDoctorsQuerySchema = z.object({
   specialist: z.string().trim().min(1).optional(),
   city: z.string().trim().min(1).optional(),
   search: z.string().trim().min(1).optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(10),
 });
+
+export type ListDoctorsQuery = z.infer<typeof listDoctorsQuerySchema>;
 
 const doctorScheduleItemSchema = z.object({
   day: z.enum([
@@ -36,7 +40,7 @@ const practiceLocationSchema = z.object({
 });
 
 export const createDoctorBodySchema = z.object({
-  user: z.string().trim().min(1, 'user is required'),
+  userId: z.string().trim().min(1, 'user is required'),
   fullName: z.string().trim().min(1, 'fullName is required'),
   specialist: z.string().trim().min(1, 'specialist is required'),
   profilePhoto: z.url().optional(),
@@ -48,8 +52,10 @@ export const createDoctorBodySchema = z.object({
   isAvailable: z.boolean().optional(),
 });
 
+export type CreateDoctorSchema = z.infer<typeof createDoctorBodySchema>;
+
 export const updateDoctorBodySchema = createDoctorBodySchema
-  .omit({ user: true })
+  .omit({ userId: true })
   .partial()
   .refine(
     (value) => Object.keys(value).length > 0,

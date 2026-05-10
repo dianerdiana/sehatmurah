@@ -2,8 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 
 import { ApiError } from '../../common/api-error';
 import { HttpResponse } from '../../common/http-response';
+import { buildResponseMeta } from '../../common/pagination';
 
 import * as appointmentService from './appointment.service';
+import { ListAppointmentsQuery } from './appointment.schema';
 
 export const createAppointment = async (
   req: Request,
@@ -41,8 +43,18 @@ export const listAppointments = async (
       throw new ApiError(401, 'Unauthorized');
     }
 
-    const data = await appointmentService.listAppointments(req.user);
-    res.json(HttpResponse.success({ data }));
+    const query = req.query as unknown as ListAppointmentsQuery;
+    const result = await appointmentService.listAppointments(req.user, query);
+
+    res.json(
+      HttpResponse.success({
+        data: result.items,
+        meta: buildResponseMeta({
+          ...query,
+          totalItems: result.totalItems,
+        }),
+      }),
+    );
   } catch (error) {
     next(error);
   }

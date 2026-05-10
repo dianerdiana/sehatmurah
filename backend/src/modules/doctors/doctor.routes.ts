@@ -5,7 +5,10 @@ import { authMiddleware } from '../../middlewares/auth.middleware';
 import { roleMiddleware } from '../../middlewares/role.middleware';
 import { validateRequest } from '../../middlewares/validate-request.middleware';
 import { listReviewsByDoctor } from '../reviews/review.controller';
-import { doctorIdParamSchema as doctorReviewParamSchema } from '../reviews/review.schema';
+import {
+  doctorIdParamSchema as doctorReviewParamSchema,
+  listReviewsByDoctorQuerySchema,
+} from '../reviews/review.schema';
 
 import * as doctorController from './doctor.controller';
 import {
@@ -30,7 +33,10 @@ doctorRouter.get(
 );
 doctorRouter.get(
   '/:doctorId/reviews',
-  validateRequest({ params: doctorReviewParamSchema }),
+  validateRequest({
+    params: doctorReviewParamSchema,
+    query: listReviewsByDoctorQuerySchema,
+  }),
   listReviewsByDoctor,
 );
 

@@ -1,9 +1,11 @@
 import { ApiError } from '../../common/api-error';
 import { AppointmentStatus } from '../../common/enums/appointment-status.enum';
 import { UserRole } from '../../common/enums/user-role.enum';
+import { normalizePagination } from '../../common/pagination';
 import { AppointmentModel } from '../../models/appointment.model';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
 import { PatientProfileModel } from '../../models/patient-profile.model';
+import { ListAppointmentsQuery } from './appointment.schema';
 import { generateBookingCode } from '../../utils/generate-booking-code';
 
 interface BookingInput {
@@ -70,7 +72,10 @@ export const createAppointment = async (
   return appointment;
 };
 
-export const listAppointments = async (user: AuthUser) => {
+export const listAppointments = async (
+  user: AuthUser,
+  query: ListAppointmentsQuery,
+) => {
   const filter: Record<string, unknown> = {};
 
   if (user.role === UserRole.PATIENT) {
@@ -83,10 +88,17 @@ export const listAppointments = async (user: AuthUser) => {
     filter.doctor = doctorId;
   }
 
-  return AppointmentModel.find(filter)
+  const { page, limit, skip } = normalizePagination(query);
+  const totalItems = await AppointmentModel.countDocuments(filter);
+
+  const items = await AppointmentModel.find(filter)
     .populate('patient', 'fullName')
     .populate('doctor', 'fullName consultationFee')
-    .sort({ appointmentDate: -1, startTime: 1 });
+    .sort({ appointmentDate: -1, startTime: 1 })
+    .skip(skip)
+    .limit(limit);
+
+  return { items, totalItems, page, limit };
 };
 
 export const getAppointmentById = async (

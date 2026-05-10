@@ -2,8 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 
 import { ApiError } from '../../common/api-error';
 import { HttpResponse } from '../../common/http-response';
+import { buildResponseMeta } from '../../common/pagination';
 
 import * as doctorService from './doctor.service';
+import { ListDoctorsQuery } from './doctor.schema';
 
 export const listDoctors = async (
   req: Request,
@@ -11,13 +13,18 @@ export const listDoctors = async (
   next: NextFunction,
 ) => {
   try {
-    const data = await doctorService.listDoctors({
-      specialist: req.query.specialist as string | undefined,
-      city: req.query.city as string | undefined,
-      search: req.query.search as string | undefined,
-    });
+    const query = req.query as unknown as ListDoctorsQuery;
+    const result = await doctorService.listDoctors(query);
 
-    res.json(HttpResponse.success({ data }));
+    res.json(
+      HttpResponse.success({
+        data: result.items,
+        meta: buildResponseMeta({
+          ...query,
+          totalItems: result.totalItems,
+        }),
+      }),
+    );
   } catch (error) {
     next(error);
   }

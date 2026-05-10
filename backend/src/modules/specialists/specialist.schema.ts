@@ -6,7 +6,11 @@ export const specialistIdParamSchema = z.object({
 
 export const listSpecialistsQuerySchema = z.object({
   isActive: z.enum(['true', 'false']).optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(10),
 });
+
+export type ListSpecialistsQuery = z.infer<typeof listSpecialistsQuerySchema>;
 
 export const createSpecialistBodySchema = z.object({
   name: z.string().trim().min(1, 'name is required'),

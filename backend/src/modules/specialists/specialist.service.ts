@@ -1,5 +1,7 @@
 import { ApiError } from '../../common/api-error';
+import { normalizePagination } from '../../common/pagination';
 import { SpecialistModel } from '../../models/specialist.model';
+import { ListSpecialistsQuery } from './specialist.schema';
 
 const toSlug = (value: string): string =>
   value
@@ -9,14 +11,22 @@ const toSlug = (value: string): string =>
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
 
-export const listSpecialists = async (isActive?: string) => {
+export const listSpecialists = async (query: ListSpecialistsQuery) => {
   const filter: Record<string, unknown> = {};
 
-  if (typeof isActive === 'string') {
-    filter.isActive = isActive === 'true';
+  if (typeof query.isActive === 'string') {
+    filter.isActive = query.isActive === 'true';
   }
 
-  return SpecialistModel.find(filter).sort({ sortOrder: 1, name: 1 });
+  const { page, limit, skip } = normalizePagination(query);
+  const totalItems = await SpecialistModel.countDocuments(filter);
+
+  const items = await SpecialistModel.find(filter)
+    .sort({ sortOrder: 1, name: 1 })
+    .skip(skip)
+    .limit(limit);
+
+  return { items, totalItems, page, limit };
 };
 
 export const getSpecialistById = async (specialistId: string) => {

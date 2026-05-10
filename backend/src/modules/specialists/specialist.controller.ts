@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { HttpResponse } from '../../common/http-response';
+import { buildResponseMeta } from '../../common/pagination';
 
 import * as specialistService from './specialist.service';
+import { ListSpecialistsQuery } from './specialist.schema';
 
 export const listSpecialists = async (
   req: Request,
@@ -10,10 +12,18 @@ export const listSpecialists = async (
   next: NextFunction,
 ) => {
   try {
-    const data = await specialistService.listSpecialists(
-      req.query.isActive as string | undefined,
+    const query = req.query as unknown as ListSpecialistsQuery;
+    const result = await specialistService.listSpecialists(query);
+
+    res.json(
+      HttpResponse.success({
+        data: result.items,
+        meta: buildResponseMeta({
+          ...query,
+          totalItems: result.totalItems,
+        }),
+      }),
     );
-    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
