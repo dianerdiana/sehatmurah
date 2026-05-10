@@ -9,7 +9,7 @@ export const updateMyProfileBodySchema = z
   .object({
     fullName: z.string().trim().min(1).optional(),
     dateOfBirth: z.coerce.date().optional(),
-    gender: z.nativeEnum(Gender).optional(),
+    gender: z.enum(Gender).optional(),
     phoneNumber: z.string().trim().min(5).max(30).optional(),
     address: z.string().trim().min(1).max(500).optional(),
   })
