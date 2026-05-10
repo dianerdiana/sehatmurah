@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { HttpResponse } from '../../common/http-response';
 import { ApiError } from '../../middlewares/error.middleware';
 import * as authService from './auth.service';
 
@@ -11,7 +12,7 @@ export const register = async (
     const { name, email, password, role } = req.body;
 
     const data = await authService.register({ name, email, password, role });
-    res.status(201).json(data);
+    res.status(201).json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -26,7 +27,7 @@ export const login = async (
     const { email, password } = req.body;
 
     const data = await authService.login({ email, password });
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -39,7 +40,7 @@ export const me = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const data = await authService.me(req.user.id);
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }

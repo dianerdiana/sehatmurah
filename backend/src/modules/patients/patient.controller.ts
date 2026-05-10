@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { UserRole } from '../../common/enums/user-role.enum';
+import { HttpResponse } from '../../common/http-response';
 import { ApiError } from '../../middlewares/error.middleware';
 import * as patientService from './patient.service';
 
@@ -18,7 +19,7 @@ export const getMyProfile = async (
     }
 
     const data = await patientService.getMyProfile(req.user.id);
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -39,7 +40,7 @@ export const updateMyProfile = async (
     }
 
     const data = await patientService.updateMyProfile(req.user.id, req.body);
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -52,7 +53,7 @@ export const getPatientById = async (
 ) => {
   try {
     const data = await patientService.getPatientById(String(req.params.id));
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }

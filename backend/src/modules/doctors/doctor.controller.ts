@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { HttpResponse } from '../../common/http-response';
 import { ApiError } from '../../middlewares/error.middleware';
 import * as doctorService from './doctor.service';
 
@@ -14,7 +15,7 @@ export const listDoctors = async (
       search: req.query.search as string | undefined,
     });
 
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -27,7 +28,7 @@ export const getDoctorById = async (
 ) => {
   try {
     const data = await doctorService.getDoctorById(String(req.params.id));
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -40,7 +41,7 @@ export const createDoctor = async (
 ) => {
   try {
     const data = await doctorService.createDoctor(req.body);
-    res.status(201).json(data);
+    res.status(201).json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -61,7 +62,7 @@ export const updateDoctor = async (
       req.body,
       req.user,
     );
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -87,7 +88,7 @@ export const updateDoctorSchedule = async (
       schedule,
       req.user,
     );
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -100,7 +101,7 @@ export const deleteDoctor = async (
 ) => {
   try {
     const data = await doctorService.deleteDoctor(String(req.params.id));
-    res.json(data);
+    res.json(HttpResponse.success({ data, message: 'Doctor deleted' }));
   } catch (error) {
     next(error);
   }

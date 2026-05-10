@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { AppointmentStatus } from '../../common/enums/appointment-status.enum';
+import { HttpResponse } from '../../common/http-response';
 import { ApiError } from '../../middlewares/error.middleware';
 import * as appointmentService from './appointment.service';
 
@@ -23,7 +23,7 @@ export const createAppointment = async (
       reason,
     });
 
-    res.status(201).json(data);
+    res.status(201).json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -40,7 +40,7 @@ export const listAppointments = async (
     }
 
     const data = await appointmentService.listAppointments(req.user);
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -60,7 +60,7 @@ export const getAppointmentById = async (
       String(req.params.id),
       req.user,
     );
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -83,7 +83,7 @@ export const updateAppointmentStatus = async (
       status,
       req.user,
     );
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -100,7 +100,11 @@ export const deleteAppointment = async (
     }
 
     await appointmentService.deleteAppointment(String(req.params.id), req.user);
-    res.status(204).send();
+    res.json(
+      HttpResponse.success({
+        message: 'Appointment deleted',
+      }),
+    );
   } catch (error) {
     next(error);
   }

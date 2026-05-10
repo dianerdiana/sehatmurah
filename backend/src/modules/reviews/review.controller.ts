@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { HttpResponse } from '../../common/http-response';
 import { ApiError } from '../../middlewares/error.middleware';
 import * as reviewService from './review.service';
 
@@ -13,7 +14,7 @@ export const createReview = async (
     }
 
     const data = await reviewService.createReview(req.user, req.body);
-    res.status(201).json(data);
+    res.status(201).json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -28,7 +29,7 @@ export const listReviewsByDoctor = async (
     const data = await reviewService.listReviewsByDoctor(
       String(req.params.doctorId),
     );
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -41,7 +42,7 @@ export const deleteReview = async (
 ) => {
   try {
     const data = await reviewService.deleteReview(String(req.params.id));
-    res.json(data);
+    res.json(HttpResponse.success({ data, message: 'Review deleted' }));
   } catch (error) {
     next(error);
   }

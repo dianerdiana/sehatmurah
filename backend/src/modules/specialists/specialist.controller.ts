@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { HttpResponse } from '../../common/http-response';
 import * as specialistService from './specialist.service';
 
 export const listSpecialists = async (
@@ -10,7 +11,7 @@ export const listSpecialists = async (
     const data = await specialistService.listSpecialists(
       req.query.isActive as string | undefined,
     );
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -25,7 +26,7 @@ export const getSpecialistById = async (
     const data = await specialistService.getSpecialistById(
       String(req.params.id),
     );
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -38,7 +39,7 @@ export const createSpecialist = async (
 ) => {
   try {
     const data = await specialistService.createSpecialist(req.body);
-    res.status(201).json(data);
+    res.status(201).json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -54,7 +55,7 @@ export const updateSpecialist = async (
       String(req.params.id),
       req.body,
     );
-    res.json(data);
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
@@ -69,7 +70,7 @@ export const deleteSpecialist = async (
     const data = await specialistService.deleteSpecialist(
       String(req.params.id),
     );
-    res.json(data);
+    res.json(HttpResponse.success({ data, message: 'Specialist deleted' }));
   } catch (error) {
     next(error);
   }
