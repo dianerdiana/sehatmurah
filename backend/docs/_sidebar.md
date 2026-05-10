@@ -1,8 +1,9 @@
-- SehatMurah Doctor Appointment API - Specification
-  - Endpoints
-    - [appointment](./api-spec/appointments.md)
-    - [auth](./api-spec/auth.md)
-    - [doctor](./api-spec/doctors.md)
-    - [patient](./api-spec/patients.md)
-    - [review](./api-spec/reviews.md)
-    - [specialist](./api-spec/specialists.md)
+- SehatMurah Doctor Appointment API
+  - [Overview](README.md)
+  - API Specification
+    - [Auth](./api-spec/auth.md)
+    - [Specialists](./api-spec/specialists.md)
+    - [Doctors](./api-spec/doctors.md)
+    - [Patients](./api-spec/patients.md)
+    - [Appointments](./api-spec/appointments.md)
+    - [Reviews](./api-spec/reviews.md)

@@ -2,9 +2,9 @@
 
 Base URL: `/api/reviews`
 
-## Data Model Ringkas
+## Data Model Summary
 
-- Field review: `patient`, `doctor`, `appointment`, `rating`, `comment`, `createdAt`, `updatedAt`
+- Review fields: `patient`, `doctor`, `appointment`, `rating`, `comment`, `createdAt`, `updatedAt`
 
 ## Endpoints
 
@@ -13,7 +13,7 @@ Base URL: `/api/reviews`
 - Method: `POST`
 - Path: `/`
 - Role: `PATIENT`
-- Auth: wajib `Authorization: Bearer <access_token>`
+- Auth: requires `Authorization: Bearer <access_token>`
 
 Request body:
 
@@ -22,47 +22,47 @@ Request body:
   "doctor": "doctorProfileId",
   "appointment": "appointmentId",
   "rating": 5,
-  "comment": "Pelayanan sangat baik"
+  "comment": "Excellent service"
 }
 ```
 
-Validasi:
+Validation:
 
-- `doctor`: string, wajib
-- `appointment`: string, opsional
+- `doctor`: required string
+- `appointment`: optional string
 - `rating`: integer, min 1, max 5
-- `comment`: string, opsional, max 1000
+- `comment`: optional string, max 1000 characters
 
-Aturan bisnis penting:
+Important business rules:
 
-- Jika `appointment` diisi:
-  - appointment harus ada
-  - appointment harus milik patient yang login
-  - doctor pada appointment harus sama dengan payload `doctor`
-  - status appointment harus `completed`
+- If `appointment` is provided:
+  - appointment must exist
+  - appointment must belong to the logged-in patient
+  - appointment doctor must match the payload `doctor`
+  - appointment status must be `completed`
 
 Success:
 
 - Status code: `201`
-- `data`: object review yang dibuat
+- `data`: created review object
 
-Error umum:
+Common errors:
 
 - `400` Appointment doctor does not match / Review is only allowed for completed appointment
 - `403` Only PATIENT can create review / Forbidden
 - `404` Doctor not found / Appointment not found / Patient profile not found
-- `409` Duplicate resource (kombinasi patient-doctor-appointment duplikat)
+- `409` Duplicate resource (duplicate patient-doctor-appointment combination)
 
 ## 2) Delete Review
 
 - Method: `DELETE`
 - Path: `/:id`
 - Role: `ADMIN`
-- Auth: wajib token
+- Auth: token required
 
-Path params:
+Path parameters:
 
-- `id`: string, wajib
+- `id`: required string
 
 Success:
 
@@ -76,13 +76,13 @@ Success:
 }
 ```
 
-Error umum:
+Common errors:
 
 - `404` Review not found
 
-## Catatan Endpoint Terkait
+## Related Endpoint Note
 
-Untuk list review per dokter, gunakan endpoint di module doctors:
+To list reviews by doctor, use the endpoint in the doctors module:
 
 - `GET /api/doctors/:doctorId/reviews`
 - Query: `page`, `limit`

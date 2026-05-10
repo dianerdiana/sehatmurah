@@ -2,9 +2,9 @@
 
 Base URL: `/api/specialists`
 
-## Data Model Ringkas
+## Data Model Summary
 
-- Field specialist: `name`, `slug`, `description`, `icon`, `image`, `isActive`, `sortOrder`, `createdAt`, `updatedAt`
+- Specialist fields: `name`, `slug`, `description`, `icon`, `image`, `isActive`, `sortOrder`, `createdAt`, `updatedAt`
 
 ## Endpoints
 
@@ -12,36 +12,36 @@ Base URL: `/api/specialists`
 
 - Method: `GET`
 - Path: `/`
-- Auth: publik
+- Auth: public
 
-Query params:
+Query parameters:
 
-- `isActive`: `true | false` (opsional)
+- `isActive`: `true | false` (optional)
 - `page` (number, default `1`)
 - `limit` (number, default `10`, max `100`)
 
 Success:
 
 - Status code: `200`
-- `data`: array specialist
+- `data`: specialist array
 - `meta`: pagination
 
 ## 2) Get Specialist By ID
 
 - Method: `GET`
 - Path: `/:id`
-- Auth: publik
+- Auth: public
 
-Path params:
+Path parameters:
 
-- `id`: string, wajib
+- `id`: required string
 
 Success:
 
 - Status code: `200`
-- `data`: object specialist
+- `data`: specialist object
 
-Error umum:
+Common errors:
 
 - `404` Specialist not found
 
@@ -50,15 +50,15 @@ Error umum:
 - Method: `POST`
 - Path: `/`
 - Role: `ADMIN`
-- Auth: wajib `Authorization: Bearer <access_token>`
+- Auth: requires `Authorization: Bearer <access_token>`
 
 Request body:
 
 ```json
 {
-  "name": "Penyakit Dalam",
+  "name": "Internal Medicine",
   "slug": "penyakit-dalam",
-  "description": "Spesialis penyakit dalam",
+  "description": "Internal medicine specialist",
   "icon": "stethoscope",
   "image": "https://example.com/specialist.jpg",
   "isActive": true,
@@ -66,48 +66,48 @@ Request body:
 }
 ```
 
-Validasi:
+Validation:
 
-- `name`: string, wajib
-- `slug`: string, opsional (jika kosong akan di-generate dari `name`)
-- `description`: string, opsional, max 500
-- `icon`: string, opsional, max 255
-- `image`: string, opsional, max 255
-- `isActive`: boolean, opsional
-- `sortOrder`: integer, opsional
+- `name`: required string
+- `slug`: optional string (generated from `name` when omitted)
+- `description`: optional string, max 500
+- `icon`: optional string, max 255
+- `image`: optional string, max 255
+- `isActive`: optional boolean
+- `sortOrder`: optional integer
 
 Success:
 
 - Status code: `201`
-- `data`: object specialist
+- `data`: specialist object
 
-Error umum:
+Common errors:
 
 - `400` name is required
-- `409` Duplicate resource (slug duplikat)
+- `409` Duplicate resource (duplicate slug)
 
 ## 4) Update Specialist
 
 - Method: `PATCH`
 - Path: `/:id`
 - Role: `ADMIN`
-- Auth: wajib token
+- Auth: token required
 
-Path params:
+Path parameters:
 
-- `id`: string, wajib
+- `id`: required string
 
 Request body:
 
-- Partial dari payload create
-- Jika `name` diubah dan `slug` tidak dikirim, slug akan digenerate ulang dari `name`
+- Partial payload from the create endpoint
+- If `name` changes and `slug` is not sent, slug is regenerated from `name`
 
 Success:
 
 - Status code: `200`
-- `data`: object specialist setelah update
+- `data`: specialist object after update
 
-Error umum:
+Common errors:
 
 - `404` Specialist not found
 
@@ -116,11 +116,11 @@ Error umum:
 - Method: `DELETE`
 - Path: `/:id`
 - Role: `ADMIN`
-- Auth: wajib token
+- Auth: token required
 
-Path params:
+Path parameters:
 
-- `id`: string, wajib
+- `id`: required string
 
 Success:
 
@@ -134,6 +134,6 @@ Success:
 }
 ```
 
-Error umum:
+Common errors:
 
 - `404` Specialist not found

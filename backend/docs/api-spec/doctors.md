@@ -29,7 +29,7 @@ Base URL: `/api/doctors`
 }
 ```
 
-## Data Model Ringkas
+## Data Model Summary
 
 - `DoctorProfile`: `user`, `fullName`, `specialist`, `profilePhoto`, `experienceYears`, `description`, `practiceLocation`, `schedule`, `consultationFee`, `ratingAverage`, `ratingCount`, `isAvailable`
 - `schedule.day`: `MONDAY | TUESDAY | WEDNESDAY | THURSDAY | FRIDAY | SATURDAY | SUNDAY`
@@ -40,38 +40,38 @@ Base URL: `/api/doctors`
 
 - Method: `GET`
 - Path: `/`
-- Auth: publik
+- Auth: public
 
-Query params:
+Query parameters:
 
-- `specialist` (string, opsional)
-- `city` (string, opsional)
-- `search` (string, opsional, mencari `fullName`)
+- `specialist` (optional string)
+- `city` (optional string)
+- `search` (optional string, searches `fullName`)
 - `page` (number, default `1`)
 - `limit` (number, default `10`, max `100`)
 
 Success:
 
 - Status code: `200`
-- `data`: array doctor profile (dengan populate specialist: `name`, `slug`, `icon`)
+- `data`: doctor profile array (with specialist populated: `name`, `slug`, `icon`)
 - `meta`: pagination
 
 ## 2) Get Doctor By ID
 
 - Method: `GET`
 - Path: `/:id`
-- Auth: publik
+- Auth: public
 
-Path params:
+Path parameters:
 
-- `id`: string, wajib
+- `id`: required string
 
 Success:
 
 - Status code: `200`
-- `data`: object doctor profile
+- `data`: doctor profile object
 
-Error umum:
+Common errors:
 
 - `404` Doctor not found
 
@@ -79,13 +79,13 @@ Error umum:
 
 - Method: `GET`
 - Path: `/:doctorId/reviews`
-- Auth: publik
+- Auth: public
 
-Path params:
+Path parameters:
 
-- `doctorId`: string, wajib
+- `doctorId`: required string
 
-Query params:
+Query parameters:
 
 - `page` (number, default `1`)
 - `limit` (number, default `10`, max `100`)
@@ -93,10 +93,10 @@ Query params:
 Success:
 
 - Status code: `200`
-- `data`: array review (populate patient `fullName`)
+- `data`: review array (patient populated with `fullName`)
 - `meta`: pagination
 
-Error umum:
+Common errors:
 
 - `404` Doctor not found
 
@@ -105,7 +105,7 @@ Error umum:
 - Method: `POST`
 - Path: `/`
 - Role: `ADMIN`
-- Auth: wajib `Authorization: Bearer <access_token>`
+- Auth: requires `Authorization: Bearer <access_token>`
 
 Request body:
 
@@ -116,9 +116,9 @@ Request body:
   "specialist": "specialistId",
   "profilePhoto": "https://example.com/photo.jpg",
   "experienceYears": 5,
-  "description": "Dokter penyakit dalam",
+  "description": "Internal medicine specialist",
   "practiceLocation": {
-    "clinicName": "Klinik Sehat",
+    "clinicName": "Sehat Clinic",
     "address": "Jl. Sudirman No. 1",
     "city": "Jakarta"
   },
@@ -135,17 +135,17 @@ Request body:
 }
 ```
 
-Validasi penting:
+Key validation:
 
 - `consultationFee` >= 0
-- format `startTime` dan `endTime` harus `HH:mm`
+- `startTime` and `endTime` must use `HH:mm` format
 
 Success:
 
 - Status code: `201`
-- `data`: object doctor profile
+- `data`: doctor profile object
 
-Error umum:
+Common errors:
 
 - `400` User role must be DOCTOR
 - `404` User not found
@@ -156,28 +156,28 @@ Error umum:
 - Method: `PATCH`
 - Path: `/:id`
 - Role: `ADMIN | DOCTOR`
-- Auth: wajib token
+- Auth: token required
 
-Path params:
+Path parameters:
 
-- `id`: string, wajib
+- `id`: required string
 
 Request body:
 
-- Partial dari payload create (kecuali `userId`)
-- Minimal 1 field
+- Partial payload from create endpoint (except `userId`)
+- At least 1 field is required
 
-Aturan akses:
+Access rules:
 
-- `ADMIN`: bisa update semua doctor
-- `DOCTOR`: hanya bisa update profile miliknya
+- `ADMIN`: can update any doctor profile
+- `DOCTOR`: can only update their own profile
 
 Success:
 
 - Status code: `200`
-- `data`: object doctor profile setelah update
+- `data`: doctor profile object after update
 
-Error umum:
+Common errors:
 
 - `403` Forbidden
 - `404` Doctor not found
@@ -187,11 +187,11 @@ Error umum:
 - Method: `PATCH`
 - Path: `/:id/schedule`
 - Role: `ADMIN | DOCTOR`
-- Auth: wajib token
+- Auth: token required
 
-Path params:
+Path parameters:
 
-- `id`: string, wajib
+- `id`: required string
 
 Request body:
 
@@ -211,9 +211,9 @@ Request body:
 Success:
 
 - Status code: `200`
-- `data`: object doctor profile setelah update schedule
+- `data`: doctor profile object after schedule update
 
-Error umum:
+Common errors:
 
 - `400` schedule must be an array / validation error
 - `403` Forbidden
@@ -224,11 +224,11 @@ Error umum:
 - Method: `DELETE`
 - Path: `/:id`
 - Role: `ADMIN`
-- Auth: wajib token
+- Auth: token required
 
-Path params:
+Path parameters:
 
-- `id`: string, wajib
+- `id`: required string
 
 Success:
 
@@ -242,6 +242,6 @@ Success:
 }
 ```
 
-Error umum:
+Common errors:
 
 - `404` Doctor not found

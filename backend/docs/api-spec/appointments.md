@@ -2,7 +2,7 @@
 
 Base URL: `/api/appointments`
 
-Semua endpoint pada module ini membutuhkan header:
+All endpoints in this module require:
 
 `Authorization: Bearer <access_token>`
 
@@ -40,10 +40,10 @@ Semua endpoint pada module ini membutuhkan header:
 }
 ```
 
-## Data Model Ringkas
+## Data Model Summary
 
 - `AppointmentStatus`: `pending | confirmed | cancelled | completed`
-- Field appointment utama: `patient`, `doctor`, `appointmentDate`, `startTime`, `endTime`, `reason`, `status`, `bookingCode`, `notes`, `createdAt`, `updatedAt`
+- Appointment core fields: `patient`, `doctor`, `appointmentDate`, `startTime`, `endTime`, `reason`, `status`, `bookingCode`, `notes`, `createdAt`, `updatedAt`
 
 ## Endpoints
 
@@ -61,29 +61,29 @@ Request body:
   "appointmentDate": "2026-05-20",
   "startTime": "09:00",
   "endTime": "09:30",
-  "reason": "Kontrol rutin"
+  "reason": "Routine checkup"
 }
 ```
 
-Validasi:
+Validation:
 
-- `doctor`: string, wajib
+- `doctor`: required string
 - `appointmentDate`: format `YYYY-MM-DD`
-- `startTime`: format `HH:mm` (24 jam)
-- `endTime`: format `HH:mm` (24 jam)
-- `reason`: string, opsional, max 500
+- `startTime`: `HH:mm` format (24-hour)
+- `endTime`: `HH:mm` format (24-hour)
+- `reason`: optional string, max 500 characters
 
 Success:
 
 - Status code: `201`
-- `data`: object appointment yang baru dibuat (status default `pending`, dengan `bookingCode` otomatis)
+- `data`: newly created appointment object (default status is `pending`, with generated `bookingCode`)
 
-Error umum:
+Common errors:
 
 - `400` Doctor is not available
 - `403` Only PATIENT can create appointment
 - `404` Doctor not found / Patient profile not found
-- `409` Duplicate resource (slot dokter bentrok)
+- `409` Duplicate resource (doctor time slot conflict)
 
 ## 2) List Appointments
 
@@ -91,21 +91,21 @@ Error umum:
 - Path: `/`
 - Role: `PATIENT | DOCTOR | ADMIN`
 
-Query params:
+Query parameters:
 
 - `page` (number, default `1`)
 - `limit` (number, default `10`, max `100`)
 
-Catatan filter otomatis berdasarkan role:
+Automatic filtering by role:
 
-- `PATIENT`: hanya appointment milik patient login
-- `DOCTOR`: hanya appointment milik doctor login
-- `ADMIN`: semua appointment
+- `PATIENT`: only appointments owned by the logged-in patient
+- `DOCTOR`: only appointments owned by the logged-in doctor
+- `ADMIN`: all appointments
 
 Success:
 
 - Status code: `200`
-- `data`: array appointment
+- `data`: appointment array
 - `meta`: pagination (`page`, `limit`, `totalItems`, `totalPages`)
 
 ## 3) Get Appointment By ID
@@ -114,22 +114,22 @@ Success:
 - Path: `/:id`
 - Role: `PATIENT | DOCTOR | ADMIN`
 
-Path params:
+Path parameters:
 
-- `id`: string, wajib
+- `id`: required string
 
-Aturan akses:
+Access rules:
 
-- `ADMIN`: bebas
-- `PATIENT`: hanya appointment miliknya
-- `DOCTOR`: hanya appointment miliknya
+- `ADMIN`: unrestricted
+- `PATIENT`: only their own appointments
+- `DOCTOR`: only their own appointments
 
 Success:
 
 - Status code: `200`
-- `data`: object appointment
+- `data`: appointment object
 
-Error umum:
+Common errors:
 
 - `403` Forbidden
 - `404` Appointment not found
@@ -140,9 +140,9 @@ Error umum:
 - Path: `/:id/status`
 - Role: `DOCTOR | ADMIN`
 
-Path params:
+Path parameters:
 
-- `id`: string, wajib
+- `id`: required string
 
 Request body:
 
@@ -152,21 +152,21 @@ Request body:
 }
 ```
 
-Validasi:
+Validation:
 
 - `status`: enum `pending | confirmed | cancelled | completed`
 
-Aturan akses:
+Access rules:
 
-- `ADMIN`: bebas
-- `DOCTOR`: hanya appointment miliknya
+- `ADMIN`: unrestricted
+- `DOCTOR`: only their own appointments
 
 Success:
 
 - Status code: `200`
-- `data`: object appointment setelah update
+- `data`: appointment object after update
 
-Error umum:
+Common errors:
 
 - `403` Forbidden
 - `404` Appointment not found
@@ -177,14 +177,14 @@ Error umum:
 - Path: `/:id`
 - Role: `PATIENT | ADMIN`
 
-Path params:
+Path parameters:
 
-- `id`: string, wajib
+- `id`: required string
 
-Aturan akses:
+Access rules:
 
-- `ADMIN`: bisa hapus appointment apa pun
-- `PATIENT`: hanya appointment miliknya dan status harus `pending`
+- `ADMIN`: can delete any appointment
+- `PATIENT`: can only delete their own appointment and it must be `pending`
 
 Success:
 
@@ -197,7 +197,7 @@ Success:
 }
 ```
 
-Error umum:
+Common errors:
 
 - `400` Only pending appointment can be cancelled
 - `403` Forbidden

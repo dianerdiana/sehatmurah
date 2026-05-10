@@ -19,12 +19,11 @@ Base URL: `/api/auth`
 ```json
 {
   "status": "error",
-  "message": "Invalid email or password",
-  "code": "INTERNAL_SERVER_ERROR"
+  "message": "Invalid email or password"
 }
 ```
 
-## Data Model Ringkas
+## Data Model Summary
 
 - `UserRole`: `PATIENT | DOCTOR | ADMIN`
 
@@ -34,7 +33,7 @@ Base URL: `/api/auth`
 
 - Method: `POST`
 - Path: `/register`
-- Auth: tidak perlu token
+- Auth: no token required
 
 Request body:
 
@@ -42,17 +41,17 @@ Request body:
 {
   "name": "Budi",
   "email": "budi@mail.com",
-  "password": "rahasia123",
+  "password": "secret123",
   "role": "PATIENT"
 }
 ```
 
-Validasi:
+Validation:
 
-- `name`: string, wajib, max 120
-- `email`: email valid, wajib, max 255
-- `password`: string, wajib, min 8, max 128
-- `role`: enum `PATIENT | DOCTOR | ADMIN`, opsional (default `PATIENT`)
+- `name`: required string, max 120
+- `email`: required valid email, max 255
+- `password`: required string, min 8, max 128
+- `role`: optional enum `PATIENT | DOCTOR | ADMIN` (default `PATIENT`)
 
 Success:
 
@@ -60,7 +59,7 @@ Success:
 - `data.token`: JWT access token
 - `data.user`: `{ id, name, email, role }`
 
-Error umum:
+Common errors:
 
 - `409` Email is already registered
 - `400` Validation error
@@ -69,21 +68,21 @@ Error umum:
 
 - Method: `POST`
 - Path: `/login`
-- Auth: tidak perlu token
+- Auth: no token required
 
 Request body:
 
 ```json
 {
   "email": "budi@mail.com",
-  "password": "rahasia123"
+  "password": "secret123"
 }
 ```
 
-Validasi:
+Validation:
 
-- `email`: email valid, wajib
-- `password`: string, wajib
+- `email`: required valid email
+- `password`: required string
 
 Success:
 
@@ -91,7 +90,7 @@ Success:
 - `data.token`: JWT access token
 - `data.user`: `{ id, name, email, role }`
 
-Error umum:
+Common errors:
 
 - `401` Invalid email or password
 - `400` Validation error
@@ -100,14 +99,14 @@ Error umum:
 
 - Method: `GET`
 - Path: `/me`
-- Auth: wajib `Authorization: Bearer <access_token>`
+- Auth: requires `Authorization: Bearer <access_token>`
 
 Success:
 
 - Status code: `200`
 - `data`: `{ id, name, email, role, isActive }`
 
-Error umum:
+Common errors:
 
 - `401` Unauthorized / Invalid token
 - `404` User not found

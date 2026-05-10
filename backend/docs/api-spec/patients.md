@@ -2,11 +2,11 @@
 
 Base URL: `/api/patients`
 
-Semua endpoint membutuhkan header:
+All endpoints require:
 
 `Authorization: Bearer <access_token>`
 
-## Data Model Ringkas
+## Data Model Summary
 
 - `Gender`: `MALE | FEMALE`
 - `PatientProfile`: `user`, `fullName`, `dateOfBirth`, `gender`, `phoneNumber`, `address`, `createdAt`, `updatedAt`
@@ -22,9 +22,9 @@ Semua endpoint membutuhkan header:
 Success:
 
 - Status code: `200`
-- `data`: patient profile (populate user: `name`, `email`, `role`)
+- `data`: patient profile (with user populated: `name`, `email`, `role`)
 
-Error umum:
+Common errors:
 
 - `401` Unauthorized / Invalid token
 - `403` Only PATIENT can access this endpoint / Forbidden
@@ -36,7 +36,7 @@ Error umum:
 - Path: `/me`
 - Role: `PATIENT`
 
-Request body (minimal 1 field):
+Request body (at least 1 field):
 
 ```json
 {
@@ -48,9 +48,9 @@ Request body (minimal 1 field):
 }
 ```
 
-Validasi:
+Validation:
 
-- `fullName`: string, opsional
+- `fullName`: optional string
 - `dateOfBirth`: date (coerce)
 - `gender`: `MALE | FEMALE`
 - `phoneNumber`: string, min 5, max 30
@@ -59,11 +59,11 @@ Validasi:
 Success:
 
 - Status code: `200`
-- `data`: patient profile setelah update
+- `data`: patient profile after update
 
-Error umum:
+Common errors:
 
-- `400` Validation error (termasuk jika body kosong)
+- `400` Validation error (including empty body)
 - `403` Only PATIENT can access this endpoint / Forbidden
 - `404` Patient profile not found
 
@@ -73,16 +73,16 @@ Error umum:
 - Path: `/:id`
 - Role: `ADMIN`
 
-Path params:
+Path parameters:
 
-- `id`: string, wajib
+- `id`: required string
 
 Success:
 
 - Status code: `200`
-- `data`: patient profile (populate user: `name`, `email`, `role`, `isActive`)
+- `data`: patient profile (with user populated: `name`, `email`, `role`, `isActive`)
 
-Error umum:
+Common errors:
 
 - `403` Forbidden
 - `404` Patient profile not found
