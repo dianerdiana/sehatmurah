@@ -1,12 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
-import { ZodError, ZodTypeAny } from 'zod';
-import { ApiErrorItem } from '../common/http-response';
-import { ApiError } from './error.middleware';
+import z, { ZodError } from 'zod';
+import { ApiError, ApiErrorItem } from '../common/api-error';
 
 interface ValidationSchemas {
-  body?: ZodTypeAny;
-  params?: ZodTypeAny;
-  query?: ZodTypeAny;
+  body?: z.ZodAny;
+  params?: z.ZodAny;
+  query?: z.ZodAny;
 }
 
 const formatZodError = (error: ZodError): ApiErrorItem[] => {

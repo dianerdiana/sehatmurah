@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpResponse } from '../../common/http-response';
-import { ApiError } from '../../middlewares/error.middleware';
+import { ApiError } from '../../common/api-error';
 import * as reviewService from './review.service';
 
 export const createReview = async (

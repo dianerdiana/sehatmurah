@@ -1,4 +1,4 @@
-import { ApiError } from '../../middlewares/error.middleware';
+import { ApiError } from '../../common/api-error';
 import { PatientProfileModel } from '../../models/patient-profile.model';
 
 export const getMyProfile = async (userId: string) => {

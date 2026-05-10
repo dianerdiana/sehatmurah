@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 import { AppointmentStatus } from '../../common/enums/appointment-status.enum';
 import { UserRole } from '../../common/enums/user-role.enum';
-import { ApiError } from '../../middlewares/error.middleware';
+import { ApiError } from '../../common/api-error';
 import { AppointmentModel } from '../../models/appointment.model';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
 import { PatientProfileModel } from '../../models/patient-profile.model';

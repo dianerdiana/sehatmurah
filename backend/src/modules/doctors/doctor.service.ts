@@ -1,7 +1,7 @@
 import { UserRole } from '../../common/enums/user-role.enum';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
 import { UserModel } from '../../models/user.model';
-import { ApiError } from '../../middlewares/error.middleware';
+import { ApiError } from '../../common/api-error';
 
 interface DoctorQuery {
   specialist?: string;

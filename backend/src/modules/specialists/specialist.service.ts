@@ -1,4 +1,4 @@
-import { ApiError } from '../../middlewares/error.middleware';
+import { ApiError } from '../../common/api-error';
 import { SpecialistModel } from '../../models/specialist.model';
 
 const toSlug = (value: string): string =>

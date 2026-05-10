@@ -1,22 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { ApiErrorItem, HttpResponse } from '../common/http-response';
-
-export class ApiError extends Error {
-  public readonly statusCode: number;
-  public readonly code?: string;
-  public readonly details?: ApiErrorItem[];
-
-  constructor(
-    statusCode: number,
-    message: string,
-    options: { code?: string; details?: ApiErrorItem[] } = {},
-  ) {
-    super(message);
-    this.statusCode = statusCode;
-    this.code = options.code;
-    this.details = options.details;
-  }
-}
+import { HttpResponse } from '../common/http-response';
+import { ApiError } from '../common/api-error';
 
 export const notFoundHandler = (_req: Request, res: Response): void => {
   res

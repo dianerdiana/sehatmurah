@@ -1,7 +1,7 @@
 import { UserRole } from '../../common/enums/user-role.enum';
 import { PatientProfileModel } from '../../models/patient-profile.model';
 import { UserModel } from '../../models/user.model';
-import { ApiError } from '../../middlewares/error.middleware';
+import { ApiError } from '../../common/api-error';
 import { comparePassword, hashPassword } from '../../utils/password';
 import { signAccessToken } from '../../utils/jwt';
 

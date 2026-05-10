@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { UserRole } from '../common/enums/user-role.enum';
-import { ApiError } from './error.middleware';
+import { ApiError } from '../common/api-error';
 
 export const roleMiddleware = (...allowedRoles: UserRole[]) => {
   return (req: Request, _res: Response, next: NextFunction): void => {
