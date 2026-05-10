@@ -7,7 +7,7 @@ import { validateRequest } from '../../middlewares/validate-request.middleware';
 import { listReviewsByDoctor } from '../reviews/review.controller';
 import {
   doctorIdSchema as doctorReviewParamSchema,
-  listReviewsByDoctorQuerySchema,
+  listReviewsByDoctorSchema,
 } from '../reviews/review.schema';
 
 import * as doctorController from './doctor.controller';
@@ -31,7 +31,7 @@ doctorRouter.get(
   '/:doctorId/reviews',
   validateRequest({
     params: doctorReviewParamSchema,
-    query: listReviewsByDoctorQuerySchema,
+    query: listReviewsByDoctorSchema,
   }),
   listReviewsByDoctor,
 );
