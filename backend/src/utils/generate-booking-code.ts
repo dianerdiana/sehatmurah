@@ -4,5 +4,5 @@ const randomChars = (): string => {
 
 export const generateBookingCode = (): string => {
   const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-  return `BK-${datePart}-${randomChars()}`;
+  return `BC-${datePart}-${randomChars()}`;
 };
