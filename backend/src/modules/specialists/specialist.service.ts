@@ -1,7 +1,8 @@
 import { ApiError } from '../../common/api-error';
 import { normalizePagination } from '../../common/pagination';
 import { SpecialistModel } from '../../models/specialist.model';
-import { ListSpecialistsQuery } from './specialist.schema';
+
+import { CreateSpecialistDto, ListSpecialistsDto, UpdateSpecialistDto } from './specialist.schema';
 
 const toSlug = (value: string): string =>
   value
@@ -11,7 +12,7 @@ const toSlug = (value: string): string =>
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
 
-export const listSpecialists = async (query: ListSpecialistsQuery) => {
+export const listSpecialists = async (query: ListSpecialistsDto) => {
   const filter: Record<string, unknown> = {};
 
   if (typeof query.isActive === 'string') {
@@ -31,6 +32,7 @@ export const listSpecialists = async (query: ListSpecialistsQuery) => {
 
 export const getSpecialistById = async (specialistId: string) => {
   const specialist = await SpecialistModel.findById(specialistId);
+
   if (!specialist) {
     throw new ApiError(404, 'Specialist not found');
   }
@@ -38,8 +40,9 @@ export const getSpecialistById = async (specialistId: string) => {
   return specialist;
 };
 
-export const createSpecialist = async (payload: Record<string, unknown>) => {
+export const createSpecialist = async (payload: CreateSpecialistDto) => {
   const name = String(payload.name ?? '').trim();
+
   if (!name) {
     throw new ApiError(400, 'name is required');
   }
@@ -48,11 +51,9 @@ export const createSpecialist = async (payload: Record<string, unknown>) => {
   return SpecialistModel.create({ ...payload, slug });
 };
 
-export const updateSpecialist = async (
-  specialistId: string,
-  payload: Record<string, unknown>,
-) => {
+export const updateSpecialist = async (specialistId: string, payload: UpdateSpecialistDto) => {
   const specialist = await SpecialistModel.findById(specialistId);
+
   if (!specialist) {
     throw new ApiError(404, 'Specialist not found');
   }
@@ -69,6 +70,7 @@ export const updateSpecialist = async (
 
 export const deleteSpecialist = async (specialistId: string) => {
   const specialist = await SpecialistModel.findByIdAndDelete(specialistId);
+
   if (!specialist) {
     throw new ApiError(404, 'Specialist not found');
   }

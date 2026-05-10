@@ -7,30 +7,32 @@ import { validateRequest } from '../../middlewares/validate-request.middleware';
 
 import * as specialistController from './specialist.controller';
 import {
-  createSpecialistBodySchema,
-  listSpecialistsQuerySchema,
-  specialistIdParamSchema,
-  updateSpecialistBodySchema,
+  createSpecialistSchema,
+  listSpecialistsSchema,
+  specialistIdSchema,
+  updateSpecialistSchema,
 } from './specialist.schema';
 
 export const specialistRouter = Router();
 
+// Public Route
 specialistRouter.get(
   '/',
-  validateRequest({ query: listSpecialistsQuerySchema }),
+  validateRequest({ query: listSpecialistsSchema }),
   specialistController.listSpecialists,
 );
 specialistRouter.get(
   '/:id',
-  validateRequest({ params: specialistIdParamSchema }),
+  validateRequest({ params: specialistIdSchema }),
   specialistController.getSpecialistById,
 );
 
+// Private Route
 specialistRouter.post(
   '/',
   authMiddleware,
   roleMiddleware(UserRole.ADMIN),
-  validateRequest({ body: createSpecialistBodySchema }),
+  validateRequest({ body: createSpecialistSchema }),
   specialistController.createSpecialist,
 );
 
@@ -39,8 +41,8 @@ specialistRouter.patch(
   authMiddleware,
   roleMiddleware(UserRole.ADMIN),
   validateRequest({
-    params: specialistIdParamSchema,
-    body: updateSpecialistBodySchema,
+    params: specialistIdSchema,
+    body: updateSpecialistSchema,
   }),
   specialistController.updateSpecialist,
 );
@@ -49,6 +51,6 @@ specialistRouter.delete(
   '/:id',
   authMiddleware,
   roleMiddleware(UserRole.ADMIN),
-  validateRequest({ params: specialistIdParamSchema }),
+  validateRequest({ params: specialistIdSchema }),
   specialistController.deleteSpecialist,
 );
