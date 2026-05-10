@@ -3,9 +3,10 @@ import { UserRole } from '../../common/enums/user-role.enum';
 import { normalizePagination } from '../../common/pagination';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
 import { UserModel } from '../../models/user.model';
-import { CreateDoctorSchema, ListDoctorsQuery } from './doctor.schema';
 
-export const listDoctors = async (query: ListDoctorsQuery) => {
+import { CreateDoctorDto, ListDoctorsDto } from './doctor.schema';
+
+export const listDoctors = async (query: ListDoctorsDto) => {
   const filter: Record<string, unknown> = {};
 
   if (query.specialist) {
@@ -37,6 +38,7 @@ export const getDoctorById = async (doctorId: string) => {
     'specialist',
     'name slug icon',
   );
+
   if (!doctor) {
     throw new ApiError(404, 'Doctor not found');
   }
@@ -44,22 +46,25 @@ export const getDoctorById = async (doctorId: string) => {
   return doctor;
 };
 
-export const createDoctor = async (payload: CreateDoctorSchema) => {
+export const createDoctor = async (payload: CreateDoctorDto) => {
   const userId = String(payload.userId ?? '');
+
   if (!userId) {
     throw new ApiError(400, 'user is required');
   }
 
   const user = await UserModel.findById(userId);
+
   if (!user) {
     throw new ApiError(404, 'User not found');
   }
 
   if (user.role !== UserRole.DOCTOR) {
-    throw new ApiError(400, 'User role must be DOCTOR');
+    throw new ApiError(400, 'User role must be Doctor');
   }
 
   const existingProfile = await DoctorProfileModel.findOne({ user: userId });
+
   if (existingProfile) {
     throw new ApiError(409, 'Doctor profile already exists for this user');
   }
@@ -73,14 +78,12 @@ export const updateDoctor = async (
   requester: { id: string; role: UserRole },
 ) => {
   const existingDoctor = await DoctorProfileModel.findById(doctorId);
+
   if (!existingDoctor) {
     throw new ApiError(404, 'Doctor not found');
   }
 
-  if (
-    requester.role === UserRole.DOCTOR &&
-    existingDoctor.user.toString() !== requester.id
-  ) {
+  if (requester.role === UserRole.DOCTOR && existingDoctor.user.toString() !== requester.id) {
     throw new ApiError(403, 'Forbidden');
   }
 
@@ -96,14 +99,12 @@ export const updateDoctorSchedule = async (
   requester: { id: string; role: UserRole },
 ) => {
   const doctor = await DoctorProfileModel.findById(doctorId);
+
   if (!doctor) {
     throw new ApiError(404, 'Doctor not found');
   }
 
-  if (
-    requester.role === UserRole.DOCTOR &&
-    doctor.user.toString() !== requester.id
-  ) {
+  if (requester.role === UserRole.DOCTOR && doctor.user.toString() !== requester.id) {
     throw new ApiError(403, 'Forbidden');
   }
 
@@ -115,6 +116,7 @@ export const updateDoctorSchedule = async (
 
 export const deleteDoctor = async (doctorId: string) => {
   const doctor = await DoctorProfileModel.findByIdAndDelete(doctorId);
+
   if (!doctor) {
     throw new ApiError(404, 'Doctor not found');
   }

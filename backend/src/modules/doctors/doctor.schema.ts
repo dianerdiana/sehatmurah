@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-export const doctorIdParamSchema = z.object({
+export const doctorIdSchema = z.object({
   id: z.string().trim().min(1, 'id is required'),
 });
 
-export const listDoctorsQuerySchema = z.object({
+export const listDoctorsSchema = z.object({
   specialist: z.string().trim().min(1).optional(),
   city: z.string().trim().min(1).optional(),
   search: z.string().trim().min(1).optional(),
@@ -12,24 +12,10 @@ export const listDoctorsQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(10),
 });
 
-export type ListDoctorsQuery = z.infer<typeof listDoctorsQuerySchema>;
-
 const doctorScheduleItemSchema = z.object({
-  day: z.enum([
-    'MONDAY',
-    'TUESDAY',
-    'WEDNESDAY',
-    'THURSDAY',
-    'FRIDAY',
-    'SATURDAY',
-    'SUNDAY',
-  ]),
-  startTime: z
-    .string()
-    .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'invalid startTime HH:mm'),
-  endTime: z
-    .string()
-    .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'invalid endTime HH:mm'),
+  day: z.enum(['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']),
+  startTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'invalid startTime HH:mm'),
+  endTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'invalid endTime HH:mm'),
   isAvailable: z.boolean().default(true),
 });
 
@@ -39,7 +25,7 @@ const practiceLocationSchema = z.object({
   city: z.string().trim().min(1, 'city is required'),
 });
 
-export const createDoctorBodySchema = z.object({
+export const createDoctorSchema = z.object({
   userId: z.string().trim().min(1, 'user is required'),
   fullName: z.string().trim().min(1, 'fullName is required'),
   specialist: z.string().trim().min(1, 'specialist is required'),
@@ -52,16 +38,17 @@ export const createDoctorBodySchema = z.object({
   isAvailable: z.boolean().optional(),
 });
 
-export type CreateDoctorSchema = z.infer<typeof createDoctorBodySchema>;
-
-export const updateDoctorBodySchema = createDoctorBodySchema
+export const updateDoctorSchema = createDoctorSchema
   .omit({ userId: true })
   .partial()
-  .refine(
-    (value) => Object.keys(value).length > 0,
-    'at least one field must be provided',
-  );
+  .refine((value) => Object.keys(value).length > 0, 'at least one field must be provided');
 
-export const updateDoctorScheduleBodySchema = z.object({
+export const updateDoctorScheduleSchema = z.object({
   schedule: z.array(doctorScheduleItemSchema),
 });
+
+export type DoctorIdDto = z.infer<typeof doctorIdSchema>;
+export type ListDoctorsDto = z.infer<typeof listDoctorsSchema>;
+export type CreateDoctorDto = z.infer<typeof createDoctorSchema>;
+export type UpdateDoctorDto = z.infer<typeof updateDoctorSchema>;
+export type UpdateDoctorScheduleDto = z.infer<typeof updateDoctorScheduleSchema>;

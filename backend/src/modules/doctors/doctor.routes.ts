@@ -6,29 +6,25 @@ import { roleMiddleware } from '../../middlewares/role.middleware';
 import { validateRequest } from '../../middlewares/validate-request.middleware';
 import { listReviewsByDoctor } from '../reviews/review.controller';
 import {
-  doctorIdParamSchema as doctorReviewParamSchema,
+  doctorIdSchema as doctorReviewParamSchema,
   listReviewsByDoctorQuerySchema,
 } from '../reviews/review.schema';
 
 import * as doctorController from './doctor.controller';
 import {
-  createDoctorBodySchema,
-  doctorIdParamSchema,
-  listDoctorsQuerySchema,
-  updateDoctorBodySchema,
-  updateDoctorScheduleBodySchema,
+  createDoctorSchema,
+  doctorIdSchema,
+  listDoctorsSchema,
+  updateDoctorScheduleSchema,
+  updateDoctorSchema,
 } from './doctor.schema';
 
 export const doctorRouter = Router();
 
-doctorRouter.get(
-  '/',
-  validateRequest({ query: listDoctorsQuerySchema }),
-  doctorController.listDoctors,
-);
+doctorRouter.get('/', validateRequest({ query: listDoctorsSchema }), doctorController.listDoctors);
 doctorRouter.get(
   '/:id',
-  validateRequest({ params: doctorIdParamSchema }),
+  validateRequest({ params: doctorIdSchema }),
   doctorController.getDoctorById,
 );
 doctorRouter.get(
@@ -44,7 +40,7 @@ doctorRouter.post(
   '/',
   authMiddleware,
   roleMiddleware(UserRole.ADMIN),
-  validateRequest({ body: createDoctorBodySchema }),
+  validateRequest({ body: createDoctorSchema }),
   doctorController.createDoctor,
 );
 
@@ -53,8 +49,8 @@ doctorRouter.patch(
   authMiddleware,
   roleMiddleware(UserRole.ADMIN, UserRole.DOCTOR),
   validateRequest({
-    params: doctorIdParamSchema,
-    body: updateDoctorBodySchema,
+    params: doctorIdSchema,
+    body: updateDoctorSchema,
   }),
   doctorController.updateDoctor,
 );
@@ -64,8 +60,8 @@ doctorRouter.patch(
   authMiddleware,
   roleMiddleware(UserRole.ADMIN, UserRole.DOCTOR),
   validateRequest({
-    params: doctorIdParamSchema,
-    body: updateDoctorScheduleBodySchema,
+    params: doctorIdSchema,
+    body: updateDoctorScheduleSchema,
   }),
   doctorController.updateDoctorSchedule,
 );
@@ -74,6 +70,6 @@ doctorRouter.delete(
   '/:id',
   authMiddleware,
   roleMiddleware(UserRole.ADMIN),
-  validateRequest({ params: doctorIdParamSchema }),
+  validateRequest({ params: doctorIdSchema }),
   doctorController.deleteDoctor,
 );

@@ -3,17 +3,19 @@ import { NextFunction, Request, Response } from 'express';
 import { ApiError } from '../../common/api-error';
 import { HttpResponse } from '../../common/http-response';
 import { buildResponseMeta } from '../../common/pagination';
+import { AuthUser } from '../../types/auth-user.type';
 
+import {
+  CreateDoctorDto,
+  ListDoctorsDto,
+  UpdateDoctorDto,
+  UpdateDoctorScheduleDto,
+} from './doctor.schema';
 import * as doctorService from './doctor.service';
-import { ListDoctorsQuery } from './doctor.schema';
 
-export const listDoctors = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const listDoctors = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const query = req.query as unknown as ListDoctorsQuery;
+    const query = req.query as unknown as ListDoctorsDto;
     const result = await doctorService.listDoctors(query);
 
     res.json(
@@ -30,86 +32,64 @@ export const listDoctors = async (
   }
 };
 
-export const getDoctorById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const getDoctorById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await doctorService.getDoctorById(String(req.params.id));
+    const doctorId = String(req.params.id);
+
+    const data = await doctorService.getDoctorById(doctorId);
     res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
 };
 
-export const createDoctor = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const createDoctor = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await doctorService.createDoctor(req.body);
+    const payload = req.body as CreateDoctorDto;
+
+    const data = await doctorService.createDoctor(payload);
     res.status(201).json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
 };
 
-export const updateDoctor = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const updateDoctor = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) {
-      throw new ApiError(401, 'Unauthorized');
-    }
+    const doctorId = String(req.params.id);
+    const payload = req.body as UpdateDoctorDto;
+    const authUser = req.user as AuthUser;
 
-    const data = await doctorService.updateDoctor(
-      String(req.params.id),
-      req.body,
-      req.user,
-    );
+    const data = await doctorService.updateDoctor(doctorId, payload, authUser);
     res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
 };
 
-export const updateDoctorSchedule = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const updateDoctorSchedule = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) {
-      throw new ApiError(401, 'Unauthorized');
-    }
+    const doctorId = String(req.params.id);
+    const payload = req.body as UpdateDoctorScheduleDto;
+    const schedule = payload.schedule;
+    const authUser = req.user as AuthUser;
 
-    const schedule = req.body.schedule;
     if (!Array.isArray(schedule)) {
       throw new ApiError(400, 'schedule must be an array');
     }
 
-    const data = await doctorService.updateDoctorSchedule(
-      String(req.params.id),
-      schedule,
-      req.user,
-    );
+    const data = await doctorService.updateDoctorSchedule(doctorId, schedule, authUser);
     res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteDoctor = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const deleteDoctor = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await doctorService.deleteDoctor(String(req.params.id));
+    const doctorId = String(req.params.id);
+
+    const data = await doctorService.deleteDoctor(doctorId);
     res.json(HttpResponse.success({ data, message: 'Doctor deleted' }));
   } catch (error) {
     next(error);
