@@ -1,6 +1,8 @@
 import { ApiError } from '../../common/api-error';
 import { PatientProfileModel } from '../../models/patient-profile.model';
 
+import { UpdateMyProfileDto } from './patient.schema';
+
 export const getMyProfile = async (userId: string) => {
   const profile = await PatientProfileModel.findOne({ user: userId }).populate(
     'user',
@@ -14,17 +16,14 @@ export const getMyProfile = async (userId: string) => {
   return profile;
 };
 
-export const updateMyProfile = async (
-  userId: string,
-  payload: Record<string, unknown>,
-) => {
+export const updateMyProfile = async (userId: string, payload: UpdateMyProfileDto) => {
   const profile = await PatientProfileModel.findOne({ user: userId });
 
   if (!profile) {
     throw new ApiError(404, 'Patient profile not found');
   }
 
-  const allowedFields = [
+  const allowedFields: (keyof UpdateMyProfileDto)[] = [
     'fullName',
     'dateOfBirth',
     'gender',
@@ -33,8 +32,11 @@ export const updateMyProfile = async (
   ];
 
   for (const field of allowedFields) {
-    if (field in payload) {
-      (profile as unknown as Record<string, unknown>)[field] = payload[field];
+    const value = payload[field];
+
+    if (value !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (profile as any)[field] = value;
     }
   }
 

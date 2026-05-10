@@ -1,60 +1,39 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { ApiError } from '../../common/api-error';
-import { UserRole } from '../../common/enums/user-role.enum';
 import { HttpResponse } from '../../common/http-response';
+import { AuthUser } from '../../types/auth-user.type';
 
+import { UpdateMyProfileDto } from './patient.schema';
 import * as patientService from './patient.service';
 
-export const getMyProfile = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const getMyProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) {
-      throw new ApiError(401, 'Unauthorized');
-    }
+    const authUser = req.user as AuthUser;
 
-    if (req.user.role !== UserRole.PATIENT) {
-      throw new ApiError(403, 'Only PATIENT can access this endpoint');
-    }
-
-    const data = await patientService.getMyProfile(req.user.id);
+    const data = await patientService.getMyProfile(authUser.id);
     res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
 };
 
-export const updateMyProfile = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const updateMyProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) {
-      throw new ApiError(401, 'Unauthorized');
-    }
+    const authUser = req.user as AuthUser;
+    const payload = req.body as UpdateMyProfileDto;
 
-    if (req.user.role !== UserRole.PATIENT) {
-      throw new ApiError(403, 'Only PATIENT can access this endpoint');
-    }
-
-    const data = await patientService.updateMyProfile(req.user.id, req.body);
+    const data = await patientService.updateMyProfile(authUser.id, payload);
     res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
 };
 
-export const getPatientById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const getPatientById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await patientService.getPatientById(String(req.params.id));
+    const patientId = String(req.params.id);
+
+    const data = await patientService.getPatientById(patientId);
     res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
