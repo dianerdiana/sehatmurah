@@ -5,27 +5,19 @@ import { HttpResponse } from '../../common/http-response';
 import { buildResponseMeta } from '../../common/pagination';
 
 import * as appointmentService from './appointment.service';
-import { ListAppointmentsQuery } from './appointment.schema';
+import {
+  CreateAppointmentSchema,
+  ListAppointmentsSchema,
+  UpdateAppointmentStatusSchema,
+} from './appointment.schema';
+import { AuthUser } from '../../types/auth-user.type';
 
-export const createAppointment = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const createAppointment = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) {
-      throw new ApiError(401, 'Unauthorized');
-    }
+    const authUser = req.user as AuthUser;
+    const payload = req.body as CreateAppointmentSchema;
 
-    const { doctor, appointmentDate, startTime, endTime, reason } = req.body;
-
-    const data = await appointmentService.createAppointment(req.user, {
-      doctor,
-      appointmentDate,
-      startTime,
-      endTime,
-      reason,
-    });
+    const data = await appointmentService.createAppointment(authUser, payload);
 
     res.status(201).json(HttpResponse.success({ data }));
   } catch (error) {
@@ -33,24 +25,17 @@ export const createAppointment = async (
   }
 };
 
-export const listAppointments = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const listAppointments = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) {
-      throw new ApiError(401, 'Unauthorized');
-    }
-
-    const query = req.query as unknown as ListAppointmentsQuery;
-    const result = await appointmentService.listAppointments(req.user, query);
+    const authUser = req.user as AuthUser;
+    const payload = req.query as unknown as ListAppointmentsSchema;
+    const result = await appointmentService.listAppointments(authUser, payload);
 
     res.json(
       HttpResponse.success({
         data: result.items,
         meta: buildResponseMeta({
-          ...query,
+          ...payload,
           totalItems: result.totalItems,
         }),
       }),
@@ -60,60 +45,38 @@ export const listAppointments = async (
   }
 };
 
-export const getAppointmentById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const getAppointmentById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) {
-      throw new ApiError(401, 'Unauthorized');
-    }
+    const authUser = req.user as AuthUser;
+    const appointmentId = String(req.params.id);
 
-    const data = await appointmentService.getAppointmentById(
-      String(req.params.id),
-      req.user,
-    );
+    const data = await appointmentService.getAppointmentById(appointmentId, authUser);
+
     res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
 };
 
-export const updateAppointmentStatus = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const updateAppointmentStatus = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) {
-      throw new ApiError(401, 'Unauthorized');
-    }
+    const authUser = req.user as AuthUser;
+    const { status } = req.body as UpdateAppointmentStatusSchema;
+    const appointmentId = String(req.params.id);
 
-    const { status } = req.body;
-
-    const data = await appointmentService.updateAppointmentStatus(
-      String(req.params.id),
-      status,
-      req.user,
-    );
+    const data = await appointmentService.updateAppointmentStatus(appointmentId, status, authUser);
     res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteAppointment = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const deleteAppointment = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) {
-      throw new ApiError(401, 'Unauthorized');
-    }
+    const authUser = req.user as AuthUser;
+    const appointmentId = String(req.params.id);
 
-    await appointmentService.deleteAppointment(String(req.params.id), req.user);
+    await appointmentService.deleteAppointment(appointmentId, authUser);
     res.json(
       HttpResponse.success({
         message: 'Appointment deleted',

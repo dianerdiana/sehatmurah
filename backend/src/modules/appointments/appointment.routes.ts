@@ -7,10 +7,10 @@ import { validateRequest } from '../../middlewares/validate-request.middleware';
 
 import * as appointmentController from './appointment.controller';
 import {
-  appointmentIdParamSchema,
-  createAppointmentBodySchema,
-  listAppointmentsQuerySchema,
-  updateAppointmentStatusBodySchema,
+  appointmentIdSchema,
+  createAppointmentSchema,
+  listAppointmentsSchema,
+  updateAppointmentStatusSchema,
 } from './appointment.schema';
 
 export const appointmentRouter = Router();
@@ -20,21 +20,21 @@ appointmentRouter.use(authMiddleware);
 appointmentRouter.post(
   '/',
   roleMiddleware(UserRole.PATIENT),
-  validateRequest({ body: createAppointmentBodySchema }),
+  validateRequest({ body: createAppointmentSchema }),
   appointmentController.createAppointment,
 );
 
 appointmentRouter.get(
   '/',
   roleMiddleware(UserRole.PATIENT, UserRole.DOCTOR, UserRole.ADMIN),
-  validateRequest({ query: listAppointmentsQuerySchema }),
+  validateRequest({ query: listAppointmentsSchema }),
   appointmentController.listAppointments,
 );
 
 appointmentRouter.get(
   '/:id',
   roleMiddleware(UserRole.PATIENT, UserRole.DOCTOR, UserRole.ADMIN),
-  validateRequest({ params: appointmentIdParamSchema }),
+  validateRequest({ params: appointmentIdSchema }),
   appointmentController.getAppointmentById,
 );
 
@@ -42,8 +42,8 @@ appointmentRouter.patch(
   '/:id/status',
   roleMiddleware(UserRole.DOCTOR, UserRole.ADMIN),
   validateRequest({
-    params: appointmentIdParamSchema,
-    body: updateAppointmentStatusBodySchema,
+    params: appointmentIdSchema,
+    body: updateAppointmentStatusSchema,
   }),
   appointmentController.updateAppointmentStatus,
 );
@@ -51,6 +51,6 @@ appointmentRouter.patch(
 appointmentRouter.delete(
   '/:id',
   roleMiddleware(UserRole.PATIENT, UserRole.ADMIN),
-  validateRequest({ params: appointmentIdParamSchema }),
+  validateRequest({ params: appointmentIdSchema }),
   appointmentController.deleteAppointment,
 );

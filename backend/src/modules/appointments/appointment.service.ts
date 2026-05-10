@@ -5,21 +5,10 @@ import { normalizePagination } from '../../common/pagination';
 import { AppointmentModel } from '../../models/appointment.model';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
 import { PatientProfileModel } from '../../models/patient-profile.model';
-import { ListAppointmentsQuery } from './appointment.schema';
+import { AuthUser } from '../../types/auth-user.type';
 import { generateBookingCode } from '../../utils/generate-booking-code';
 
-interface BookingInput {
-  doctor: string;
-  appointmentDate: string;
-  startTime: string;
-  endTime: string;
-  reason?: string;
-}
-
-interface AuthUser {
-  id: string;
-  role: UserRole;
-}
+import { CreateAppointmentSchema, ListAppointmentsSchema } from './appointment.schema';
 
 const getPatientProfileId = async (userId: string): Promise<string> => {
   const patientProfile = await PatientProfileModel.findOne({ user: userId });
@@ -30,7 +19,7 @@ const getPatientProfileId = async (userId: string): Promise<string> => {
   return patientProfile._id.toString();
 };
 
-const getDoctorProfileIdByUser = async (userId: string): Promise<string> => {
+const getDoctorProfileIdByUserId = async (userId: string): Promise<string> => {
   const doctorProfile = await DoctorProfileModel.findOne({ user: userId });
   if (!doctorProfile) {
     throw new ApiError(404, 'Doctor profile not found');
@@ -39,12 +28,9 @@ const getDoctorProfileIdByUser = async (userId: string): Promise<string> => {
   return doctorProfile._id.toString();
 };
 
-export const createAppointment = async (
-  user: AuthUser,
-  payload: BookingInput,
-) => {
+export const createAppointment = async (user: AuthUser, payload: CreateAppointmentSchema) => {
   if (user.role !== UserRole.PATIENT) {
-    throw new ApiError(403, 'Only PATIENT can create appointment');
+    throw new ApiError(403, 'Only Patient can create appointment');
   }
 
   const patientId = await getPatientProfileId(user.id);
@@ -72,10 +58,7 @@ export const createAppointment = async (
   return appointment;
 };
 
-export const listAppointments = async (
-  user: AuthUser,
-  query: ListAppointmentsQuery,
-) => {
+export const listAppointments = async (user: AuthUser, payload: ListAppointmentsSchema) => {
   const filter: Record<string, unknown> = {};
 
   if (user.role === UserRole.PATIENT) {
@@ -84,11 +67,11 @@ export const listAppointments = async (
   }
 
   if (user.role === UserRole.DOCTOR) {
-    const doctorId = await getDoctorProfileIdByUser(user.id);
+    const doctorId = await getDoctorProfileIdByUserId(user.id);
     filter.doctor = doctorId;
   }
 
-  const { page, limit, skip } = normalizePagination(query);
+  const { page, limit, skip } = normalizePagination(payload);
   const totalItems = await AppointmentModel.countDocuments(filter);
 
   const items = await AppointmentModel.find(filter)
@@ -101,10 +84,7 @@ export const listAppointments = async (
   return { items, totalItems, page, limit };
 };
 
-export const getAppointmentById = async (
-  appointmentId: string,
-  user: AuthUser,
-) => {
+export const getAppointmentById = async (appointmentId: string, user: AuthUser) => {
   const appointment = await AppointmentModel.findById(appointmentId)
     .populate('patient', 'fullName user')
     .populate('doctor', 'fullName user');
@@ -125,7 +105,7 @@ export const getAppointmentById = async (
     return appointment;
   }
 
-  const doctorId = await getDoctorProfileIdByUser(user.id);
+  const doctorId = await getDoctorProfileIdByUserId(user.id);
   if (appointment.doctor._id.toString() !== doctorId) {
     throw new ApiError(403, 'Forbidden');
   }
@@ -142,16 +122,13 @@ export const updateAppointmentStatus = async (
     throw new ApiError(403, 'Forbidden');
   }
 
-  const appointment = await AppointmentModel.findById(appointmentId).populate(
-    'doctor',
-    'user',
-  );
+  const appointment = await AppointmentModel.findById(appointmentId).populate('doctor', 'user');
   if (!appointment) {
     throw new ApiError(404, 'Appointment not found');
   }
 
   if (user.role === UserRole.DOCTOR) {
-    const doctorId = await getDoctorProfileIdByUser(user.id);
+    const doctorId = await getDoctorProfileIdByUserId(user.id);
     if (appointment.doctor._id.toString() !== doctorId) {
       throw new ApiError(403, 'Forbidden');
     }
@@ -163,10 +140,7 @@ export const updateAppointmentStatus = async (
   return appointment;
 };
 
-export const deleteAppointment = async (
-  appointmentId: string,
-  user: AuthUser,
-) => {
+export const deleteAppointment = async (appointmentId: string, user: AuthUser) => {
   const appointment = await AppointmentModel.findById(appointmentId);
   if (!appointment) {
     throw new ApiError(404, 'Appointment not found');
