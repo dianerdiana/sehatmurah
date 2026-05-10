@@ -4,9 +4,9 @@ import z, { ZodError } from 'zod';
 import { ApiError, ApiErrorItem } from '../common/api-error';
 
 interface ValidationSchemas {
-  body?: z.ZodAny;
-  params?: z.ZodAny;
-  query?: z.ZodAny;
+  body?: z.ZodObject;
+  params?: z.ZodObject;
+  query?: z.ZodObject;
 }
 
 const formatZodError = (error: ZodError): ApiErrorItem[] => {
