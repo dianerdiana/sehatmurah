@@ -4,18 +4,10 @@ import { authMiddleware } from '../../middlewares/auth.middleware';
 import { validateRequest } from '../../middlewares/validate-request.middleware';
 
 import * as authController from './auth.controller';
-import { loginBodySchema, registerBodySchema } from './auth.schema';
+import { loginSchema, registerSchema } from './auth.schema';
 
 export const authRouter = Router();
 
-authRouter.post(
-  '/register',
-  validateRequest({ body: registerBodySchema }),
-  authController.register,
-);
-authRouter.post(
-  '/login',
-  validateRequest({ body: loginBodySchema }),
-  authController.login,
-);
+authRouter.post('/register', validateRequest({ body: registerSchema }), authController.register);
+authRouter.post('/login', validateRequest({ body: loginSchema }), authController.login);
 authRouter.get('/me', authMiddleware, authController.me);

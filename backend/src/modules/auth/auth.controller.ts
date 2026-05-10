@@ -1,34 +1,27 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { ApiError } from '../../common/api-error';
 import { HttpResponse } from '../../common/http-response';
+import { AuthUser } from '../../types/auth-user.type';
 
+import { LoginSchema, RegisterSchema } from './auth.schema';
 import * as authService from './auth.service';
 
-export const register = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, email, password, role } = req.body;
+    const payload = req.body as RegisterSchema;
 
-    const data = await authService.register({ name, email, password, role });
+    const data = await authService.register(payload);
     res.status(201).json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
 };
 
-export const login = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, password } = req.body;
+    const payload = req.body as LoginSchema;
 
-    const data = await authService.login({ email, password });
+    const data = await authService.login(payload);
     res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
@@ -37,11 +30,9 @@ export const login = async (
 
 export const me = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.user) {
-      throw new ApiError(401, 'Unauthorized');
-    }
+    const authUser = req.user as AuthUser;
 
-    const data = await authService.me(req.user.id);
+    const data = await authService.me(authUser.id);
     res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);

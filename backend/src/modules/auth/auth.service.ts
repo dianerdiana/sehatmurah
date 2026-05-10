@@ -5,33 +5,23 @@ import { UserModel } from '../../models/user.model';
 import { signAccessToken } from '../../utils/jwt';
 import { comparePassword, hashPassword } from '../../utils/password';
 
-interface RegisterInput {
-  name: string;
-  email: string;
-  password: string;
-  role?: UserRole;
-}
+import { LoginSchema, RegisterSchema } from './auth.schema';
 
-interface LoginInput {
-  email: string;
-  password: string;
-}
-
-export const register = async (input: RegisterInput) => {
-  const role = input.role ?? UserRole.PATIENT;
+export const register = async (payload: RegisterSchema) => {
+  const role = payload.role ?? UserRole.PATIENT;
 
   const existingUser = await UserModel.findOne({
-    email: input.email.toLowerCase(),
+    email: payload.email.toLowerCase(),
   });
   if (existingUser) {
     throw new ApiError(409, 'Email is already registered');
   }
 
-  const hashedPassword = await hashPassword(input.password);
+  const hashedPassword = await hashPassword(payload.password);
 
   const user = await UserModel.create({
-    name: input.name,
-    email: input.email,
+    name: payload.name,
+    email: payload.email,
     password: hashedPassword,
     role,
   });
@@ -39,7 +29,7 @@ export const register = async (input: RegisterInput) => {
   if (role === UserRole.PATIENT) {
     await PatientProfileModel.create({
       user: user._id,
-      fullName: input.name,
+      fullName: payload.name,
     });
   }
 
@@ -59,16 +49,16 @@ export const register = async (input: RegisterInput) => {
   };
 };
 
-export const login = async (input: LoginInput) => {
+export const login = async (payload: LoginSchema) => {
   const user = await UserModel.findOne({
-    email: input.email.toLowerCase(),
+    email: payload.email.toLowerCase(),
   }).select('+password');
 
   if (!user) {
     throw new ApiError(401, 'Invalid email or password');
   }
 
-  const isPasswordValid = await comparePassword(input.password, user.password);
+  const isPasswordValid = await comparePassword(payload.password, user.password);
   if (!isPasswordValid) {
     throw new ApiError(401, 'Invalid email or password');
   }
