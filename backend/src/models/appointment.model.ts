@@ -64,7 +64,6 @@ const appointmentSchema = new Schema<IAppointment>(
   },
 );
 
-appointmentSchema.index({ bookingCode: 1 }, { unique: true });
 appointmentSchema.index(
   { doctor: 1, appointmentDate: 1, startTime: 1 },
   { unique: true },

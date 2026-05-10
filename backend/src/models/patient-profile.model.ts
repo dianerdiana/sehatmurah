@@ -44,7 +44,6 @@ const patientProfileSchema = new Schema<IPatientProfile>(
   },
 );
 
-patientProfileSchema.index({ user: 1 }, { unique: true });
 patientProfileSchema.index({ phoneNumber: 1 });
 
 export const PatientProfileModel = model<IPatientProfile>(

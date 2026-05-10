@@ -145,7 +145,6 @@ const doctorProfileSchema = new Schema<IDoctorProfile>(
   },
 );
 
-doctorProfileSchema.index({ user: 1 }, { unique: true });
 doctorProfileSchema.index({ specialist: 1 });
 doctorProfileSchema.index({ isAvailable: 1 });
 doctorProfileSchema.index({ ratingAverage: -1 });

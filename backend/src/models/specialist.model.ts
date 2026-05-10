@@ -48,7 +48,6 @@ const specialistSchema = new Schema<ISpecialist>(
   },
 );
 
-specialistSchema.index({ slug: 1 }, { unique: true });
 specialistSchema.index({ name: 1 });
 specialistSchema.index({ isActive: 1 });
 specialistSchema.index({ sortOrder: 1 });
