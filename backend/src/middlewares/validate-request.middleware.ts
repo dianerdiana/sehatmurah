@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { ZodError, ZodTypeAny } from 'zod';
+import { ApiErrorItem } from '../common/http-response';
 import { ApiError } from './error.middleware';
 
 interface ValidationSchemas {
@@ -8,10 +9,11 @@ interface ValidationSchemas {
   query?: ZodTypeAny;
 }
 
-const formatZodError = (error: ZodError): string => {
-  return error.issues
-    .map((issue) => `${issue.path.join('.') || 'request'}: ${issue.message}`)
-    .join('; ');
+const formatZodError = (error: ZodError): ApiErrorItem[] => {
+  return error.issues.map((issue) => ({
+    field: issue.path.length ? issue.path.join('.') : undefined,
+    message: issue.message,
+  }));
 };
 
 export const validateRequest = (schemas: ValidationSchemas) => {
@@ -32,7 +34,12 @@ export const validateRequest = (schemas: ValidationSchemas) => {
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        next(new ApiError(400, formatZodError(error)));
+        next(
+          new ApiError(400, 'Validation error', {
+            code: 'VALIDATION_ERROR',
+            details: formatZodError(error),
+          }),
+        );
         return;
       }
 

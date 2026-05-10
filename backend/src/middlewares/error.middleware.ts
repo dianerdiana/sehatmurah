@@ -1,16 +1,27 @@
 import { NextFunction, Request, Response } from 'express';
+import { ApiErrorItem, HttpResponse } from '../common/http-response';
 
 export class ApiError extends Error {
   public readonly statusCode: number;
+  public readonly code?: string;
+  public readonly details?: ApiErrorItem[];
 
-  constructor(statusCode: number, message: string) {
+  constructor(
+    statusCode: number,
+    message: string,
+    options: { code?: string; details?: ApiErrorItem[] } = {},
+  ) {
     super(message);
     this.statusCode = statusCode;
+    this.code = options.code;
+    this.details = options.details;
   }
 }
 
 export const notFoundHandler = (_req: Request, res: Response): void => {
-  res.status(404).json({ message: 'Route not found' });
+  res
+    .status(404)
+    .json(HttpResponse.error('Route not found', undefined, 'ROUTE_NOT_FOUND'));
 };
 
 export const errorHandler = (
@@ -20,15 +31,27 @@ export const errorHandler = (
   _next: NextFunction,
 ): void => {
   if (err instanceof ApiError) {
-    res.status(err.statusCode).json({ message: err.message });
+    res
+      .status(err.statusCode)
+      .json(HttpResponse.error(err.message, err.details, err.code));
     return;
   }
 
   if ((err as { code?: number }).code === 11000) {
-    res.status(409).json({ message: 'Duplicate resource' });
+    res
+      .status(409)
+      .json(
+        HttpResponse.error(
+          'Duplicate resource',
+          undefined,
+          'DUPLICATE_RESOURCE',
+        ),
+      );
     return;
   }
 
   const message = err instanceof Error ? err.message : 'Internal server error';
-  res.status(500).json({ message });
+  res
+    .status(500)
+    .json(HttpResponse.error(message, undefined, 'INTERNAL_SERVER_ERROR'));
 };
