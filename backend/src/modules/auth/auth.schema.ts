@@ -3,7 +3,7 @@ import { UserRole } from '../../common/enums/user-role.enum';
 
 export const registerBodySchema = z.object({
   name: z.string().trim().min(1, 'name is required').max(120),
-  email: z.string().trim().email('invalid email').max(255),
+  email: z.email('invalid email').max(255),
   password: z
     .string()
     .min(8, 'password must be at least 8 characters')
@@ -12,6 +12,6 @@ export const registerBodySchema = z.object({
 });
 
 export const loginBodySchema = z.object({
-  email: z.string().trim().email('invalid email').max(255),
+  email: z.email('invalid email').max(255),
   password: z.string().min(1, 'password is required').max(128),
 });
