@@ -74,7 +74,11 @@ export function RecommendedDoctors() {
                 // KONDISI 2: Tampilkan Data Dokter jika loading selesai dan sukses
                 queryDoctors.data.map((doctor) => (
                   <CarouselItem className='basis-[45%]' key={doctor._id}>
-                    <Link to='/doctor-details' className='w-70 shrink-0 rounded-3xl'>
+                    <Link
+                      to={`/doctors/$doctorId/details`}
+                      params={{ doctorId: doctor._id }}
+                      className='w-70 shrink-0 rounded-3xl'
+                    >
                       <div className='relative h-45 w-full overflow-hidden rounded-t-3xl border border-gray-200 bg-gray-100'>
                         <img src={doctor.profilePhoto} alt='Image' className='w-full h-full object-contain' />
 
