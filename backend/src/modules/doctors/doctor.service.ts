@@ -3,8 +3,9 @@ import { UserRole } from '../../common/enums/user-role.enum';
 import { normalizePagination } from '../../common/pagination';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
 import { UserModel } from '../../models/user.model';
+import { AuthUser } from '../../types/auth-user.type';
 
-import { CreateDoctorDto, ListDoctorsDto } from './doctor.schema';
+import { CreateDoctorDto, ListDoctorsDto, UpdateDoctorDto } from './doctor.schema';
 
 export const listDoctors = async (query: ListDoctorsDto) => {
   const filter: Record<string, unknown> = {};
@@ -68,18 +69,14 @@ export const createDoctor = async (payload: CreateDoctorDto) => {
   return DoctorProfileModel.create(payload);
 };
 
-export const updateDoctor = async (
-  doctorId: string,
-  payload: Record<string, unknown>,
-  requester: { id: string; role: UserRole },
-) => {
+export const updateDoctor = async (doctorId: string, payload: UpdateDoctorDto, user: AuthUser) => {
   const existingDoctor = await DoctorProfileModel.findById(doctorId);
 
   if (!existingDoctor) {
     throw new ApiError(404, 'Doctor not found');
   }
 
-  if (requester.role === UserRole.DOCTOR && existingDoctor.user.toString() !== requester.id) {
+  if (user.role === UserRole.DOCTOR && existingDoctor.user.toString() !== user.id) {
     throw new ApiError(403, 'Forbidden');
   }
 
@@ -92,7 +89,7 @@ export const updateDoctor = async (
 export const updateDoctorSchedule = async (
   doctorId: string,
   schedule: unknown[],
-  requester: { id: string; role: UserRole },
+  user: AuthUser,
 ) => {
   const doctor = await DoctorProfileModel.findById(doctorId);
 
@@ -100,7 +97,7 @@ export const updateDoctorSchedule = async (
     throw new ApiError(404, 'Doctor not found');
   }
 
-  if (requester.role === UserRole.DOCTOR && doctor.user.toString() !== requester.id) {
+  if (user.role === UserRole.DOCTOR && doctor.user.toString() !== user.id) {
     throw new ApiError(403, 'Forbidden');
   }
 
