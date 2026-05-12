@@ -10,7 +10,6 @@ import { comparePassword, hashPassword } from '../../utils/password';
 import { LoginDto, RegisterDto } from './auth.schema';
 
 export const register = async (payload: RegisterDto) => {
-  // 1. Mulai sesi
   const session = await mongoose.startSession();
 
   const role = payload.role ?? UserRole.PATIENT;
@@ -25,27 +24,33 @@ export const register = async (payload: RegisterDto) => {
 
   const hashedPassword = await hashPassword(payload.password);
 
-  // 2. Mulai transaksi
   session.startTransaction();
 
   try {
-    // 3. Eksekusi operasi dengan sesi
-
-    const user = await UserModel.create({
-      name: payload.name,
-      email: payload.email,
-      password: hashedPassword,
-      role,
-    });
+    const [user] = await UserModel.create(
+      [
+        {
+          name: payload.name,
+          email: payload.email,
+          password: hashedPassword,
+          role,
+        },
+      ],
+      { session },
+    );
 
     if (role === UserRole.PATIENT) {
-      await PatientProfileModel.create({
-        user: user._id,
-        fullName: payload.name,
-      });
+      await PatientProfileModel.create(
+        [
+          {
+            user: user._id,
+            fullName: payload.name,
+          },
+        ],
+        { session },
+      );
     }
 
-    // 4. Commit transaksi jika semua operasi berhasil
     await session.commitTransaction();
 
     const token = signAccessToken({
@@ -63,11 +68,9 @@ export const register = async (payload: RegisterDto) => {
       },
     };
   } catch (error) {
-    // Batalkan transaksi jika ada kesalahan
     await session.abortTransaction();
-    throw new ApiError(401, `Failed to register user: ${error}`);
+    throw error;
   } finally {
-    // Tutup sesi
     session.endSession();
   }
 };
