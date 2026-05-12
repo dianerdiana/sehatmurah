@@ -1,16 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { ApiError } from '../../common/api-error';
 import { HttpResponse } from '../../common/http-response';
 import { buildResponseMeta } from '../../common/pagination';
+import { AuthUser } from '../../types/auth-user.type';
 
-import * as appointmentService from './appointment.service';
 import {
   CreateAppointmentDto,
   ListAppointmentsDto,
   UpdateAppointmentStatusDto,
 } from './appointment.schema';
-import { AuthUser } from '../../types/auth-user.type';
+import * as appointmentService from './appointment.service';
 
 export const createAppointment = async (req: Request, res: Response, next: NextFunction) => {
   try {

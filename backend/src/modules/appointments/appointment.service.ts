@@ -24,6 +24,7 @@ export const createAppointment = async (user: AuthUser, payload: CreateAppointme
   const patientId = await getPatientProfileId(user.id);
 
   const doctor = await DoctorProfileModel.findById(payload.doctor);
+
   if (!doctor) {
     throw new ApiError(404, 'Doctor not found');
   }
