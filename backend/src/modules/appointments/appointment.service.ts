@@ -20,6 +20,36 @@ const getDoctorProfileIdByUserId = async (userId: string): Promise<string> => {
   return doctorProfile._id.toString();
 };
 
+const normalizeRefId = (value: unknown): string => {
+  if (value && typeof value === 'object' && '_id' in value) {
+    return String((value as { _id: unknown })._id);
+  }
+
+  return String(value);
+};
+
+const assertPatientOwnsAppointment = async (
+  userId: string,
+  appointmentPatientRef: unknown,
+): Promise<void> => {
+  const patientId = await getPatientProfileId(userId);
+
+  if (normalizeRefId(appointmentPatientRef) !== patientId) {
+    throw new ApiError(403, 'Forbidden');
+  }
+};
+
+const assertDoctorOwnsAppointment = async (
+  userId: string,
+  appointmentDoctorRef: unknown,
+): Promise<void> => {
+  const doctorId = await getDoctorProfileIdByUserId(userId);
+
+  if (normalizeRefId(appointmentDoctorRef) !== doctorId) {
+    throw new ApiError(403, 'Forbidden');
+  }
+};
+
 export const createAppointment = async (user: AuthUser, payload: CreateAppointmentDto) => {
   const patientId = await getPatientProfileId(user.id);
 
@@ -87,17 +117,11 @@ export const getAppointmentById = async (appointmentId: string, user: AuthUser) 
   }
 
   if (user.role === UserRole.PATIENT) {
-    const patientId = await getPatientProfileId(user.id);
-    if (appointment.patient._id.toString() !== patientId) {
-      throw new ApiError(403, 'Forbidden');
-    }
+    await assertPatientOwnsAppointment(user.id, appointment.patient);
     return appointment;
   }
 
-  const doctorId = await getDoctorProfileIdByUserId(user.id);
-  if (appointment.doctor._id.toString() !== doctorId) {
-    throw new ApiError(403, 'Forbidden');
-  }
+  await assertDoctorOwnsAppointment(user.id, appointment.doctor);
 
   return appointment;
 };
@@ -114,10 +138,7 @@ export const updateAppointmentStatus = async (
   }
 
   if (user.role === UserRole.DOCTOR) {
-    const doctorId = await getDoctorProfileIdByUserId(user.id);
-    if (appointment.doctor._id.toString() !== doctorId) {
-      throw new ApiError(403, 'Forbidden');
-    }
+    await assertDoctorOwnsAppointment(user.id, appointment.doctor);
   }
 
   appointment.status = status;
@@ -138,10 +159,7 @@ export const deleteAppointment = async (appointmentId: string, user: AuthUser) =
   }
 
   if (user.role === UserRole.PATIENT) {
-    const patientId = await getPatientProfileId(user.id);
-    if (appointment.patient.toString() !== patientId) {
-      throw new ApiError(403, 'Forbidden');
-    }
+    await assertPatientOwnsAppointment(user.id, appointment.patient);
 
     if (appointment.status !== AppointmentStatus.PENDING) {
       throw new ApiError(400, 'Only pending appointment can be cancelled');
