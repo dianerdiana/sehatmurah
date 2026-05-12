@@ -47,11 +47,7 @@ export const getDoctorById = async (doctorId: string) => {
 };
 
 export const createDoctor = async (payload: CreateDoctorDto) => {
-  const userId = String(payload.userId ?? '');
-
-  if (!userId) {
-    throw new ApiError(400, 'user is required');
-  }
+  const userId = payload.userId;
 
   const user = await UserModel.findById(userId);
 

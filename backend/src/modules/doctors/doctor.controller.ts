@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { ApiError } from '../../common/api-error';
 import { HttpResponse } from '../../common/http-response';
 import { buildResponseMeta } from '../../common/pagination';
 import { AuthUser } from '../../types/auth-user.type';
@@ -73,10 +72,6 @@ export const updateDoctorSchedule = async (req: Request, res: Response, next: Ne
     const payload = req.body as UpdateDoctorScheduleDto;
     const schedule = payload.schedule;
     const authUser = req.user as AuthUser;
-
-    if (!Array.isArray(schedule)) {
-      throw new ApiError(400, 'schedule must be an array');
-    }
 
     const data = await doctorService.updateDoctorSchedule(doctorId, schedule, authUser);
     res.json(HttpResponse.success({ data }));
