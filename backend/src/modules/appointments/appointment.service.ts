@@ -4,21 +4,11 @@ import { UserRole } from '../../common/enums/user-role.enum';
 import { normalizePagination } from '../../common/pagination';
 import { AppointmentModel } from '../../models/appointment.model';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
-import { PatientProfileModel } from '../../models/patient-profile.model';
 import { AuthUser } from '../../types/auth-user.type';
 import { generateBookingCode } from '../../utils/generate-booking-code';
+import { getPatientProfileId } from '../patients/patient.port';
 
 import { CreateAppointmentDto, ListAppointmentsDto } from './appointment.schema';
-
-const getPatientProfileId = async (userId: string): Promise<string> => {
-  const patientProfile = await PatientProfileModel.findOne({ user: userId });
-
-  if (!patientProfile) {
-    throw new ApiError(404, 'Patient profile not found');
-  }
-
-  return patientProfile._id.toString();
-};
 
 const getDoctorProfileIdByUserId = async (userId: string): Promise<string> => {
   const doctorProfile = await DoctorProfileModel.findOne({ user: userId });

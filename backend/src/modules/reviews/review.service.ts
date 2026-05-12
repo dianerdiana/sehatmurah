@@ -5,21 +5,11 @@ import { AppointmentStatus } from '../../common/enums/appointment-status.enum';
 import { normalizePagination } from '../../common/pagination';
 import { AppointmentModel } from '../../models/appointment.model';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
-import { PatientProfileModel } from '../../models/patient-profile.model';
 import { ReviewModel } from '../../models/review.model';
 import { AuthUser } from '../../types/auth-user.type';
+import { getPatientProfileId } from '../patients/patient.port';
 
 import { CreateReviewDto, ListReviewsByDoctorDto } from './review.schema';
-
-const getPatientProfileId = async (userId: string): Promise<string> => {
-  const patientProfile = await PatientProfileModel.findOne({ user: userId });
-
-  if (!patientProfile) {
-    throw new ApiError(404, 'Patient profile not found');
-  }
-
-  return patientProfile._id.toString();
-};
 
 const recalculateDoctorRating = async (doctorId: string): Promise<void> => {
   const doctorObjectId = new Types.ObjectId(doctorId);
