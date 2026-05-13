@@ -1,4 +1,4 @@
-import { Document, model,Schema, Types } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
 
 export interface IReview extends Document {
   patient: Types.ObjectId;
@@ -41,9 +41,6 @@ const reviewSchema = new Schema<IReview>(
 );
 
 reviewSchema.index({ doctor: 1 });
-reviewSchema.index(
-  { patient: 1, doctor: 1, appointment: 1 },
-  { unique: true, sparse: true },
-);
+reviewSchema.index({ patient: 1, doctor: 1, appointment: 1 }, { unique: true, sparse: true });
 
 export const ReviewModel = model<IReview>('Review', reviewSchema);

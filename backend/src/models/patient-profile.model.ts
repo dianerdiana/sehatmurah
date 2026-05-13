@@ -1,4 +1,4 @@
-import { Document, model,Schema, Types } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
 
 import { Gender } from '../common/enums/gender.enum';
 
@@ -47,7 +47,4 @@ const patientProfileSchema = new Schema<IPatientProfile>(
 
 patientProfileSchema.index({ phoneNumber: 1 });
 
-export const PatientProfileModel = model<IPatientProfile>(
-  'PatientProfile',
-  patientProfileSchema,
-);
+export const PatientProfileModel = model<IPatientProfile>('PatientProfile', patientProfileSchema);

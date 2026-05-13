@@ -1,4 +1,4 @@
-import { Document, model,Schema, Types } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
 
 export interface IPracticeLocation {
   clinicName: string;
@@ -54,15 +54,7 @@ const doctorScheduleSchema = new Schema<IDoctorSchedule>(
     day: {
       type: String,
       required: true,
-      enum: [
-        'MONDAY',
-        'TUESDAY',
-        'WEDNESDAY',
-        'THURSDAY',
-        'FRIDAY',
-        'SATURDAY',
-        'SUNDAY',
-      ],
+      enum: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'],
     },
     startTime: {
       type: String,
@@ -149,7 +141,4 @@ doctorProfileSchema.index({ specialist: 1 });
 doctorProfileSchema.index({ isAvailable: 1 });
 doctorProfileSchema.index({ ratingAverage: -1 });
 
-export const DoctorProfileModel = model<IDoctorProfile>(
-  'DoctorProfile',
-  doctorProfileSchema,
-);
+export const DoctorProfileModel = model<IDoctorProfile>('DoctorProfile', doctorProfileSchema);

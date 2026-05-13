@@ -1,4 +1,4 @@
-import { Document, model,Schema } from 'mongoose';
+import { Document, model, Schema } from 'mongoose';
 
 export interface ISpecialist extends Document {
   name: string;
@@ -52,7 +52,4 @@ specialistSchema.index({ name: 1 });
 specialistSchema.index({ isActive: 1 });
 specialistSchema.index({ sortOrder: 1 });
 
-export const SpecialistModel = model<ISpecialist>(
-  'Specialist',
-  specialistSchema,
-);
+export const SpecialistModel = model<ISpecialist>('Specialist', specialistSchema);

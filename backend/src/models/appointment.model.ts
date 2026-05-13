@@ -1,4 +1,4 @@
-import { Document, model,Schema, Types } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
 
 import { AppointmentStatus } from '../common/enums/appointment-status.enum';
 
@@ -65,14 +65,8 @@ const appointmentSchema = new Schema<IAppointment>(
   },
 );
 
-appointmentSchema.index(
-  { doctor: 1, appointmentDate: 1, startTime: 1 },
-  { unique: true },
-);
+appointmentSchema.index({ doctor: 1, appointmentDate: 1, startTime: 1 }, { unique: true });
 appointmentSchema.index({ patient: 1, appointmentDate: -1 });
 appointmentSchema.index({ status: 1 });
 
-export const AppointmentModel = model<IAppointment>(
-  'Appointment',
-  appointmentSchema,
-);
+export const AppointmentModel = model<IAppointment>('Appointment', appointmentSchema);
