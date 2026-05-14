@@ -9,6 +9,6 @@ const config = {
   semi: true,
   htmlWhitespaceSensitivity: 'ignore',
   jsxSingleQuote: true,
-}
+};
 
-export default config
+export default config;
