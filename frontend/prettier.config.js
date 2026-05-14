@@ -2,9 +2,13 @@
 
 /** @type {import('prettier').Config} */
 const config = {
-  semi: false,
+  printWidth: 120,
+  tabWidth: 2,
+  trailingComma: 'all',
   singleQuote: true,
-  trailingComma: "all",
-};
+  semi: true,
+  htmlWhitespaceSensitivity: 'ignore',
+  jsxSingleQuote: true,
+}
 
-export default config;
+export default config
