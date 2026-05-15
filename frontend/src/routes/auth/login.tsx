@@ -43,7 +43,7 @@ function LoginPage() {
         <div className='flex justify-center gap-2 md:justify-start'>
           <Link to='/' className='flex items-center gap-2 font-medium'>
             <div className='flex w-60 items-center justify-center rounded-md text-primary-foreground'>
-              <img src={themeConfig.app.appBrandName} alt='logo-brand' className='w-full h-auto' />
+              <img src={themeConfig.app.logoBrandName} alt='logo-brand' className='w-full h-auto' />
             </div>
           </Link>
         </div>
