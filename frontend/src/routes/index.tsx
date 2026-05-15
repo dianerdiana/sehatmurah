@@ -1,10 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import { PublicFacingLayout } from '@/layouts/public-facing-layout'
+
 export const Route = createFileRoute('/')({ component: Home })
 
 function Home() {
   return (
-    <>
+    <PublicFacingLayout>
       <main className="mx-auto max-w-[640px] overflow-hidden pb-[98px]">
         <header>
           <div className="flex items-center justify-between rounded-b-3xl border border-gray-200 bg-white px-4 pb-8 pt-12">
@@ -606,45 +608,6 @@ function Home() {
           </div>
         </section>
       </main>
-      <nav className="navigate fixed bottom-0 left-0 right-0 z-30 mx-auto">
-        <div className="mx-auto max-w-[640px]">
-          <div className="flex items-center justify-between rounded-t-2xl border-t border-gray-50 bg-white px-4 py-6">
-            <a
-              href="/"
-              className="grid w-[112.33px] place-items-center gap-[6px]"
-            >
-              <img src="assets/icons/homepage-nav-home-active.svg" alt="Icon" />
-              <p className="font-jakarta font-bold leading-[20.16px] text-primary">
-                Home
-              </p>
-            </a>
-            <a
-              href="doctor-search"
-              className="grid w-[112.33px] place-items-center gap-[6px]"
-            >
-              <img
-                src="assets/icons/homepage-nav-appointment-nonactive.svg"
-                alt="Icon"
-              />
-              <p className="font-jakarta font-semibold leading-[20.16px] text-gray-500">
-                Appointment
-              </p>
-            </a>
-            <a
-              href="my-booking"
-              className="grid w-[112.33px] place-items-center gap-[6px]"
-            >
-              <img
-                src="assets/icons/homepage-nav-booking-nonactive.svg"
-                alt="Icon"
-              />
-              <p className="font-jakarta font-semibold leading-[20.16px] text-gray-500">
-                My Booking
-              </p>
-            </a>
-          </div>
-        </div>
-      </nav>
-    </>
+    </PublicFacingLayout>
   )
 }
