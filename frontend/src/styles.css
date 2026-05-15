@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 @import 'tw-animate-css';
@@ -130,7 +130,7 @@
 }
 
 @theme inline {
-  --font-sans: 'Plus Jakarta Sans', 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -191,7 +191,7 @@ body,
 
 body {
   margin: 0;
-  color: var(--sea-ink);
+  color: var(--color-gray-500);
   font-family: var(--font-sans);
   background-color: var(--bg-base);
   background:
@@ -231,14 +231,14 @@ body::after {
   mask-image: radial-gradient(circle at 50% 30%, black, transparent 78%);
 }
 
-a {
+.custom_link {
   color: oklch(0.619 0.149 243.64);
   text-decoration-color: oklch(0.619 0.149 243.64);
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
 
-a:hover {
+.custom_link:hover {
   color: oklch(0.62 0.17 243);
 }
 
