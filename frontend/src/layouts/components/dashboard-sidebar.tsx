@@ -12,8 +12,8 @@ import { NavUser } from './nav-user';
 const data = {
   user: {
     name: 'Dian Erdiana',
-    email: 'dianerdiana@talentaindonesia.id',
-    avatar: '/avatars/shadcn.jpg',
+    email: 'dianerdiana@dianerdiana.com',
+    avatar: '/assets/image/doctordetails-dire-clove.png',
   },
   navMain: [
     {
@@ -31,35 +31,24 @@ const data = {
       label: 'PLATFORM',
       items: [
         {
-          title: 'Modul',
-          url: '/modules',
+          title: 'Appointment',
+          url: '/appointments',
           icon: <Clipboard />,
         },
         {
-          title: 'Proyek',
-          url: '/projects',
+          title: 'Doctor',
+          url: '/doctors',
           icon: <Archive />,
         },
         {
-          title: 'Peserta',
-          url: '/participants',
+          title: 'Patient',
+          url: '/patients',
           icon: <Users />,
-        },
-        {
-          title: 'Kumpulan Tes',
-          url: '/tests',
-          icon: <LayoutGrid />,
-          items: [
-            {
-              title: 'Semua',
-              url: '#',
-            },
-          ],
         },
       ],
     },
     {
-      label: 'PENGATURAN',
+      label: 'SETTING',
       items: [
         {
           title: 'User',
@@ -67,14 +56,9 @@ const data = {
           icon: <UserRoundCog />,
         },
         {
-          title: 'Klien',
-          url: '/clients',
+          title: 'Review',
+          url: '/reviews',
           icon: <BriefcaseBusiness />,
-        },
-        {
-          title: 'Perusahaan',
-          url: '/companies',
-          icon: <Building2 />,
         },
       ],
     },
