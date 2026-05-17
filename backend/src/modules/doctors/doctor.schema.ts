@@ -12,6 +12,12 @@ export const listDoctorsSchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(10),
 });
 
+export const listDoctorsCitiesSchema = z.object({
+  search: z.string().trim().min(1).optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(10),
+});
+
 const doctorScheduleItemSchema = z.object({
   day: z.enum(['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']),
   startTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'invalid startTime HH:mm'),
@@ -49,6 +55,7 @@ export const updateDoctorScheduleSchema = z.object({
 
 export type DoctorIdDto = z.infer<typeof doctorIdSchema>;
 export type ListDoctorsDto = z.infer<typeof listDoctorsSchema>;
+export type ListDoctorsCitiesDto = z.infer<typeof listDoctorsCitiesSchema>;
 export type CreateDoctorDto = z.infer<typeof createDoctorSchema>;
 export type UpdateDoctorDto = z.infer<typeof updateDoctorSchema>;
 export type UpdateDoctorScheduleDto = z.infer<typeof updateDoctorScheduleSchema>;
