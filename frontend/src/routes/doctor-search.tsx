@@ -96,7 +96,7 @@ function DoctorSearchPage() {
               </button>
             </div>
           </div>
-          <div id='myModal' className='absolute left-0 right-0 top-12 z-50 hidden pb-[208px]'>
+          <div id='myModal' className='absolute left-0 right-0 top-12 z-50 pb-[208px]'>
             <div className='mx-auto max-w-[640px] px-4'>
               <div className='h-[145px] rounded-t-3xl bg-[linear-gradient(100.99deg,_#277B53_0%,_#277B7B_100%)] px-4 pt-6'>
                 <p className='text-center font-jakarta font-bold leading-[25.6px] text-white'>
