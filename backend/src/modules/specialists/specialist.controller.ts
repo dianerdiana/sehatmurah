@@ -8,7 +8,7 @@ import * as specialistService from './specialist.service';
 
 export const listSpecialists = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const payload = req.query as unknown as ListSpecialistsDto;
+    const payload = req.sanitizedQuery as ListSpecialistsDto;
     const result = await specialistService.listSpecialists(payload);
 
     res.json(
