@@ -6,6 +6,7 @@ import { AuthUser } from '../../types/auth-user.type';
 
 import {
   CreateDoctorDto,
+  ListDoctorsCitiesDto,
   ListDoctorsDto,
   UpdateDoctorDto,
   UpdateDoctorScheduleDto,
@@ -16,6 +17,25 @@ export const listDoctors = async (req: Request, res: Response, next: NextFunctio
   try {
     const query = req.query as unknown as ListDoctorsDto;
     const result = await doctorService.listDoctors(query);
+
+    res.json(
+      HttpResponse.success({
+        data: result.items,
+        meta: buildResponseMeta({
+          ...query,
+          totalItems: result.totalItems,
+        }),
+      }),
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const listDoctorsCities = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const query = req.query as unknown as ListDoctorsCitiesDto;
+    const result = await doctorService.listDoctorsCities(query);
 
     res.json(
       HttpResponse.success({
