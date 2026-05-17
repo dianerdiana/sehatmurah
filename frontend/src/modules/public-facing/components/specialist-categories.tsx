@@ -2,24 +2,18 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getSpecialists } from '../public-facing.api';
 
-function GridSpecialistsSekeleton() {
+function SpecialistCategoriesSekeleton() {
   return (
-    <section id='categories-skeleton' className='rounded-3xl bg-white px-4 py-8 animate-pulse'>
-      {/* Header Skeleton */}
+    <section id='categories-skeleton' className='rounded-3xl bg-white mx-4 px-4 py-8 animate-pulse'>
       <div className='flex items-center justify-between'>
-        {/* Title Placeholder */}
         <div className='h-6.25 w-44 rounded-md bg-gray-300'></div>
-        {/* "View All" Link Placeholder */}
         <div className='h-4.25 w-14 rounded-md bg-gray-200'></div>
       </div>
 
-      {/* Grid Items Skeleton */}
       <div className='grid grid-cols-3 justify-items-center gap-y-4 pt-4'>
         {[...Array(6)].map((_, index) => (
           <div key={index} className='h-25.5 w-27.75 flex flex-col items-center'>
-            {/* Image/Icon Circle Placeholder */}
             <div className='size-18 rounded-3xl bg-gray-200'></div>
-            {/* Text/Label Placeholder */}
             <div className='mt-2.5 h-4 w-16 rounded bg-gray-200'></div>
           </div>
         ))}
@@ -28,14 +22,14 @@ function GridSpecialistsSekeleton() {
   );
 }
 
-export function GridSpecialists() {
+export function SpecialistCategories() {
   const { data, isPending } = useQuery({
     queryKey: ['specialists'],
     queryFn: getSpecialists,
   });
 
   if (isPending) {
-    return <GridSpecialistsSekeleton />;
+    return <SpecialistCategoriesSekeleton />;
   }
 
   return (
