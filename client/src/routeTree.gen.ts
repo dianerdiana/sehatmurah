@@ -9,8 +9,63 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SuccessPageRouteImport } from './routes/success-page'
+import { Route as SearchResultRouteImport } from './routes/search-result'
+import { Route as PaymentDetailsRouteImport } from './routes/payment-details'
+import { Route as MyBookingRouteImport } from './routes/my-booking'
+import { Route as FutureAppointmentSuccesRouteImport } from './routes/future-appointment-succes'
+import { Route as FutureAppointmentPendingRouteImport } from './routes/future-appointment-pending'
+import { Route as DoctorSearchRouteImport } from './routes/doctor-search'
+import { Route as DoctorDetailsRouteImport } from './routes/doctor-details'
+import { Route as BookingConfirmationRouteImport } from './routes/booking-confirmation'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SuccessPageRoute = SuccessPageRouteImport.update({
+  id: '/success-page',
+  path: '/success-page',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchResultRoute = SearchResultRouteImport.update({
+  id: '/search-result',
+  path: '/search-result',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentDetailsRoute = PaymentDetailsRouteImport.update({
+  id: '/payment-details',
+  path: '/payment-details',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyBookingRoute = MyBookingRouteImport.update({
+  id: '/my-booking',
+  path: '/my-booking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FutureAppointmentSuccesRoute = FutureAppointmentSuccesRouteImport.update({
+  id: '/future-appointment-succes',
+  path: '/future-appointment-succes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FutureAppointmentPendingRoute =
+  FutureAppointmentPendingRouteImport.update({
+    id: '/future-appointment-pending',
+    path: '/future-appointment-pending',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DoctorSearchRoute = DoctorSearchRouteImport.update({
+  id: '/doctor-search',
+  path: '/doctor-search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DoctorDetailsRoute = DoctorDetailsRouteImport.update({
+  id: '/doctor-details',
+  path: '/doctor-details',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingConfirmationRoute = BookingConfirmationRouteImport.update({
+  id: '/booking-confirmation',
+  path: '/booking-confirmation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +74,158 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/booking-confirmation': typeof BookingConfirmationRoute
+  '/doctor-details': typeof DoctorDetailsRoute
+  '/doctor-search': typeof DoctorSearchRoute
+  '/future-appointment-pending': typeof FutureAppointmentPendingRoute
+  '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
+  '/my-booking': typeof MyBookingRoute
+  '/payment-details': typeof PaymentDetailsRoute
+  '/search-result': typeof SearchResultRoute
+  '/success-page': typeof SuccessPageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/booking-confirmation': typeof BookingConfirmationRoute
+  '/doctor-details': typeof DoctorDetailsRoute
+  '/doctor-search': typeof DoctorSearchRoute
+  '/future-appointment-pending': typeof FutureAppointmentPendingRoute
+  '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
+  '/my-booking': typeof MyBookingRoute
+  '/payment-details': typeof PaymentDetailsRoute
+  '/search-result': typeof SearchResultRoute
+  '/success-page': typeof SuccessPageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/booking-confirmation': typeof BookingConfirmationRoute
+  '/doctor-details': typeof DoctorDetailsRoute
+  '/doctor-search': typeof DoctorSearchRoute
+  '/future-appointment-pending': typeof FutureAppointmentPendingRoute
+  '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
+  '/my-booking': typeof MyBookingRoute
+  '/payment-details': typeof PaymentDetailsRoute
+  '/search-result': typeof SearchResultRoute
+  '/success-page': typeof SuccessPageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/booking-confirmation'
+    | '/doctor-details'
+    | '/doctor-search'
+    | '/future-appointment-pending'
+    | '/future-appointment-succes'
+    | '/my-booking'
+    | '/payment-details'
+    | '/search-result'
+    | '/success-page'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/booking-confirmation'
+    | '/doctor-details'
+    | '/doctor-search'
+    | '/future-appointment-pending'
+    | '/future-appointment-succes'
+    | '/my-booking'
+    | '/payment-details'
+    | '/search-result'
+    | '/success-page'
+  id:
+    | '__root__'
+    | '/'
+    | '/booking-confirmation'
+    | '/doctor-details'
+    | '/doctor-search'
+    | '/future-appointment-pending'
+    | '/future-appointment-succes'
+    | '/my-booking'
+    | '/payment-details'
+    | '/search-result'
+    | '/success-page'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BookingConfirmationRoute: typeof BookingConfirmationRoute
+  DoctorDetailsRoute: typeof DoctorDetailsRoute
+  DoctorSearchRoute: typeof DoctorSearchRoute
+  FutureAppointmentPendingRoute: typeof FutureAppointmentPendingRoute
+  FutureAppointmentSuccesRoute: typeof FutureAppointmentSuccesRoute
+  MyBookingRoute: typeof MyBookingRoute
+  PaymentDetailsRoute: typeof PaymentDetailsRoute
+  SearchResultRoute: typeof SearchResultRoute
+  SuccessPageRoute: typeof SuccessPageRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/success-page': {
+      id: '/success-page'
+      path: '/success-page'
+      fullPath: '/success-page'
+      preLoaderRoute: typeof SuccessPageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search-result': {
+      id: '/search-result'
+      path: '/search-result'
+      fullPath: '/search-result'
+      preLoaderRoute: typeof SearchResultRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payment-details': {
+      id: '/payment-details'
+      path: '/payment-details'
+      fullPath: '/payment-details'
+      preLoaderRoute: typeof PaymentDetailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my-booking': {
+      id: '/my-booking'
+      path: '/my-booking'
+      fullPath: '/my-booking'
+      preLoaderRoute: typeof MyBookingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/future-appointment-succes': {
+      id: '/future-appointment-succes'
+      path: '/future-appointment-succes'
+      fullPath: '/future-appointment-succes'
+      preLoaderRoute: typeof FutureAppointmentSuccesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/future-appointment-pending': {
+      id: '/future-appointment-pending'
+      path: '/future-appointment-pending'
+      fullPath: '/future-appointment-pending'
+      preLoaderRoute: typeof FutureAppointmentPendingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/doctor-search': {
+      id: '/doctor-search'
+      path: '/doctor-search'
+      fullPath: '/doctor-search'
+      preLoaderRoute: typeof DoctorSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/doctor-details': {
+      id: '/doctor-details'
+      path: '/doctor-details'
+      fullPath: '/doctor-details'
+      preLoaderRoute: typeof DoctorDetailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/booking-confirmation': {
+      id: '/booking-confirmation'
+      path: '/booking-confirmation'
+      fullPath: '/booking-confirmation'
+      preLoaderRoute: typeof BookingConfirmationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +238,15 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BookingConfirmationRoute: BookingConfirmationRoute,
+  DoctorDetailsRoute: DoctorDetailsRoute,
+  DoctorSearchRoute: DoctorSearchRoute,
+  FutureAppointmentPendingRoute: FutureAppointmentPendingRoute,
+  FutureAppointmentSuccesRoute: FutureAppointmentSuccesRoute,
+  MyBookingRoute: MyBookingRoute,
+  PaymentDetailsRoute: PaymentDetailsRoute,
+  SearchResultRoute: SearchResultRoute,
+  SuccessPageRoute: SuccessPageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
