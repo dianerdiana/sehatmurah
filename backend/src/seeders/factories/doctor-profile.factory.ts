@@ -39,7 +39,8 @@ export function generateDoctorProfiles(
       user: doctorUserIds[0],
       fullName: 'Dr. Ahmad Wijaya, Sp.J',
       specialist: specialistIds[0], // Cardiologist
-      profilePhoto: 'https://via.placeholder.com/200?text=Dr+Ahmad',
+      profilePhoto:
+        'https://ik.imagekit.io/dianerdiana/sehatmurah/doctors/searchresult-dr-raze-invoker.png',
       experienceYears: 15,
       description:
         'Experienced cardiologist with expertise in heart disease prevention and treatment',
@@ -58,7 +59,8 @@ export function generateDoctorProfiles(
       user: doctorUserIds[1],
       fullName: 'Dr. Siti Nurhaliza, Sp.KK',
       specialist: specialistIds[1], // Dermatologist
-      profilePhoto: 'https://via.placeholder.com/200?text=Dr+Siti',
+      profilePhoto:
+        'https://ik.imagekit.io/dianerdiana/sehatmurah/doctors/doctorsearch-dr-marci-maiden.png',
       experienceYears: 12,
       description: 'Dermatologist specializing in skin care and aesthetic treatments',
       practiceLocation: {
@@ -76,7 +78,8 @@ export function generateDoctorProfiles(
       user: doctorUserIds[2],
       fullName: 'Dr. Budi Santoso, Sp.OT',
       specialist: specialistIds[2], // Orthopedic
-      profilePhoto: 'https://via.placeholder.com/200?text=Dr+Budi',
+      profilePhoto:
+        'https://ik.imagekit.io/dianerdiana/sehatmurah/doctors/searchresult-dr.-arrbona-naaiv.png',
       experienceYears: 18,
       description: 'Orthopedic specialist with expertise in bone fractures and joint replacements',
       practiceLocation: {
@@ -94,7 +97,8 @@ export function generateDoctorProfiles(
       user: doctorUserIds[3],
       fullName: 'Dr. Eka Putri, Sp.A',
       specialist: specialistIds[3], // Pediatrician
-      profilePhoto: 'https://via.placeholder.com/200?text=Dr+Eka',
+      profilePhoto:
+        'https://ik.imagekit.io/dianerdiana/sehatmurah/doctors/searchresult-dr-reyna-ramma.png',
       experienceYears: 10,
       description: 'Pediatrician dedicated to child health and development',
       practiceLocation: {
@@ -112,7 +116,7 @@ export function generateDoctorProfiles(
       user: doctorUserIds[4],
       fullName: 'Dr. Roni Hermawan, Sp.JP',
       specialist: specialistIds[4], // Psychiatrist
-      profilePhoto: 'https://via.placeholder.com/200?text=Dr+Roni',
+      profilePhoto: 'https://ik.imagekit.io/dianerdiana/sehatmurah/doctors/doctor-budi.png',
       experienceYears: 14,
       description: 'Psychiatrist providing mental health counseling and treatment',
       practiceLocation: {
