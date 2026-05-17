@@ -1,17 +1,43 @@
+import mongoose from 'mongoose';
+
 import { ApiError } from '../../common/api-error';
 import { UserRole } from '../../common/enums/user-role.enum';
 import { normalizePagination } from '../../common/pagination';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
+import { SpecialistModel } from '../../models/specialist.model';
 import { UserModel } from '../../models/user.model';
 import { AuthUser } from '../../types/auth-user.type';
 
-import { CreateDoctorDto, ListDoctorsDto, UpdateDoctorDto } from './doctor.schema';
+import {
+  CreateDoctorDto,
+  ListDoctorsCitiesDto,
+  ListDoctorsDto,
+  UpdateDoctorDto,
+} from './doctor.schema';
 
 export const listDoctors = async (query: ListDoctorsDto) => {
   const filter: Record<string, unknown> = {};
 
   if (query.specialist) {
-    filter.specialist = query.specialist;
+    const isObjectId = mongoose.Types.ObjectId.isValid(query.specialist);
+
+    if (isObjectId) {
+      filter.specialist = query.specialist;
+    } else {
+      const specialistData = await SpecialistModel.findOne({
+        $or: [
+          { slug: query.specialist },
+          { name: { $regex: query.specialist, $options: 'i' } }, // Case-insensitive
+        ],
+      }).select('_id');
+
+      if (specialistData) {
+        filter.specialist = specialistData._id;
+      } else {
+        // Jika spesialis tidak ditemukan, paksa hasil pencarian dokter kosong
+        filter.specialist = new mongoose.Types.ObjectId();
+      }
+    }
   }
 
   if (query.city) {
@@ -32,6 +58,21 @@ export const listDoctors = async (query: ListDoctorsDto) => {
     .limit(limit);
 
   return { items, totalItems, page, limit };
+};
+
+export const listDoctorsCities = async (query: ListDoctorsCitiesDto) => {
+  const filter: Record<string, unknown> = {};
+
+  if (query.search) {
+    filter['practiceLocation.city'] = { $regex: query.search, $options: 'i' };
+  }
+
+  // Gunakan distinct untuk mengambil daftar nama kota unik langsung dari database
+  const items = await DoctorProfileModel.distinct('practiceLocation.city', filter);
+
+  const totalItems = items.length;
+
+  return { items, totalItems };
 };
 
 export const getDoctorById = async (doctorId: string) => {
