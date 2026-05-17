@@ -14,6 +14,7 @@ import * as doctorController from './doctor.controller';
 import {
   createDoctorSchema,
   doctorIdSchema,
+  listDoctorsCitiesSchema,
   listDoctorsSchema,
   updateDoctorScheduleSchema,
   updateDoctorSchema,
@@ -22,6 +23,11 @@ import {
 export const doctorRouter = Router();
 
 doctorRouter.get('/', validateRequest({ query: listDoctorsSchema }), doctorController.listDoctors);
+doctorRouter.get(
+  '/cities',
+  validateRequest({ query: listDoctorsCitiesSchema }),
+  doctorController.listDoctorsCities,
+);
 doctorRouter.get(
   '/:id',
   validateRequest({ params: doctorIdSchema }),
