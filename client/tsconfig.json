@@ -16,8 +16,10 @@
       "@/lib/*": ["./src/lib/*"],
       "@/types/*": ["./src/types/*"],
       "@/services/*": ["./src/services/*"],
-      "@/features/*": ["./src/features/*"],
-      "@/redux/*": ["./src/redux/*"]
+      "@/modules/*": ["./src/modules/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/context/*": ["./src/context/*"],
+      "@/integrations/*": ["./src/integrations/*"]
     }
   }
 }

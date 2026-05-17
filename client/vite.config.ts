@@ -28,8 +28,10 @@ export default defineConfig({
       '@/lib': path.resolve(__dirname, './src/lib'),
       '@/types': path.resolve(__dirname, './src/types'),
       '@/services': path.resolve(__dirname, './src/services'),
-      '@/features': path.resolve(__dirname, './src/features'),
-      '@/redux': path.resolve(__dirname, './src/redux'),
+      '@/modules': path.resolve(__dirname, './src/modules'),
+      '@/hooks': path.resolve(__dirname, './src/hooks'),
+      '@/context': path.resolve(__dirname, './src/context'),
+      '@/integrations': path.resolve(__dirname, './src/integrations'),
     },
   },
 });
