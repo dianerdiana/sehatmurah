@@ -15,7 +15,7 @@
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
-    "docs": "docsify serve docs",
+    "docs": "docsify serve docs --port 4000",
     "seed": "ts-node src/seeders/index.ts",
     "seed:reset": "ts-node src/seeders/index.ts --reset"
   },
