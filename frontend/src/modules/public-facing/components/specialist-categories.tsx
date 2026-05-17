@@ -24,8 +24,8 @@ function SpecialistCategoriesSekeleton() {
 
 export function SpecialistCategories() {
   const { data, isPending } = useQuery({
-    queryKey: ['specialists'],
-    queryFn: getSpecialists,
+    queryKey: ['specialists', 'categories'],
+    queryFn: () => getSpecialists({ limit: 6 }),
   });
 
   if (isPending) {
