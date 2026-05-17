@@ -37,14 +37,9 @@
       "@/modules/*": ["./src/modules/*"],
       "@/hooks/*": ["./src/hooks/*"],
       "@/context/*": ["./src/context/*"],
-      "@/integrations/*": ["./src/integrations/*"]
+      "@/integrations/*": ["./src/integrations/*"],
+      "@/navigation/*": ["./src/navigation/*"]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "cypress/**/*.ts",
-    "cypress/**/*.tsx",
-    ".storybook/**/*.ts"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "cypress/**/*.ts", "cypress/**/*.tsx", ".storybook/**/*.ts"]
 }

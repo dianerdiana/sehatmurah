@@ -32,6 +32,7 @@ export default defineConfig({
       '@/hooks': path.resolve(__dirname, './src/hooks'),
       '@/context': path.resolve(__dirname, './src/context'),
       '@/integrations': path.resolve(__dirname, './src/integrations'),
+      '@/navigation': path.resolve(__dirname, './src/navigation'),
     },
   },
 });

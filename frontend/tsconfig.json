@@ -1,9 +1,6 @@
 {
   "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"],
@@ -19,7 +16,8 @@
       "@/modules/*": ["./src/modules/*"],
       "@/hooks/*": ["./src/hooks/*"],
       "@/context/*": ["./src/context/*"],
-      "@/integrations/*": ["./src/integrations/*"]
+      "@/integrations/*": ["./src/integrations/*"],
+      "@/navigation/*": ["./src/navigation/*"]
     }
   }
 }
