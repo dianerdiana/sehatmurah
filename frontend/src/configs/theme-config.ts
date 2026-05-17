@@ -3,7 +3,7 @@
 // Template config options
 export const themeConfig = {
   app: {
-    appName: 'Sehat Murah',
+    appName: 'SEHATMURAH',
     appType: 'Appointment Doctor',
     logoBrandName: '/assets/logo/logo-brand-name.png',
     logoBrand: '/assets/logo/logo-brand.png',
