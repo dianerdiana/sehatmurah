@@ -23,6 +23,7 @@ export const listSpecialists = async (query: ListSpecialistsDto) => {
   const totalItems = await SpecialistModel.countDocuments(filter);
 
   const items = await SpecialistModel.find(filter)
+    .populate('countDoctors')
     .sort({ sortOrder: 1, name: 1 })
     .skip(skip)
     .limit(limit);
