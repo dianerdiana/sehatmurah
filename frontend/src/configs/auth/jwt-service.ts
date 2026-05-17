@@ -52,35 +52,35 @@ export class JwtService {
         }
 
         // Cek jika error 401 dan bukan request refresh itu sendiri yang error
-        if (response.status === 401 && !originalRequest.retry) {
-          if (!this.isAlreadyFetchingAccessToken) {
-            this.isAlreadyFetchingAccessToken = true;
+        // if (response.status === 401 && !originalRequest.retry) {
+        //   if (!this.isAlreadyFetchingAccessToken) {
+        //     this.isAlreadyFetchingAccessToken = true;
 
-            this.refreshToken()
-              .then((res) => {
-                this.isAlreadyFetchingAccessToken = false;
-                const newVisibleToken = res.data.accessToken;
-                this.setToken(newVisibleToken);
-                this.onAccessTokenFetched(newVisibleToken);
-              })
-              .catch((err) => {
-                this.isAlreadyFetchingAccessToken = false;
-                this.subscribers = []; // Bersihkan antrean jika refresh gagal
-                this.removeToken();
-                return Promise.reject(err);
-              });
-          }
+        //     this.refreshToken()
+        //       .then((res) => {
+        //         this.isAlreadyFetchingAccessToken = false;
+        //         const newVisibleToken = res.data.accessToken;
+        //         this.setToken(newVisibleToken);
+        //         this.onAccessTokenFetched(newVisibleToken);
+        //       })
+        //       .catch((err) => {
+        //         this.isAlreadyFetchingAccessToken = false;
+        //         this.subscribers = []; // Bersihkan antrean jika refresh gagal
+        //         this.removeToken();
+        //         return Promise.reject(err);
+        //       });
+        //   }
 
-          // Flag agar request ini tidak mengulang refresh jika nanti gagal lagi
-          originalRequest.retry = true;
+        //   // Flag agar request ini tidak mengulang refresh jika nanti gagal lagi
+        //   originalRequest.retry = true;
 
-          return new Promise((resolve) => {
-            this.addSubscriber((token: string) => {
-              originalRequest.headers.Authorization = `${this.jwtConfig.tokenType} ${token}`;
-              resolve(this.axin(originalRequest));
-            });
-          });
-        }
+        //   return new Promise((resolve) => {
+        //     this.addSubscriber((token: string) => {
+        //       originalRequest.headers.Authorization = `${this.jwtConfig.tokenType} ${token}`;
+        //       resolve(this.axin(originalRequest));
+        //     });
+        //   });
+        // }
 
         return Promise.reject(error);
       },
