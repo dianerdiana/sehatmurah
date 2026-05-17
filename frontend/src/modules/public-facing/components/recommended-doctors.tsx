@@ -17,7 +17,7 @@ export function RecommendedDoctors() {
 
   const { data: specialistsData } = useQuery({
     queryKey: ['specialists'],
-    queryFn: getSpecialists,
+    queryFn: () => getSpecialists({ limit: 10 }),
   });
 
   const {
@@ -35,8 +35,8 @@ export function RecommendedDoctors() {
   };
 
   return (
-    <section id='Recommended' className='mb-4 mt-4 rounded-3xl bg-white py-8'>
-      <h2 className='pl-4 text-[20px] font-bold leading-[25.2px] text-gray-900'>Recommended Doctors</h2>
+    <section id='Recommended' className='mb-4 mt-4 rounded-3xl bg-white py-8 px-4'>
+      <h2 className='text-[20px] font-bold leading-[25.2px] text-gray-900'>Recommended Doctors</h2>
       <Tabs defaultValue={currentTab} onValueChange={onTabChange} className='w-full mt-4'>
         <TabsList className='w-full h-auto bg-transparent p-0 mb-6 block'>
           <Carousel
