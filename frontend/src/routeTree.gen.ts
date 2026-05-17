@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SuccessPageRouteImport } from './routes/success-page'
-import { Route as SearchResultRouteImport } from './routes/search-result'
+import { Route as SearchRouteImport } from './routes/search'
 import { Route as PaymentDetailsRouteImport } from './routes/payment-details'
 import { Route as MyBookingRouteImport } from './routes/my-booking'
 import { Route as FutureAppointmentSuccesRouteImport } from './routes/future-appointment-succes'
@@ -28,9 +28,9 @@ const SuccessPageRoute = SuccessPageRouteImport.update({
   path: '/success-page',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SearchResultRoute = SearchResultRouteImport.update({
-  id: '/search-result',
-  path: '/search-result',
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PaymentDetailsRoute = PaymentDetailsRouteImport.update({
@@ -99,7 +99,7 @@ export interface FileRoutesByFullPath {
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
-  '/search-result': typeof SearchResultRoute
+  '/search': typeof SearchRoute
   '/success-page': typeof SuccessPageRoute
   '/auth/login': typeof AuthLoginRoute
   '/dashboard': typeof dashboardLayoutDashboardRoute
@@ -113,7 +113,7 @@ export interface FileRoutesByTo {
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
-  '/search-result': typeof SearchResultRoute
+  '/search': typeof SearchRoute
   '/success-page': typeof SuccessPageRoute
   '/auth/login': typeof AuthLoginRoute
   '/dashboard': typeof dashboardLayoutDashboardRoute
@@ -128,7 +128,7 @@ export interface FileRoutesById {
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
-  '/search-result': typeof SearchResultRoute
+  '/search': typeof SearchRoute
   '/success-page': typeof SuccessPageRoute
   '/(dashboard)/_layout': typeof dashboardLayoutRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
@@ -145,7 +145,7 @@ export interface FileRouteTypes {
     | '/future-appointment-succes'
     | '/my-booking'
     | '/payment-details'
-    | '/search-result'
+    | '/search'
     | '/success-page'
     | '/auth/login'
     | '/dashboard'
@@ -159,7 +159,7 @@ export interface FileRouteTypes {
     | '/future-appointment-succes'
     | '/my-booking'
     | '/payment-details'
-    | '/search-result'
+    | '/search'
     | '/success-page'
     | '/auth/login'
     | '/dashboard'
@@ -173,7 +173,7 @@ export interface FileRouteTypes {
     | '/future-appointment-succes'
     | '/my-booking'
     | '/payment-details'
-    | '/search-result'
+    | '/search'
     | '/success-page'
     | '/(dashboard)/_layout'
     | '/auth/login'
@@ -189,7 +189,7 @@ export interface RootRouteChildren {
   FutureAppointmentSuccesRoute: typeof FutureAppointmentSuccesRoute
   MyBookingRoute: typeof MyBookingRoute
   PaymentDetailsRoute: typeof PaymentDetailsRoute
-  SearchResultRoute: typeof SearchResultRoute
+  SearchRoute: typeof SearchRoute
   SuccessPageRoute: typeof SuccessPageRoute
   dashboardLayoutRoute: typeof dashboardLayoutRouteWithChildren
   AuthLoginRoute: typeof AuthLoginRoute
@@ -204,11 +204,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SuccessPageRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/search-result': {
-      id: '/search-result'
-      path: '/search-result'
-      fullPath: '/search-result'
-      preLoaderRoute: typeof SearchResultRouteImport
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/payment-details': {
@@ -312,7 +312,7 @@ const rootRouteChildren: RootRouteChildren = {
   FutureAppointmentSuccesRoute: FutureAppointmentSuccesRoute,
   MyBookingRoute: MyBookingRoute,
   PaymentDetailsRoute: PaymentDetailsRoute,
-  SearchResultRoute: SearchResultRoute,
+  SearchRoute: SearchRoute,
   SuccessPageRoute: SuccessPageRoute,
   dashboardLayoutRoute: dashboardLayoutRouteWithChildren,
   AuthLoginRoute: AuthLoginRoute,
