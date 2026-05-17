@@ -1,4 +1,5 @@
-import { Field, FieldLabel } from '../ui/field';
+import { useStore } from '@tanstack/react-form';
+import { Field, FieldError, FieldLabel } from '../ui/field';
 import { Input } from '../ui/input';
 
 import { useFieldContext } from '@/context/form-context';
@@ -13,6 +14,7 @@ export type TextFieldProps = {
 
 export function TextField(props: TextFieldProps) {
   const field = useFieldContext<string>();
+  const errors = useStore(field.store, (state) => state.meta.errors);
 
   return (
     <Field>
@@ -27,6 +29,8 @@ export function TextField(props: TextFieldProps) {
         onChange={(e) => field.handleChange(e.target.value)}
         aria-invalid={!field.state.meta.isValid}
       />
+
+      {!field.state.meta.isValid && <FieldError errors={errors} />}
     </Field>
   );
 }
