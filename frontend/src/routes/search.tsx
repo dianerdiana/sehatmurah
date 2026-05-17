@@ -1,11 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { SearchX } from 'lucide-react';
 import z from 'zod';
 
-import { formatCurrency } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 import { PublicBlankLayout } from '@/layouts/public-blank-layout';
 import { PublicFacingLayout } from '@/layouts/public-facing-layout';
+import { CardDoctor, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
 import { FormSearchDoctor } from '@/modules/public-facing/components/form-search-doctor';
 import { getDoctors } from '@/modules/public-facing/public-facing.api';
 
@@ -21,11 +23,14 @@ export const Route = createFileRoute('/search')({
 
 function DoctorsSearchPage() {
   const { specialist, city } = Route.useSearch();
+  const router = useRouter();
 
-  const { data } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ['doctors', specialist, city],
     queryFn: () => getDoctors({ specialist, city }),
   });
+
+  const doctors = data?.status === 'success' ? data.data : [];
 
   if (!specialist || !city) {
     return (
@@ -38,9 +43,9 @@ function DoctorsSearchPage() {
   return (
     <PublicBlankLayout>
       <header className='h-67 w-full rounded-b-2xl bg-primary px-4 pt-12'>
-        <a href='doctor-search'>
+        <Button onClick={() => router.history.back()}>
           <img src='/assets/icons/arrow-left-blue.svg' alt='Image' />
-        </a>
+        </Button>
         <div className='absolute left-1/2 top-12 -translate-x-1/2'>
           <h1 className='mb-0.75 whitespace-nowrap text-center text-xl font-bold leading-[25.2px] text-white'>
             Recommended Doctors
@@ -53,66 +58,23 @@ function DoctorsSearchPage() {
         </div>
       </header>
       <section id='ContainerCards' className='-mt-35 w-full space-y-4 px-4'>
-        {data && data.status === 'success' && data.data.length
-          ? data.data.map((doctor) => (
-              <article id='Card1' className='space-y-5 rounded-3xl bg-white p-5'>
-                <header className='cardHeader flex items-center gap-x-3'>
-                  <div className='relative h-30 w-25'>
-                    <img
-                      className='rounded-ee-md rounded-es-3xl rounded-se-3xl rounded-ss-md bg-gray-100 object-cover'
-                      src={doctor.profilePhoto}
-                      alt='Image'
-                    />
-                    <img className='absolute left-2 top-2' src='/assets/icons/alert-online.svg' alt='Icon' />
-                  </div>
-                  <div className='space-y-2'>
-                    <h3 className='font-bold leading-[20.16px] text-primary'>{doctor.practiceLocation.clinicName}</h3>
-                    <h2 className='text-lg font-bold leading-[22.68px] text-gray-900'>{doctor.fullName}</h2>
-                    <p className='font-semibold leading-[20.16px] text-gray-500'>{doctor.specialist.name} Specialist</p>
-                  </div>
-                </header>
-                <div className='cardInfo flex items-center justify-evenly rounded-2xl border border-gray-200 py-4'>
-                  <div className='grid w-[80.33px] place-items-center'>
-                    <div className='mb-1 flex gap-0.5'>
-                      <img src='/assets/icons/searchresult-verify.svg' alt='Icon' />
-                      <h4 className='font-bold leading-[20.16px] text-gray-900'>Verify</h4>
-                    </div>
-                    <p className='text-sm font-semibold leading-[17.64px] text-gray-500'>Certified</p>
-                  </div>
-                  <hr className='w-9 rotate-90 border-gray-200' />
-                  <div className='grid w-[80.33px] place-items-center'>
-                    <div className='mb-1 flex gap-0.5 whitespace-nowrap'>
-                      <img src='/assets/icons/searchresult-5-years.svg' alt='Icon' />
-                      <h4 className='font-bold leading-[20.16px] text-gray-900'>{doctor.experienceYears} Years</h4>
-                    </div>
-                    <p className='text-sm font-semibold leading-[17.64px] text-gray-500'>Experience</p>
-                  </div>
-                  <hr className='w-9 rotate-90 border-gray-200' />
-                  <div className='grid w-[80.33px] place-items-center'>
-                    <div className='mb-1 flex gap-0.5'>
-                      <img src='/assets/icons/searchresult-4.5.svg' alt='Icon' />
-                      <h4 className='font-bold leading-[20.16px] text-gray-900'>{doctor.ratingAverage}</h4>
-                    </div>
-                    <p className='text-sm font-semibold leading-[17.64px] text-gray-500'>Rating</p>
-                  </div>
-                </div>
-                <footer className='cardPrice flex items-center justify-between space-x-2'>
-                  <div>
-                    <p className='mb-0.5 whitespace-nowrap text-[18px] font-bold leading-[22.68px] text-accent-red'>
-                      {formatCurrency(doctor.consultationFee)}
-                    </p>
-                    <p className='font-semibold leading-[20.16px] text-gray-500'>/hour</p>
-                  </div>
-                  <a
-                    href='doctor-details'
-                    className='flex h-13 w-45 items-center justify-center rounded-[100px] border border-primary bg-[#2C40FF17] font-bold leading-[20.16px] text-primary'
-                  >
-                    Book Now
-                  </a>
-                </footer>
-              </article>
-            ))
-          : 'not found'}
+        {isPending ? (
+          <CardDoctorSkeleton />
+        ) : doctors.length ? (
+          doctors.map((doctor) => <CardDoctor doctor={doctor} key={doctor._id} />)
+        ) : (
+          <div className='flex min-h-87.5 w-full flex-col items-center justify-center rounded-3xl border border-dashed border-gray-300 bg-white p-8 text-center'>
+            <div className='flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-gray-400 mb-5'>
+              <SearchX className='size-8 text-gray-400' />
+            </div>
+
+            <h3 className='text-xl font-bold leading-7 text-gray-900'>No Doctors Found</h3>
+            <p className='mt-2 max-w-sm text-base font-medium leading-relaxed text-gray-500'>
+              We couldn't find any doctors matching your criteria. Try adjusting your search filters or exploring other
+              specialties.
+            </p>
+          </div>
+        )}
       </section>
     </PublicBlankLayout>
   );
