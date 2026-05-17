@@ -10,6 +10,7 @@ import '../styles.css';
 import React from 'react';
 import TanstackQueryProvider from '@/integrations/tanstack-query/root-provider';
 import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools';
+import { Toaster } from '@/components/ui/sonner';
 
 export const Route = createRootRoute({
   component: RootDocument,
@@ -36,6 +37,7 @@ function RootDocument() {
           ]}
         />
       </TanstackQueryProvider>
+      <Toaster position='top-right' />
     </React.Suspense>
   );
 }
