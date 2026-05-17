@@ -2,21 +2,21 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 
 import { Button } from '@/components/ui/button';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 import { useAppForm } from '@/hooks/use-app-form';
 
-import { login } from '../auth.api';
 import { loginSchema } from '../auth.schema';
+import { toast } from 'sonner';
+import { useAuth } from '@/hooks/use-auth';
 
 export function LoginForm() {
+  const { login, userData } = useAuth();
   const navigate = useNavigate();
   const mutation = useMutation({
     mutationFn: login,
     mutationKey: ['auth', 'login'],
-    onError: (error) => console.log(error),
-    onSuccess: (props) => console.log(props),
   });
 
   const form = useAppForm({
@@ -27,13 +27,17 @@ export function LoginForm() {
     validators: {
       onSubmit: loginSchema,
     },
-    onSubmit: (props) => {
-      // navigate({ to: '/dashboard' });
-      mutation.mutate(props.value);
-    },
-    onSubmitInvalid: (props) => {
-      console.log(props);
-    },
+    onSubmit: ({ value }) =>
+      mutation.mutate(value, {
+        onSuccess: (props) => {
+          if (props.status === 'success') {
+            toast.success(`Welcome to dashboard, ${userData.name}`);
+            navigate({ to: '/dashboard' });
+          } else {
+            toast.error(props.message);
+          }
+        },
+      }),
   });
 
   return (
@@ -45,11 +49,11 @@ export function LoginForm() {
         form.handleSubmit();
       }}
     >
+      <div className='flex flex-col gap-1'>
+        <h1 className='text-2xl font-medium'>Hi, Welcome! 👋</h1>
+        <p className='text-sm text-balance text-muted-foreground'>Please login to continue access your account</p>
+      </div>
       <FieldGroup>
-        <div className='flex flex-col gap-1'>
-          <h1 className='text-2xl font-medium'>Hi, Welcome! 👋</h1>
-          <p className='text-sm text-balance text-muted-foreground'>Please login to continue access your account</p>
-        </div>
         <form.AppField name='email'>
           {(field) => <field.TextField id='email' name='email' label='Email' placeholder='example@mail.com' />}
         </form.AppField>
@@ -63,13 +67,17 @@ export function LoginForm() {
           <form.Field
             name='password'
             children={(field) => (
-              <Input
-                value={field.state.value}
-                id='password'
-                type='password'
-                onChange={(e) => field.handleChange(e.target.value)}
-                aria-invalid={!field.state.meta.isValid}
-              />
+              <>
+                <Input
+                  value={field.state.value}
+                  id='password'
+                  type='password'
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  aria-invalid={!field.state.meta.isValid}
+                />
+
+                {!field.state.meta.isValid && <FieldError>{field.state.meta.errors[0]?.message}</FieldError>}
+              </>
             )}
           />
         </Field>
