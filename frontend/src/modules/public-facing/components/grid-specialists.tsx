@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+
 import { getSpecialists } from '../public-facing.api';
 
 function GridSpecialistsSekeleton() {
@@ -32,8 +33,6 @@ export function GridSpecialists() {
     queryKey: ['specialists'],
     queryFn: getSpecialists,
   });
-
-  console.log(data);
 
   if (isPending) {
     return <GridSpecialistsSekeleton />;

@@ -1,20 +1,19 @@
 import { createContext, useContext, useState } from 'react';
 
-import { api } from '@/configs/api-config';
-
 import type { AxiosResponse } from 'axios';
 
-import type { AbilityRule } from '@/types/ability-rule';
-import type { UserData } from '@/types/user-data';
-import type { LoginResponse } from '@/modules/auth/auth.response';
+import { createAbility } from '@/lib/utils';
 
 import { AbilityContext } from './ability-context';
 
-import { createAbility } from '@/lib/utils';
-import type { HttpResponse } from '@/types/http-response';
+import { api } from '@/configs/api-config';
 import { toApiError } from '@/configs/auth/jwt-service';
-import { UserRole } from '@/types/enums/user-role.enum';
+import type { LoginResponse } from '@/modules/auth/auth.response';
 import type { LoginDto } from '@/modules/auth/auth.schema';
+import type { AbilityRule } from '@/types/ability-rule';
+import { UserRole } from '@/types/enums/user-role.enum';
+import type { HttpResponse } from '@/types/http-response';
+import type { UserData } from '@/types/user-data';
 
 type AuthContextType = {
   isAuthenticated: boolean;

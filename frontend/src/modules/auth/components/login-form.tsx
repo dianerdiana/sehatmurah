@@ -1,15 +1,15 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
 import { useAppForm } from '@/hooks/use-app-form';
+import { useAuth } from '@/hooks/use-auth';
 
 import { loginSchema } from '../auth.schema';
-import { toast } from 'sonner';
-import { useAuth } from '@/hooks/use-auth';
 
 export function LoginForm() {
   const { login, userData } = useAuth();

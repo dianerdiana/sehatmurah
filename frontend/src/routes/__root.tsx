@@ -1,16 +1,17 @@
+import React from 'react';
+
+import { TanStackDevtools } from '@tanstack/react-devtools';
 import { createRootRoute } from '@tanstack/react-router';
+import { Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
+import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { TanStackDevtools } from '@tanstack/react-devtools';
 
-import { Outlet } from '@tanstack/react-router';
+import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools';
+import TanstackQueryProvider from '@/integrations/tanstack-query/root-provider';
 
 import '../styles.css';
-import React from 'react';
-import TanstackQueryProvider from '@/integrations/tanstack-query/root-provider';
-import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools';
-import { Toaster } from '@/components/ui/sonner';
 
 export const Route = createRootRoute({
   component: RootDocument,

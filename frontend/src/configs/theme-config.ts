@@ -7,6 +7,8 @@ export const themeConfig = {
     appType: 'Appointment Doctor',
     logoBrandName: '/assets/logo/logo-brand-name.png',
     logoBrand: '/assets/logo/logo-brand.png',
+    localCurrency: 'id-ID',
+    currency: 'IDR',
   },
   layout: {
     isRTL: false,

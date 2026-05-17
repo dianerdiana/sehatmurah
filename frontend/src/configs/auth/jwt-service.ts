@@ -161,7 +161,7 @@ export const toApiError = (e: unknown): ErrorResponse => {
   if (axios.isAxiosError(e)) {
     const status = e.response?.data.status;
     const code = e.response?.data.code;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+     
     const data = e.response?.data as any;
     return {
       status,

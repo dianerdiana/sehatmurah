@@ -5,6 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } fr
 import { CompanyBrand } from './company-brand';
 import { NavMain } from './nav-main';
 import { NavUser } from './nav-user';
+
 import { navigation } from '@/navigation';
 
 export function DashboardSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

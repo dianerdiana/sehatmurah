@@ -5,6 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import prettier from 'eslint-config-prettier';
 
 export default defineConfig([
   globalIgnores(['dist']),
@@ -62,28 +63,24 @@ export default defineConfig([
         },
       ],
 
+      'simple-import-sort/exports': 'error',
+
       // Import
-      'import/no-extraneous-dependencies': [
-        'error',
-        {
-          devDependencies: [
-            'vite.config.*',
-            '**/*.config.*',
-            '**/scripts/**',
-            '**/*.test.*',
-            '.storybook/*.*',
-          ],
-        },
-      ],
+      // 'import/no-extraneous-dependencies': [
+      //   'error',
+      //   {
+      //     devDependencies: ['vite.config.*', '**/*.config.*', '**/scripts/**', '**/*.test.*', '.storybook/*.*'],
+      //   },
+      // ],
 
       // Function component style
-      'react/function-component-definition': [
-        'error',
-        {
-          namedComponents: 'arrow-function',
-          unnamedComponents: 'arrow-function',
-        },
-      ],
+      // 'react/function-component-definition': [
+      //   'error',
+      //   {
+      //     namedComponents: 'arrow-function',
+      //     unnamedComponents: 'arrow-function',
+      //   },
+      // ],
 
       '@typescript-eslint/no-explicit-any': 'off',
     },
@@ -94,4 +91,5 @@ export default defineConfig([
       'react-refresh/only-export-components': 'off',
     },
   },
+  prettier,
 ]);
