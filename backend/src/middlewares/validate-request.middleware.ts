@@ -24,11 +24,11 @@ export const validateRequest = (schemas: ValidationSchemas) => {
       }
 
       if (schemas.params) {
-        req.params = schemas.params.parse(req.params) as Request['params'];
+        req.sanitizedParams = schemas.params.parse(req.params);
       }
 
       if (schemas.query) {
-        req.query = schemas.query.parse(req.query) as Request['query'];
+        req.sanitizedQuery = schemas.query.parse(req.query);
       }
 
       next();
