@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import { Star } from 'lucide-react';
+import { Star, User } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
@@ -20,13 +20,16 @@ export function RecommendedDoctors() {
     queryFn: getSpecialists,
   });
 
-  const { data: doctorsData, refetch } = useQuery({
-    queryKey: ['doctors'],
+  const {
+    data: doctorsData,
+    refetch,
+    isPending: doctorsPending,
+  } = useQuery({
+    queryKey: ['doctors', currentTab],
     queryFn: () => getDoctors({ specialist: currentTab === 'all' ? undefined : currentTab }),
   });
 
   const onTabChange = (tab: string) => {
-    console.log(tab);
     refetch();
     setCurrentTab(tab);
   };
@@ -39,12 +42,12 @@ export function RecommendedDoctors() {
           <Carousel
             opts={{
               align: 'start',
-              dragFree: true, // Mengizinkan gesekan bebas (free scroll) yang mulus
+              dragFree: true,
               slidesToScroll: 'auto',
             }}
             className='w-full'
           >
-            <CarouselContent className='-ml-3 flex flex-row'>
+            <CarouselContent className='-ml-3 flex flex-row pb-2'>
               <CarouselItem className='pl-3 basis-auto shrink-0'>
                 <TabsTrigger
                   value='all'
@@ -72,11 +75,18 @@ export function RecommendedDoctors() {
         <TabsContent value={currentTab}>
           <Carousel>
             <CarouselContent>
-              {doctorsData &&
-                doctorsData.status === 'success' &&
+              {/* KONDISI 1: Tampilkan Skeleton saat data sedang pending/loading */}
+              {doctorsPending ? (
+                Array.from({ length: 3 }).map((_, index) => (
+                  <CarouselItem className='basis-[45%]' key={`skeleton-${index}`}>
+                    <DoctorCardSkeleton />
+                  </CarouselItem>
+                ))
+              ) : doctorsData && doctorsData.status === 'success' && doctorsData.data.length ? (
+                // KONDISI 2: Tampilkan Data Dokter jika loading selesai dan sukses
                 doctorsData.data.map((doctor) => (
                   <CarouselItem className='basis-[45%]' key={doctor._id}>
-                    <Link to='/doctor-details' className='swiper-slide w-70 shrink-0 rounded-3xl'>
+                    <Link to='/doctor-details' className='w-70 shrink-0 rounded-3xl'>
                       <div className='relative h-45 w-full overflow-hidden rounded-t-3xl border border-gray-200 bg-gray-100'>
                         <img src={doctor.profilePhoto} alt='Image' className='w-full h-full object-contain' />
 
@@ -118,11 +128,60 @@ export function RecommendedDoctors() {
                       </div>
                     </Link>
                   </CarouselItem>
-                ))}
+                ))
+              ) : (
+                // KONDISI 3: Opsional, jika data kosong atau terjadi error
+                <div className='w-full rounded-3xl border border-dashed border-gray-200 bg-gray-50/30 py-12 px-4 flex flex-col items-center justify-center text-center min-h-75'>
+                  <div className='flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-gray-400 mb-3'>
+                    <User />
+                  </div>
+                  <h3 className='font-jakarta text-lg font-bold text-gray-900'>No doctors found</h3>
+                  <p className='mt-1 text-sm text-gray-500 max-w-sm'>
+                    There are currently no doctors registered or active in this specialty. Please check other
+                    categories.
+                  </p>
+                </div>
+              )}
             </CarouselContent>
           </Carousel>
         </TabsContent>
       </Tabs>
     </section>
+  );
+}
+
+export default function DoctorCardSkeleton() {
+  return (
+    <div className='swiper-slide w-70 shrink-0 rounded-3xl animate-pulse'>
+      <div className='relative h-45 w-full overflow-hidden rounded-t-3xl border border-gray-200 bg-gray-100'>
+        <div className='w-full h-full bg-gray-200' />
+
+        <div className='absolute left-4 top-4 flex items-center gap-1.5 h-7 w-24 rounded-full bg-gray-300/80 px-2.5' />
+      </div>
+
+      <div className='flex h-12 w-full items-center justify-between bg-gray-200 px-5 py-3.5 border-x border-gray-200'>
+        <div className='h-4 w-32 rounded bg-gray-300' />
+        <div className='size-5 rounded-full bg-gray-300' />
+      </div>
+
+      <div className='w-full overflow-hidden rounded-b-3xl bg-white p-5 border border-gray-200 border-t-0'>
+        <div className='flex justify-between items-start'>
+          <div className='space-y-2'>
+            <div className='h-5 w-40 rounded bg-gray-300' />
+            <div className='h-4 w-28 rounded bg-gray-200' />
+          </div>
+
+          <div className='flex flex-col items-center gap-1.5 shrink-0'>
+            <div className='size-5 rounded bg-gray-200' />
+            <div className='h-3.5 w-6 rounded bg-gray-200' />
+          </div>
+        </div>
+
+        <div className='mt-4 flex items-baseline gap-1'>
+          <div className='h-6 w-24 rounded bg-gray-300' />
+          <div className='h-4 w-12 rounded bg-gray-200' />
+        </div>
+      </div>
+    </div>
   );
 }
