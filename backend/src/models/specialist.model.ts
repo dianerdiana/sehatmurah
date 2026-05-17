@@ -8,6 +8,7 @@ export interface ISpecialist extends Document {
   image?: string;
   isActive: boolean;
   sortOrder: number;
+  countDoctors?: number;
 }
 
 const specialistSchema = new Schema<ISpecialist>(
@@ -45,11 +46,19 @@ const specialistSchema = new Schema<ISpecialist>(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
 );
 
 specialistSchema.index({ name: 1 });
 specialistSchema.index({ isActive: 1 });
 specialistSchema.index({ sortOrder: 1 });
+specialistSchema.virtual('countDoctors', {
+  ref: 'DoctorProfile',
+  localField: '_id',
+  foreignField: 'specialist',
+  count: true,
+});
 
 export const SpecialistModel = model<ISpecialist>('Specialist', specialistSchema);
