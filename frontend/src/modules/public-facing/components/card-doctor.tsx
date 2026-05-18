@@ -2,11 +2,11 @@ import { Link } from '@tanstack/react-router';
 
 import { formatCurrency } from '@/utils/utils';
 
-import type { DoctorResponse } from '../public-facing.response';
+import type { Doctor } from '@/types/doctor.type';
 
 type CardDoctorProps = {
-  doctor: DoctorResponse;
-  footer: boolean;
+  doctor: Doctor;
+  footer?: boolean;
 };
 
 export function CardDoctor({ doctor, footer = false }: CardDoctorProps) {
