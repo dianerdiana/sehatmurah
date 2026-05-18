@@ -1,6 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
-
-import { getSpecialists } from '../public-facing.api';
+import { useGetSpecialists } from '../public-facing.query';
 
 function SpecialistCategoriesSekeleton() {
   return (
@@ -23,10 +21,7 @@ function SpecialistCategoriesSekeleton() {
 }
 
 export function SpecialistCategories() {
-  const { data, isPending } = useQuery({
-    queryKey: ['specialists', 'categories'],
-    queryFn: () => getSpecialists({ limit: 6 }),
-  });
+  const { data: specialists, isPending } = useGetSpecialists({ params: { limit: 6 } });
 
   if (isPending) {
     return <SpecialistCategoriesSekeleton />;
@@ -41,9 +36,8 @@ export function SpecialistCategories() {
         </a>
       </div>
       <div className='grid grid-cols-3 justify-items-center gap-y-4 pt-4'>
-        {data &&
-          data.status === 'success' &&
-          data.data.map((specialist) => (
+        {specialists &&
+          specialists.map((specialist) => (
             <a key={specialist._id} href='search-result' className='categori-1 h-25.5 w-27.75'>
               <div className='mx-auto flex size-18 items-center justify-center overflow-hidden rounded-3xl'>
                 <img src={specialist.image} alt='Image' className='h-full w-full object-cover' />
