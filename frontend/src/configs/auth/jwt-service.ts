@@ -3,8 +3,6 @@ import axios from 'axios';
 
 import jwtDefaultConfig from './jwt-default-config';
 
-import type { ErrorResponse } from '@/types/http-response';
-
 export type JwtServiceConfig = {
   baseURL?: string;
   tokenType?: string;
@@ -44,8 +42,9 @@ export class JwtService {
     this.axin.interceptors.response.use(
       (response) => response,
       async (error) => {
-        const { config, response } = error;
-        const originalRequest = config;
+        const { config } = error;
+        // const { config, response } = error;
+        // const originalRequest = config;
 
         if (config.url === this.jwtConfig.loginUrl || config.url === this.jwtConfig.refreshTokenUrl) {
           return Promise.reject(error);
@@ -156,20 +155,3 @@ export class JwtService {
 }
 
 export const createJwt = (jwtConfig: JwtServiceConfig) => new JwtService(jwtConfig);
-
-export const toApiError = (e: unknown): ErrorResponse => {
-  if (axios.isAxiosError(e)) {
-    const status = e.response?.data.status;
-    const code = e.response?.data.code;
-     
-    const data = e.response?.data as any;
-    return {
-      status,
-      message: data?.message ?? e.message ?? 'Request failed',
-      details: data ?? e.toJSON?.(),
-      code,
-    };
-  }
-
-  return { message: 'Unknown error', status: 'error' };
-};
