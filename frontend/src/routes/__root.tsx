@@ -37,8 +37,8 @@ function RootDocument() {
             TanStackQueryDevtools,
           ]}
         />
+        <Toaster position='top-right' />
       </TanstackQueryProvider>
-      <Toaster position='top-right' />
     </React.Suspense>
   );
 }
