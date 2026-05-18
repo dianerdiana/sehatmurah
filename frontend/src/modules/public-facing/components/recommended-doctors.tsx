@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Star, User } from 'lucide-react';
 
@@ -10,27 +9,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { formatCurrency } from '@/utils/utils';
 
-import { getDoctors, getSpecialists } from '../public-facing.api';
+import { useGetDoctors, useGetSpecialists } from '../public-facing.query';
 
 export function RecommendedDoctors() {
   const [currentTab, setCurrentTab] = React.useState<string>('all');
 
-  const { data: specialistsData } = useQuery({
-    queryKey: ['specialists'],
-    queryFn: () => getSpecialists({ limit: 10 }),
-  });
-
-  const {
-    data: doctorsData,
-    refetch,
-    isPending: doctorsPending,
-  } = useQuery({
-    queryKey: ['doctors', currentTab],
-    queryFn: () => getDoctors({ specialist: currentTab === 'all' ? undefined : currentTab }),
-  });
+  const { data: specialists } = useGetSpecialists({ params: { limit: 10 } });
+  const queryDoctors = useGetDoctors({ params: { specialist: currentTab === 'all' ? undefined : currentTab } });
 
   const onTabChange = (tab: string) => {
-    refetch();
     setCurrentTab(tab);
   };
 
@@ -57,9 +44,8 @@ export function RecommendedDoctors() {
                 </TabsTrigger>
               </CarouselItem>
 
-              {specialistsData &&
-                specialistsData.status === 'success' &&
-                specialistsData.data.map((specialist) => (
+              {specialists &&
+                specialists.map((specialist) => (
                   <CarouselItem key={specialist._id} className='pl-3 basis-auto shrink-0'>
                     <TabsTrigger
                       value={specialist._id}
@@ -76,15 +62,15 @@ export function RecommendedDoctors() {
           <Carousel>
             <CarouselContent>
               {/* KONDISI 1: Tampilkan Skeleton saat data sedang pending/loading */}
-              {doctorsPending ? (
+              {queryDoctors.isPending ? (
                 Array.from({ length: 3 }).map((_, index) => (
-                  <CarouselItem className='basis-[45%]' key={`skeleton-${index}`}>
+                  <CarouselItem className='basis-[45%] me-3' key={`skeleton-${index}`}>
                     <DoctorCardSkeleton />
                   </CarouselItem>
                 ))
-              ) : doctorsData && doctorsData.status === 'success' && doctorsData.data.length ? (
+              ) : queryDoctors.data && queryDoctors.data.length ? (
                 // KONDISI 2: Tampilkan Data Dokter jika loading selesai dan sukses
-                doctorsData.data.map((doctor) => (
+                queryDoctors.data.map((doctor) => (
                   <CarouselItem className='basis-[45%]' key={doctor._id}>
                     <Link to='/doctor-details' className='w-70 shrink-0 rounded-3xl'>
                       <div className='relative h-45 w-full overflow-hidden rounded-t-3xl border border-gray-200 bg-gray-100'>
@@ -152,7 +138,7 @@ export function RecommendedDoctors() {
 
 export default function DoctorCardSkeleton() {
   return (
-    <div className='swiper-slide w-70 shrink-0 rounded-3xl animate-pulse'>
+    <div className='w-70 shrink-0 rounded-3xl animate-pulse'>
       <div className='relative h-45 w-full overflow-hidden rounded-t-3xl border border-gray-200 bg-gray-100'>
         <div className='w-full h-full bg-gray-200' />
 
