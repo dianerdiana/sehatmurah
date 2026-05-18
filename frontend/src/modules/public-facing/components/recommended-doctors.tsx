@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Star, User } from 'lucide-react';
 
@@ -9,13 +10,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { formatCurrency } from '@/utils/utils';
 
-import { useGetDoctors, useGetSpecialists } from '@/queries/public-facing.query';
+import { doctorQueries } from '@/queries/doctor.query';
+import { specialistQueries } from '@/queries/specialist.query';
 
 export function RecommendedDoctors() {
   const [currentTab, setCurrentTab] = React.useState<string>('all');
 
-  const { data: specialists } = useGetSpecialists({ params: { limit: 10 } });
-  const queryDoctors = useGetDoctors({ params: { specialist: currentTab === 'all' ? undefined : currentTab } });
+  const { data: specialists } = useQuery(specialistQueries.list());
+  const queryDoctors = useQuery(doctorQueries.list({ specialist: currentTab === 'all' ? undefined : currentTab }));
 
   const onTabChange = (tab: string) => {
     setCurrentTab(tab);

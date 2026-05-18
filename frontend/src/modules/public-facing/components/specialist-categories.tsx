@@ -1,9 +1,10 @@
+import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 
-import { useGetSpecialists } from '@/queries/public-facing.query';
+import { specialistQueries } from '@/queries/specialist.query';
 
 export function SpecialistCategories() {
-  const { data: specialists, isPending } = useGetSpecialists({ params: { limit: 6 } });
+  const { data: specialists, isPending } = useQuery(specialistQueries.list({ limit: 6 }));
 
   if (isPending) {
     return <SpecialistCategoriesSekeleton />;

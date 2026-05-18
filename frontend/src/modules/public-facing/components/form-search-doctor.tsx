@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Search } from 'lucide-react';
 
@@ -17,14 +18,15 @@ import {
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 import { themeConfig } from '@/configs/theme-config';
-import { useGetDoctorsCity, useGetSpecialists } from '@/queries/public-facing.query';
+import { doctorQueries } from '@/queries/doctor.query';
+import { specialistQueries } from '@/queries/specialist.query';
 
 export function FormSearchDoctor() {
   const [selectedSpecialist, setSelectedSpecialist] = React.useState<undefined | string>(undefined);
   const [selectedCity, setSelectedCity] = React.useState<undefined | string>(undefined);
 
-  const { data: cities } = useGetDoctorsCity({ params: {} });
-  const { data: specialists } = useGetSpecialists({ params: { limit: 100 } });
+  const { data: cities } = useQuery(doctorQueries.cities());
+  const { data: specialists } = useQuery(specialistQueries.list({ limit: 10 }));
 
   return (
     <div id='form' className='w-full rounded-3xl bg-white px-4 py-8'>

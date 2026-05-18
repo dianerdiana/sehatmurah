@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { SearchX } from 'lucide-react';
 import z from 'zod';
@@ -8,7 +9,7 @@ import { PublicBlankLayout } from '@/layouts/public-blank-layout';
 import { PublicFacingLayout } from '@/layouts/public-facing-layout';
 import { CardDoctor, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
 import { FormSearchDoctor } from '@/modules/public-facing/components/form-search-doctor';
-import { useGetDoctors } from '@/queries/public-facing.query';
+import { doctorQueries } from '@/queries/doctor.query';
 
 const searchParamsSchema = z.object({
   specialist: z.string().optional(),
@@ -24,8 +25,8 @@ function DoctorsSearchPage() {
   const router = useRouter();
   const { specialist, city } = Route.useSearch();
 
-  const { data: doctors, isPending } = useGetDoctors({
-    params: { specialist, city },
+  const { data: doctors, isPending } = useQuery({
+    ...doctorQueries.list({ specialist, city }),
     enabled: Boolean(specialist !== undefined || city !== undefined),
   });
 
