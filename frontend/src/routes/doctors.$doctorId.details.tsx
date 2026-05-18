@@ -10,6 +10,7 @@ export const Route = createFileRoute('/doctors/$doctorId/details')({
 
 function RouteComponent() {
   const router = useRouter();
+  const { doctorId } = Route.useParams();
 
   return (
     <PublicBlankLayout>
