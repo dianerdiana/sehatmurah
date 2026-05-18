@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router';
+import { SearchX } from 'lucide-react';
 
 import { formatCurrency } from '@/utils/utils';
 
@@ -11,7 +12,7 @@ type CardDoctorProps = {
 
 export function CardDoctor({ doctor, footer = false }: CardDoctorProps) {
   return (
-    <article key={doctor._id} id={doctor._id} className='space-y-5 rounded-3xl bg-white p-5'>
+    <section key={doctor._id} id={doctor._id} className='space-y-5 rounded-3xl shadow-sm bg-white p-5'>
       <header className='cardHeader flex items-center gap-x-3'>
         <div className='relative h-30 w-25'>
           <img
@@ -69,13 +70,13 @@ export function CardDoctor({ doctor, footer = false }: CardDoctorProps) {
           </Link>
         </footer>
       )}
-    </article>
+    </section>
   );
 }
 
 export function CardDoctorSkeleton() {
   return (
-    <article className='space-y-5 rounded-3xl bg-white p-5 animate-pulse'>
+    <div className='space-y-5 rounded-3xl bg-white p-5 animate-pulse'>
       <header className='cardHeader flex items-center gap-x-3'>
         <div className='relative h-30 w-25 shrink-0 rounded-ee-md rounded-es-3xl rounded-se-3xl rounded-ss-md bg-gray-200' />
 
@@ -115,6 +116,22 @@ export function CardDoctorSkeleton() {
 
         <div className='h-13 w-45 rounded-[100px] bg-gray-200' />
       </footer>
-    </article>
+    </div>
+  );
+}
+
+export function CardDoctorNotFound() {
+  return (
+    <div className='flex min-h-87.5 w-full flex-col items-center justify-center rounded-3xl border border-dashed border-gray-300 bg-white p-8 text-center'>
+      <div className='flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-gray-400 mb-5'>
+        <SearchX className='size-8 text-gray-400' />
+      </div>
+
+      <h3 className='text-xl font-bold leading-7 text-gray-900'>No Doctors Found</h3>
+      <p className='mt-2 max-w-sm text-base font-medium leading-relaxed text-gray-500'>
+        We couldn't find any doctors matching your criteria. Try adjusting your search filters or exploring other
+        specialties.
+      </p>
+    </div>
   );
 }
