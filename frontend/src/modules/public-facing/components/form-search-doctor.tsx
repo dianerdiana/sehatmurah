@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Search } from 'lucide-react';
 
@@ -17,7 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-import { getDoctorsCities, getSpecialists } from '../public-facing.api';
+import { useGetDoctorsCity, useGetSpecialists } from '../public-facing.query';
 
 import { themeConfig } from '@/configs/theme-config';
 
@@ -25,17 +24,8 @@ export function FormSearchDoctor() {
   const [selectedSpecialist, setSelectedSpecialist] = React.useState<undefined | string>(undefined);
   const [selectedCity, setSelectedCity] = React.useState<undefined | string>(undefined);
 
-  const { data: doctorsCitiesData } = useQuery({
-    queryKey: ['doctors', 'cities'],
-    queryFn: () => getDoctorsCities({}),
-  });
-
-  const { data: specialistsData } = useQuery({
-    queryKey: ['specialists', 'search'],
-    queryFn: () => getSpecialists({ limit: 100 }),
-  });
-
-  const specialists = specialistsData && specialistsData.status === 'success' && specialistsData.data;
+  const { data: cities } = useGetDoctorsCity({ params: {} });
+  const { data: specialists } = useGetSpecialists({ params: { limit: 100 } });
 
   return (
     <div id='form' className='w-full rounded-3xl bg-white px-4 py-8'>
@@ -53,9 +43,8 @@ export function FormSearchDoctor() {
               </SelectTrigger>
               <SelectContent position='popper'>
                 <SelectGroup>
-                  {doctorsCitiesData &&
-                    doctorsCitiesData.status === 'success' &&
-                    doctorsCitiesData.data.map((city) => (
+                  {cities &&
+                    cities.map((city) => (
                       <SelectItem key={city} value={city}>
                         {city}
                       </SelectItem>
@@ -122,9 +111,8 @@ export function FormSearchDoctor() {
                   {(specialists && specialists.length) || 0} Total Specialist
                 </p>
                 <div className='group bg-white max-h-[50vh] overflow-y-auto [ms-overflow-style:none] scrollbar-none [&::-webkit-scrollbar]:hidden'>
-                  {specialistsData &&
-                    specialistsData.status === 'success' &&
-                    specialistsData.data.map((specialist) => (
+                  {specialists &&
+                    specialists.map((specialist) => (
                       <label key={specialist._id} className='obstetrics mb-4 block cursor-pointer'>
                         <div className='w-full rounded-3xl border border-gray-200 p-4'>
                           <div className='flex items-center justify-between'>
