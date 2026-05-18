@@ -1,8 +1,15 @@
+import React from 'react';
+
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 
 import { Button } from '@/components/ui/button';
 
 import { PublicBlankLayout } from '@/layouts/public-blank-layout';
+import { CardAvailableSchedule } from '@/modules/public-facing/components/card-available-schedule';
+import { CardDoctor, CardDoctorNotFound, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
+import { CardDoctorPracticeLocation } from '@/modules/public-facing/components/card-doctor-location';
+import { doctorQueries } from '@/queries/doctor.query';
 
 export const Route = createFileRoute('/doctors/$doctorId/details')({
   component: RouteComponent,
@@ -11,6 +18,11 @@ export const Route = createFileRoute('/doctors/$doctorId/details')({
 function RouteComponent() {
   const router = useRouter();
   const { doctorId } = Route.useParams();
+
+  const { data: doctor, isPending } = useQuery({
+    ...doctorQueries.getById(doctorId),
+    enabled: !!doctorId,
+  });
 
   return (
     <PublicBlankLayout>
@@ -27,6 +39,20 @@ function RouteComponent() {
           </h2>
         </div>
       </header>
+
+      <section id='ContainerCards' className='-mt-35 w-full space-y-4 px-4'>
+        {isPending ? (
+          <CardDoctorSkeleton />
+        ) : doctor ? (
+          <React.Fragment>
+            <CardDoctor doctor={doctor} />
+            <CardAvailableSchedule schedules={doctor.schedule} />
+            <CardDoctorPracticeLocation practiceLocation={doctor.practiceLocation} />
+          </React.Fragment>
+        ) : (
+          <CardDoctorNotFound />
+        )}
+      </section>
     </PublicBlankLayout>
   );
 }
