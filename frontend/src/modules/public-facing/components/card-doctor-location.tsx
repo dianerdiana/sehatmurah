@@ -11,9 +11,7 @@ export function CardDoctorPracticeLocation({ practiceLocation }: { practiceLocat
   return (
     <Card className='w-full rounded-3xl border-none shadow-md bg-background'>
       <CardHeader className='py-0'>
-        <CardTitle className='font-jakarta text-xl font-bold leading-tight text-foreground'>
-          Check-Up Location
-        </CardTitle>
+        <CardTitle className='text-xl font-bold leading-tight text-foreground'>Check-Up Location</CardTitle>
       </CardHeader>
 
       <CardContent>
@@ -29,23 +27,23 @@ export function CardDoctorPracticeLocation({ practiceLocation }: { practiceLocat
           </div>
 
           <div id='CtaMap' className='absolute bottom-4 w-full px-4 left-0'>
-            <div className='flex items-center justify-between rounded-2xl border p-3 shadow-md backdrop-blur-sm'>
+            <div className='flex items-center justify-between rounded-2xl border p-3 shadow-md bg-white'>
               <div className='flex items-center gap-3'>
                 <div className='flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary'>
                   <MapPin className='h-5 w-5' />
                 </div>
 
                 <div>
-                  <h3 className='font-jakarta text-base font-bold leading-tight text-card-foreground'>
+                  <h3 className='text-base font-bold leading-tight text-card-foreground'>
                     {practiceLocation.clinicName}
                   </h3>
-                  <p className='font-jakarta text-xs font-semibold text-muted-foreground mt-0.5'>
+                  <p className='text-xs font-semibold text-muted-foreground mt-0.5'>
                     {practiceLocation.city}, Indonesia
                   </p>
                 </div>
               </div>
 
-              <Button asChild variant='link' className='font-jakarta text-sm font-semibold text-primary px-2'>
+              <Button asChild variant='link' className='text-sm font-semibold text-primary px-2'>
                 <a href={`https://maps.google.com/maps?q=${urlLocation}`} target='_blank' rel='noopener noreferrer'>
                   See Map
                 </a>

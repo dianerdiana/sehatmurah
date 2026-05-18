@@ -95,7 +95,7 @@ export function FormSearchDoctor() {
               </button>
             </DialogTrigger>
 
-            <DialogContent className='p-0 bg-transparent border-0 sm:max-w-160 gap-0' showCloseButton={false}>
+            <DialogContent className='p-0 bg-transparent border-0 sm:max-w-170 gap-0' showCloseButton={false}>
               <DialogHeader className='h-36.25 rounded-t-3xl bg-[linear-gradient(100.99deg,#277B53_0%,#277B7B_100%)] px-4 pt-6'>
                 <DialogTitle className='text-center font-bold leading-[25.6px] text-white'>
                   {themeConfig.app.appName} &nbsp;{' '}
