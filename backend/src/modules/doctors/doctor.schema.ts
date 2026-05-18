@@ -5,15 +5,31 @@ export const doctorIdSchema = z.object({
 });
 
 export const listDoctorsSchema = z.object({
-  specialist: z.string().trim().min(1).optional(),
-  city: z.string().trim().min(1).optional(),
-  search: z.string().trim().min(1).optional(),
+  specialist: z
+    .string()
+    .trim()
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
+  city: z
+    .string()
+    .trim()
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
+  search: z
+    .string()
+    .trim()
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(10),
 });
 
 export const listDoctorsCitiesSchema = z.object({
-  search: z.string().trim().min(1).optional(),
+  search: z
+    .string()
+    .trim()
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(10),
 });
