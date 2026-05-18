@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency } from '@/utils/utils';
 
 import { getDoctors, getSpecialists } from '../public-facing.api';
 

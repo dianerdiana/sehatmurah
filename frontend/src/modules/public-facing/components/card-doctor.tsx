@@ -1,8 +1,15 @@
-import { formatCurrency } from '@/lib/utils';
+import { Link } from '@tanstack/react-router';
+
+import { formatCurrency } from '@/utils/utils';
 
 import type { DoctorResponse } from '../public-facing.response';
 
-export function CardDoctor({ doctor }: { doctor: DoctorResponse }) {
+type CardDoctorProps = {
+  doctor: DoctorResponse;
+  footer: boolean;
+};
+
+export function CardDoctor({ doctor, footer = false }: CardDoctorProps) {
   return (
     <article key={doctor._id} id={doctor._id} className='space-y-5 rounded-3xl bg-white p-5'>
       <header className='cardHeader flex items-center gap-x-3'>
@@ -45,20 +52,23 @@ export function CardDoctor({ doctor }: { doctor: DoctorResponse }) {
           <p className='text-sm font-semibold leading-[17.64px] text-gray-500'>Rating</p>
         </div>
       </div>
-      <footer className='cardPrice flex items-center justify-between space-x-2'>
-        <div>
-          <p className='mb-0.5 whitespace-nowrap text-[18px] font-bold leading-[22.68px] text-accent-red'>
-            {formatCurrency(doctor.consultationFee)}
-          </p>
-          <p className='font-semibold leading-[20.16px] text-gray-500'>/hour</p>
-        </div>
-        <a
-          href='doctor-details'
-          className='flex h-13 w-45 items-center justify-center rounded-[100px] border border-primary bg-[#2C40FF17] font-bold leading-[20.16px] text-primary'
-        >
-          Book Now
-        </a>
-      </footer>
+      {footer && (
+        <footer className='cardPrice flex items-center justify-between space-x-2'>
+          <div>
+            <p className='mb-0.5 whitespace-nowrap text-[18px] font-bold leading-[22.68px] text-accent-red'>
+              {formatCurrency(doctor.consultationFee)}
+            </p>
+            <p className='font-semibold leading-[20.16px] text-gray-500'>/hour</p>
+          </div>
+          <Link
+            to={`/doctors/$doctorId/details`}
+            params={{ doctorId: doctor._id }}
+            className='flex h-13 w-45 items-center justify-center rounded-[100px] border border-primary bg-[#2C40FF17] font-bold leading-[20.16px] text-primary'
+          >
+            Book Now
+          </Link>
+        </footer>
+      )}
     </article>
   );
 }

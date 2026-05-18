@@ -30,10 +30,10 @@ export default defineConfig({
       '@/types': path.resolve(__dirname, './src/types'),
       '@/services': path.resolve(__dirname, './src/services'),
       '@/modules': path.resolve(__dirname, './src/modules'),
-      '@/hooks': path.resolve(__dirname, './src/hooks'),
-      '@/context': path.resolve(__dirname, './src/context'),
+      '@/hooks': path.resolve(__dirname, './src/utils/hooks'),
+      '@/context': path.resolve(__dirname, './src/utils/context'),
+      '@/navigation': path.resolve(__dirname, './src/utils/navigation'),
       '@/integrations': path.resolve(__dirname, './src/integrations'),
-      '@/navigation': path.resolve(__dirname, './src/navigation'),
     },
   },
 });

@@ -21,6 +21,7 @@ import { Route as BookingConfirmationRouteImport } from './routes/booking-confir
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as dashboardLayoutRouteImport } from './routes/(dashboard)/_layout'
+import { Route as DoctorsDoctorIdDetailsRouteImport } from './routes/doctors.$doctorId.details'
 import { Route as dashboardLayoutDashboardRouteImport } from './routes/(dashboard)/_layout/dashboard'
 
 const SuccessPageRoute = SuccessPageRouteImport.update({
@@ -83,6 +84,11 @@ const dashboardLayoutRoute = dashboardLayoutRouteImport.update({
   id: '/(dashboard)/_layout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DoctorsDoctorIdDetailsRoute = DoctorsDoctorIdDetailsRouteImport.update({
+  id: '/doctors/$doctorId/details',
+  path: '/doctors/$doctorId/details',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const dashboardLayoutDashboardRoute =
   dashboardLayoutDashboardRouteImport.update({
     id: '/dashboard',
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/success-page': typeof SuccessPageRoute
   '/auth/login': typeof AuthLoginRoute
   '/dashboard': typeof dashboardLayoutDashboardRoute
+  '/doctors/$doctorId/details': typeof DoctorsDoctorIdDetailsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/success-page': typeof SuccessPageRoute
   '/auth/login': typeof AuthLoginRoute
   '/dashboard': typeof dashboardLayoutDashboardRoute
+  '/doctors/$doctorId/details': typeof DoctorsDoctorIdDetailsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/(dashboard)/_layout': typeof dashboardLayoutRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/(dashboard)/_layout/dashboard': typeof dashboardLayoutDashboardRoute
+  '/doctors/$doctorId/details': typeof DoctorsDoctorIdDetailsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
     | '/success-page'
     | '/auth/login'
     | '/dashboard'
+    | '/doctors/$doctorId/details'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
     | '/success-page'
     | '/auth/login'
     | '/dashboard'
+    | '/doctors/$doctorId/details'
   id:
     | '__root__'
     | '/'
@@ -178,6 +189,7 @@ export interface FileRouteTypes {
     | '/(dashboard)/_layout'
     | '/auth/login'
     | '/(dashboard)/_layout/dashboard'
+    | '/doctors/$doctorId/details'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -193,6 +205,7 @@ export interface RootRouteChildren {
   SuccessPageRoute: typeof SuccessPageRoute
   dashboardLayoutRoute: typeof dashboardLayoutRouteWithChildren
   AuthLoginRoute: typeof AuthLoginRoute
+  DoctorsDoctorIdDetailsRoute: typeof DoctorsDoctorIdDetailsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -281,6 +294,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/doctors/$doctorId/details': {
+      id: '/doctors/$doctorId/details'
+      path: '/doctors/$doctorId/details'
+      fullPath: '/doctors/$doctorId/details'
+      preLoaderRoute: typeof DoctorsDoctorIdDetailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(dashboard)/_layout/dashboard': {
       id: '/(dashboard)/_layout/dashboard'
       path: '/dashboard'
@@ -316,6 +336,7 @@ const rootRouteChildren: RootRouteChildren = {
   SuccessPageRoute: SuccessPageRoute,
   dashboardLayoutRoute: dashboardLayoutRouteWithChildren,
   AuthLoginRoute: AuthLoginRoute,
+  DoctorsDoctorIdDetailsRoute: DoctorsDoctorIdDetailsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

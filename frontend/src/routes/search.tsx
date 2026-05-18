@@ -22,8 +22,8 @@ export const Route = createFileRoute('/search')({
 });
 
 function DoctorsSearchPage() {
-  const { specialist, city } = Route.useSearch();
   const router = useRouter();
+  const { specialist, city } = Route.useSearch();
 
   const { data, isPending } = useQuery({
     queryKey: ['doctors', specialist, city],

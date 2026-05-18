@@ -36,3 +36,12 @@ export const getDoctorsCities = async ({ search }: { search?: string }) => {
     return toApiError(error);
   }
 };
+
+export const getDoctorById = async (id: string) => {
+  try {
+    const res = await api.get<HttpResponse<DoctorResponse>>(`/doctors/${id}`);
+    return res.data;
+  } catch (error) {
+    return toApiError(error);
+  }
+};

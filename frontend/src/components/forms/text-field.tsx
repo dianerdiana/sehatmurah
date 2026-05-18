@@ -3,7 +3,7 @@ import { useStore } from '@tanstack/react-form';
 import { Field, FieldError, FieldLabel } from '../ui/field';
 import { Input } from '../ui/input';
 
-import { useFieldContext } from '@/context/form-context';
+import { useFieldContext } from '@/utils/context/form-context';
 
 export type TextFieldProps = {
   label?: string;

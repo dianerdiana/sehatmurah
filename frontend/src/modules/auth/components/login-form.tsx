@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-import { useAppForm } from '@/hooks/use-app-form';
-import { useAuth } from '@/hooks/use-auth';
+import { useAppForm } from '@/utils/hooks/use-app-form';
+import { useAuth } from '@/utils/hooks/use-auth';
 
 import { loginSchema } from '../auth.schema';
 

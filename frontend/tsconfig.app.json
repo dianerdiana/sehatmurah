@@ -35,10 +35,10 @@
       "@/types/*": ["./src/types/*"],
       "@/services/*": ["./src/services/*"],
       "@/modules/*": ["./src/modules/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/context/*": ["./src/context/*"],
-      "@/integrations/*": ["./src/integrations/*"],
-      "@/navigation/*": ["./src/navigation/*"]
+      "@/hooks/*": ["./src/utils/hooks/*"],
+      "@/context/*": ["./src/utils/context/*"],
+      "@/navigation/*": ["./src/utils/navigation/*"],
+      "@/integrations/*": ["./src/integrations/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "cypress/**/*.ts", "cypress/**/*.tsx", ".storybook/**/*.ts"]

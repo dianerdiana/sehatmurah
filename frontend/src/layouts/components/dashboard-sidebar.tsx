@@ -6,7 +6,7 @@ import { CompanyBrand } from './company-brand';
 import { NavMain } from './nav-main';
 import { NavUser } from './nav-user';
 
-import { navigation } from '@/navigation';
+import { navigation } from '@/utils/navigation';
 
 export function DashboardSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const user = {
