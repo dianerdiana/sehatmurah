@@ -9,6 +9,8 @@ import { PublicBlankLayout } from '@/layouts/public-blank-layout';
 import { CardAvailableSchedule } from '@/modules/public-facing/components/card-available-schedule';
 import { CardDoctor, CardDoctorNotFound, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
 import { CardDoctorPracticeLocation } from '@/modules/public-facing/components/card-doctor-location';
+import { CardDoctorReviews } from '@/modules/public-facing/components/card-doctor-reviews';
+import { FixedBookingCta } from '@/modules/public-facing/components/fixed-booking-cta';
 import { doctorQueries } from '@/queries/doctor.query';
 
 export const Route = createFileRoute('/doctors/$doctorId/details')({
@@ -21,6 +23,12 @@ function RouteComponent() {
 
   const { data: doctor, isPending } = useQuery({
     ...doctorQueries.getById(doctorId),
+    enabled: !!doctorId,
+  });
+
+  const { data: reviews } = useQuery({
+    ...doctorQueries.getDoctorReviews(doctorId),
+    placeholderData: [],
     enabled: !!doctorId,
   });
 
@@ -40,7 +48,7 @@ function RouteComponent() {
         </div>
       </header>
 
-      <section id='ContainerCards' className='-mt-35 w-full space-y-4 px-4'>
+      <section id='ContainerCards' className='-mt-35 w-full space-y-4 px-4 pb-8'>
         {isPending ? (
           <CardDoctorSkeleton />
         ) : doctor ? (
@@ -48,6 +56,12 @@ function RouteComponent() {
             <CardDoctor doctor={doctor} />
             <CardAvailableSchedule schedules={doctor.schedule} />
             <CardDoctorPracticeLocation practiceLocation={doctor.practiceLocation} />
+            <FixedBookingCta
+              fee={doctor.consultationFee}
+              continueTo={`/doctors/${doctor._id}/booking`}
+              label='Book Now'
+            />
+            <CardDoctorReviews reviews={reviews ? reviews : []} />
           </React.Fragment>
         ) : (
           <CardDoctorNotFound />
