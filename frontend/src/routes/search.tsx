@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { SearchX } from 'lucide-react';
 import z from 'zod';
@@ -9,7 +8,7 @@ import { PublicBlankLayout } from '@/layouts/public-blank-layout';
 import { PublicFacingLayout } from '@/layouts/public-facing-layout';
 import { CardDoctor, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
 import { FormSearchDoctor } from '@/modules/public-facing/components/form-search-doctor';
-import { getDoctors } from '@/modules/public-facing/public-facing.api';
+import { useGetDoctors } from '@/modules/public-facing/public-facing.query';
 
 const searchParamsSchema = z.object({
   specialist: z.string().min(1).optional(),
@@ -25,12 +24,10 @@ function DoctorsSearchPage() {
   const router = useRouter();
   const { specialist, city } = Route.useSearch();
 
-  const { data, isPending } = useQuery({
-    queryKey: ['doctors', specialist, city],
-    queryFn: () => getDoctors({ specialist, city }),
+  const { data: doctors, isPending } = useGetDoctors({
+    params: { specialist, city },
+    enabled: Boolean(specialist && city),
   });
-
-  const doctors = data?.status === 'success' ? data.data : [];
 
   if (!specialist || !city) {
     return (
@@ -60,8 +57,8 @@ function DoctorsSearchPage() {
       <section id='ContainerCards' className='-mt-35 w-full space-y-4 px-4'>
         {isPending ? (
           <CardDoctorSkeleton />
-        ) : doctors.length ? (
-          doctors.map((doctor) => <CardDoctor doctor={doctor} key={doctor._id} />)
+        ) : doctors && doctors.length ? (
+          doctors.map((doctor) => <CardDoctor doctor={doctor} key={doctor._id} footer />)
         ) : (
           <div className='flex min-h-87.5 w-full flex-col items-center justify-center rounded-3xl border border-dashed border-gray-300 bg-white p-8 text-center'>
             <div className='flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-gray-400 mb-5'>
