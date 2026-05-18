@@ -11,7 +11,7 @@ export type ResponseMeta = {
 };
 
 export class HttpResponse<TData = unknown> {
-  status: 'success' | 'failed' | 'error';
+  status: 'success' | 'error';
   message: string;
   data?: TData;
   meta?: ResponseMeta;
@@ -20,7 +20,7 @@ export class HttpResponse<TData = unknown> {
 
   constructor(
     args: {
-      status?: 'success' | 'failed' | 'error';
+      status?: 'success' | 'error';
       message?: string;
       data?: TData;
       meta?: ResponseMeta;
@@ -28,14 +28,7 @@ export class HttpResponse<TData = unknown> {
       details?: ApiErrorItem[];
     } = {},
   ) {
-    const {
-      status = 'success',
-      message = 'ok',
-      data,
-      meta,
-      code,
-      details,
-    } = args;
+    const { status = 'success', message = 'ok', data, meta, code, details } = args;
 
     this.status = status;
     this.message = message;
