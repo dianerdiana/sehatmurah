@@ -15,7 +15,6 @@ import { Route as PaymentDetailsRouteImport } from './routes/payment-details'
 import { Route as MyBookingRouteImport } from './routes/my-booking'
 import { Route as FutureAppointmentSuccesRouteImport } from './routes/future-appointment-succes'
 import { Route as FutureAppointmentPendingRouteImport } from './routes/future-appointment-pending'
-import { Route as DoctorSearchRouteImport } from './routes/doctor-search'
 import { Route as DoctorDetailsRouteImport } from './routes/doctor-details'
 import { Route as BookingConfirmationRouteImport } from './routes/booking-confirmation'
 import { Route as IndexRouteImport } from './routes/index'
@@ -55,11 +54,6 @@ const FutureAppointmentPendingRoute =
     path: '/future-appointment-pending',
     getParentRoute: () => rootRouteImport,
   } as any)
-const DoctorSearchRoute = DoctorSearchRouteImport.update({
-  id: '/doctor-search',
-  path: '/doctor-search',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DoctorDetailsRoute = DoctorDetailsRouteImport.update({
   id: '/doctor-details',
   path: '/doctor-details',
@@ -100,7 +94,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/booking-confirmation': typeof BookingConfirmationRoute
   '/doctor-details': typeof DoctorDetailsRoute
-  '/doctor-search': typeof DoctorSearchRoute
   '/future-appointment-pending': typeof FutureAppointmentPendingRoute
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
@@ -115,7 +108,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/booking-confirmation': typeof BookingConfirmationRoute
   '/doctor-details': typeof DoctorDetailsRoute
-  '/doctor-search': typeof DoctorSearchRoute
   '/future-appointment-pending': typeof FutureAppointmentPendingRoute
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
@@ -131,7 +123,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/booking-confirmation': typeof BookingConfirmationRoute
   '/doctor-details': typeof DoctorDetailsRoute
-  '/doctor-search': typeof DoctorSearchRoute
   '/future-appointment-pending': typeof FutureAppointmentPendingRoute
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
@@ -149,7 +140,6 @@ export interface FileRouteTypes {
     | '/'
     | '/booking-confirmation'
     | '/doctor-details'
-    | '/doctor-search'
     | '/future-appointment-pending'
     | '/future-appointment-succes'
     | '/my-booking'
@@ -164,7 +154,6 @@ export interface FileRouteTypes {
     | '/'
     | '/booking-confirmation'
     | '/doctor-details'
-    | '/doctor-search'
     | '/future-appointment-pending'
     | '/future-appointment-succes'
     | '/my-booking'
@@ -179,7 +168,6 @@ export interface FileRouteTypes {
     | '/'
     | '/booking-confirmation'
     | '/doctor-details'
-    | '/doctor-search'
     | '/future-appointment-pending'
     | '/future-appointment-succes'
     | '/my-booking'
@@ -196,7 +184,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BookingConfirmationRoute: typeof BookingConfirmationRoute
   DoctorDetailsRoute: typeof DoctorDetailsRoute
-  DoctorSearchRoute: typeof DoctorSearchRoute
   FutureAppointmentPendingRoute: typeof FutureAppointmentPendingRoute
   FutureAppointmentSuccesRoute: typeof FutureAppointmentSuccesRoute
   MyBookingRoute: typeof MyBookingRoute
@@ -250,13 +237,6 @@ declare module '@tanstack/react-router' {
       path: '/future-appointment-pending'
       fullPath: '/future-appointment-pending'
       preLoaderRoute: typeof FutureAppointmentPendingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/doctor-search': {
-      id: '/doctor-search'
-      path: '/doctor-search'
-      fullPath: '/doctor-search'
-      preLoaderRoute: typeof DoctorSearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/doctor-details': {
@@ -327,7 +307,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BookingConfirmationRoute: BookingConfirmationRoute,
   DoctorDetailsRoute: DoctorDetailsRoute,
-  DoctorSearchRoute: DoctorSearchRoute,
   FutureAppointmentPendingRoute: FutureAppointmentPendingRoute,
   FutureAppointmentSuccesRoute: FutureAppointmentSuccesRoute,
   MyBookingRoute: MyBookingRoute,

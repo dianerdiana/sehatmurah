@@ -34,6 +34,7 @@ export default defineConfig({
       '@/context': path.resolve(__dirname, './src/utils/context'),
       '@/navigation': path.resolve(__dirname, './src/utils/navigation'),
       '@/integrations': path.resolve(__dirname, './src/integrations'),
+      '@/queries': path.resolve(__dirname, './src/queries'),
     },
   },
 });

@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { formatCurrency } from '@/utils/utils';
 
-import { useGetDoctors, useGetSpecialists } from '../public-facing.query';
+import { useGetDoctors, useGetSpecialists } from '../../../queries/public-facing.query';
 
 export function RecommendedDoctors() {
   const [currentTab, setCurrentTab] = React.useState<string>('all');

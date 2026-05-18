@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-import { useGetDoctorsCity, useGetSpecialists } from '../public-facing.query';
+import { useGetDoctorsCity, useGetSpecialists } from '../../../queries/public-facing.query';
 
 import { themeConfig } from '@/configs/theme-config';
 

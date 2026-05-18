@@ -1,4 +1,4 @@
-import { useGetSpecialists } from '../public-facing.query';
+import { useGetSpecialists } from '../../../queries/public-facing.query';
 
 function SpecialistCategoriesSekeleton() {
   return (

@@ -8,7 +8,7 @@ import { PublicBlankLayout } from '@/layouts/public-blank-layout';
 import { PublicFacingLayout } from '@/layouts/public-facing-layout';
 import { CardDoctor, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
 import { FormSearchDoctor } from '@/modules/public-facing/components/form-search-doctor';
-import { useGetDoctors } from '@/modules/public-facing/public-facing.query';
+import { useGetDoctors } from '@/queries/public-facing.query';
 
 const searchParamsSchema = z.object({
   specialist: z.string().min(1).optional(),
