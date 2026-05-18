@@ -21,6 +21,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as dashboardLayoutRouteImport } from './routes/(dashboard)/_layout'
 import { Route as DoctorsDoctorIdDetailsRouteImport } from './routes/doctors.$doctorId.details'
+import { Route as DoctorsDoctorIdBookingRouteImport } from './routes/doctors.$doctorId.booking'
 import { Route as dashboardLayoutDashboardRouteImport } from './routes/(dashboard)/_layout/dashboard'
 
 const SuccessPageRoute = SuccessPageRouteImport.update({
@@ -83,6 +84,11 @@ const DoctorsDoctorIdDetailsRoute = DoctorsDoctorIdDetailsRouteImport.update({
   path: '/doctors/$doctorId/details',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DoctorsDoctorIdBookingRoute = DoctorsDoctorIdBookingRouteImport.update({
+  id: '/doctors/$doctorId/booking',
+  path: '/doctors/$doctorId/booking',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const dashboardLayoutDashboardRoute =
   dashboardLayoutDashboardRouteImport.update({
     id: '/dashboard',
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/success-page': typeof SuccessPageRoute
   '/auth/login': typeof AuthLoginRoute
   '/dashboard': typeof dashboardLayoutDashboardRoute
+  '/doctors/$doctorId/booking': typeof DoctorsDoctorIdBookingRoute
   '/doctors/$doctorId/details': typeof DoctorsDoctorIdDetailsRoute
 }
 export interface FileRoutesByTo {
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/success-page': typeof SuccessPageRoute
   '/auth/login': typeof AuthLoginRoute
   '/dashboard': typeof dashboardLayoutDashboardRoute
+  '/doctors/$doctorId/booking': typeof DoctorsDoctorIdBookingRoute
   '/doctors/$doctorId/details': typeof DoctorsDoctorIdDetailsRoute
 }
 export interface FileRoutesById {
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/(dashboard)/_layout': typeof dashboardLayoutRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/(dashboard)/_layout/dashboard': typeof dashboardLayoutDashboardRoute
+  '/doctors/$doctorId/booking': typeof DoctorsDoctorIdBookingRoute
   '/doctors/$doctorId/details': typeof DoctorsDoctorIdDetailsRoute
 }
 export interface FileRouteTypes {
@@ -148,6 +157,7 @@ export interface FileRouteTypes {
     | '/success-page'
     | '/auth/login'
     | '/dashboard'
+    | '/doctors/$doctorId/booking'
     | '/doctors/$doctorId/details'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -162,6 +172,7 @@ export interface FileRouteTypes {
     | '/success-page'
     | '/auth/login'
     | '/dashboard'
+    | '/doctors/$doctorId/booking'
     | '/doctors/$doctorId/details'
   id:
     | '__root__'
@@ -177,6 +188,7 @@ export interface FileRouteTypes {
     | '/(dashboard)/_layout'
     | '/auth/login'
     | '/(dashboard)/_layout/dashboard'
+    | '/doctors/$doctorId/booking'
     | '/doctors/$doctorId/details'
   fileRoutesById: FileRoutesById
 }
@@ -192,6 +204,7 @@ export interface RootRouteChildren {
   SuccessPageRoute: typeof SuccessPageRoute
   dashboardLayoutRoute: typeof dashboardLayoutRouteWithChildren
   AuthLoginRoute: typeof AuthLoginRoute
+  DoctorsDoctorIdBookingRoute: typeof DoctorsDoctorIdBookingRoute
   DoctorsDoctorIdDetailsRoute: typeof DoctorsDoctorIdDetailsRoute
 }
 
@@ -281,6 +294,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DoctorsDoctorIdDetailsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/doctors/$doctorId/booking': {
+      id: '/doctors/$doctorId/booking'
+      path: '/doctors/$doctorId/booking'
+      fullPath: '/doctors/$doctorId/booking'
+      preLoaderRoute: typeof DoctorsDoctorIdBookingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(dashboard)/_layout/dashboard': {
       id: '/(dashboard)/_layout/dashboard'
       path: '/dashboard'
@@ -315,6 +335,7 @@ const rootRouteChildren: RootRouteChildren = {
   SuccessPageRoute: SuccessPageRoute,
   dashboardLayoutRoute: dashboardLayoutRouteWithChildren,
   AuthLoginRoute: AuthLoginRoute,
+  DoctorsDoctorIdBookingRoute: DoctorsDoctorIdBookingRoute,
   DoctorsDoctorIdDetailsRoute: DoctorsDoctorIdDetailsRoute,
 }
 export const routeTree = rootRouteImport
