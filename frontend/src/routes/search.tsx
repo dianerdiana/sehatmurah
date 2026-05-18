@@ -11,8 +11,8 @@ import { FormSearchDoctor } from '@/modules/public-facing/components/form-search
 import { useGetDoctors } from '@/queries/public-facing.query';
 
 const searchParamsSchema = z.object({
-  specialist: z.string().min(1).optional(),
-  city: z.string().min(1).optional(),
+  specialist: z.string().optional(),
+  city: z.string().optional(),
 });
 
 export const Route = createFileRoute('/search')({
@@ -26,10 +26,10 @@ function DoctorsSearchPage() {
 
   const { data: doctors, isPending } = useGetDoctors({
     params: { specialist, city },
-    enabled: Boolean(specialist && city),
+    enabled: Boolean(specialist !== undefined || city !== undefined),
   });
 
-  if (!specialist || !city) {
+  if (!doctors) {
     return (
       <PublicFacingLayout>
         <FormSearchDoctor />
