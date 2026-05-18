@@ -4,22 +4,23 @@ import type { AxiosResponse } from 'axios';
 
 import { createAbility } from '@/utils/utils';
 
+import { toApiError } from '../api-error.util';
+
 import { AbilityContext } from './ability-context';
 
 import { api } from '@/configs/api-config';
-import { toApiError } from '@/configs/auth/jwt-service';
 import type { LoginResponse } from '@/modules/auth/auth.response';
 import type { LoginDto } from '@/modules/auth/auth.schema';
 import type { AbilityRule } from '@/types/ability-rule.type';
+import type { ApiResponse } from '@/types/api-response.type';
 import { UserRole } from '@/types/enums/user-role.enum';
-import type { HttpResponse } from '@/types/http-response';
 import type { UserData } from '@/types/user-data.type';
 
 type AuthContextType = {
   isAuthenticated: boolean;
   isInitialLoading: boolean;
-  login: (credentials: any) => Promise<HttpResponse<LoginResponse>>;
-  register: (credentials: any) => Promise<HttpResponse<LoginResponse>>;
+  login: (credentials: any) => Promise<ApiResponse<LoginResponse>>;
+  register: (credentials: any) => Promise<ApiResponse<LoginResponse>>;
   userData: UserData;
 };
 
@@ -35,9 +36,9 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
     ability.update(newAbility.rules);
   };
 
-  const login = async (credentials: any): Promise<HttpResponse<LoginResponse>> => {
+  const login = async (credentials: any): Promise<ApiResponse<LoginResponse>> => {
     try {
-      const response = await api.post<LoginDto, HttpResponse<LoginResponse>>('/auth/login', credentials);
+      const response = await api.post<LoginDto, ApiResponse<LoginResponse>>('/auth/login', credentials);
 
       if (response.data.status === 'success') {
         const { data } = response.data;
@@ -49,11 +50,11 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
 
       return response.data;
     } catch (error) {
-      return toApiError(error);
+      throw toApiError(error);
     }
   };
 
-  const register = async (credentials: any): Promise<AxiosResponse<HttpResponse<LoginResponse>> | any> => {
+  const register = async (credentials: any): Promise<AxiosResponse<ApiResponse<LoginResponse>> | any> => {
     try {
       const response = await api.register(credentials);
 
