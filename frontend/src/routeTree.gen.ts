@@ -14,12 +14,14 @@ import { Route as PaymentDetailsRouteImport } from './routes/payment-details'
 import { Route as MyBookingRouteImport } from './routes/my-booking'
 import { Route as FutureAppointmentSuccesRouteImport } from './routes/future-appointment-succes'
 import { Route as FutureAppointmentPendingRouteImport } from './routes/future-appointment-pending'
+import { Route as LayoutPublicNavRouteImport } from './routes/_layout-public-nav'
 import { Route as LayoutPublicBlankRouteImport } from './routes/_layout-public-blank'
 import { Route as LayoutDashboardRouteImport } from './routes/_layout-dashboard'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthLoginRouteImport } from './routes/auth.login'
+import { Route as LayoutBlankRouteImport } from './routes/_layout-blank'
+import { Route as LayoutPublicNavIndexRouteImport } from './routes/_layout-public-nav/index'
 import { Route as LayoutDashboardDashboardRouteImport } from './routes/_layout-dashboard/dashboard'
 import { Route as LayoutPublicBlankDoctorsSearchRouteImport } from './routes/_layout-public-blank/doctors.search'
+import { Route as LayoutBlankAuthLoginRouteImport } from './routes/_layout-blank/auth.login'
 import { Route as LayoutPublicBlankDoctorsDoctorIdDetailsRouteImport } from './routes/_layout-public-blank/doctors.$doctorId.details'
 import { Route as LayoutPublicBlankDoctorsDoctorIdBookingRouteImport } from './routes/_layout-public-blank/doctors.$doctorId.booking'
 
@@ -49,6 +51,10 @@ const FutureAppointmentPendingRoute =
     path: '/future-appointment-pending',
     getParentRoute: () => rootRouteImport,
   } as any)
+const LayoutPublicNavRoute = LayoutPublicNavRouteImport.update({
+  id: '/_layout-public-nav',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LayoutPublicBlankRoute = LayoutPublicBlankRouteImport.update({
   id: '/_layout-public-blank',
   getParentRoute: () => rootRouteImport,
@@ -57,15 +63,14 @@ const LayoutDashboardRoute = LayoutDashboardRouteImport.update({
   id: '/_layout-dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const LayoutBlankRoute = LayoutBlankRouteImport.update({
+  id: '/_layout-blank',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthLoginRoute = AuthLoginRouteImport.update({
-  id: '/auth/login',
-  path: '/auth/login',
-  getParentRoute: () => rootRouteImport,
+const LayoutPublicNavIndexRoute = LayoutPublicNavIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LayoutPublicNavRoute,
 } as any)
 const LayoutDashboardDashboardRoute =
   LayoutDashboardDashboardRouteImport.update({
@@ -79,6 +84,11 @@ const LayoutPublicBlankDoctorsSearchRoute =
     path: '/doctors/search',
     getParentRoute: () => LayoutPublicBlankRoute,
   } as any)
+const LayoutBlankAuthLoginRoute = LayoutBlankAuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => LayoutBlankRoute,
+} as any)
 const LayoutPublicBlankDoctorsDoctorIdDetailsRoute =
   LayoutPublicBlankDoctorsDoctorIdDetailsRouteImport.update({
     id: '/doctors/$doctorId/details',
@@ -93,43 +103,45 @@ const LayoutPublicBlankDoctorsDoctorIdBookingRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof LayoutPublicNavIndexRoute
   '/future-appointment-pending': typeof FutureAppointmentPendingRoute
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
   '/success-page': typeof SuccessPageRoute
   '/dashboard': typeof LayoutDashboardDashboardRoute
-  '/auth/login': typeof AuthLoginRoute
+  '/auth/login': typeof LayoutBlankAuthLoginRoute
   '/doctors/search': typeof LayoutPublicBlankDoctorsSearchRoute
   '/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
   '/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof LayoutPublicNavIndexRoute
   '/future-appointment-pending': typeof FutureAppointmentPendingRoute
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
   '/success-page': typeof SuccessPageRoute
   '/dashboard': typeof LayoutDashboardDashboardRoute
-  '/auth/login': typeof AuthLoginRoute
+  '/auth/login': typeof LayoutBlankAuthLoginRoute
   '/doctors/search': typeof LayoutPublicBlankDoctorsSearchRoute
   '/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
   '/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_layout-blank': typeof LayoutBlankRouteWithChildren
   '/_layout-dashboard': typeof LayoutDashboardRouteWithChildren
   '/_layout-public-blank': typeof LayoutPublicBlankRouteWithChildren
+  '/_layout-public-nav': typeof LayoutPublicNavRouteWithChildren
   '/future-appointment-pending': typeof FutureAppointmentPendingRoute
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
   '/success-page': typeof SuccessPageRoute
   '/_layout-dashboard/dashboard': typeof LayoutDashboardDashboardRoute
-  '/auth/login': typeof AuthLoginRoute
+  '/_layout-public-nav/': typeof LayoutPublicNavIndexRoute
+  '/_layout-blank/auth/login': typeof LayoutBlankAuthLoginRoute
   '/_layout-public-blank/doctors/search': typeof LayoutPublicBlankDoctorsSearchRoute
   '/_layout-public-blank/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
   '/_layout-public-blank/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
@@ -163,31 +175,33 @@ export interface FileRouteTypes {
     | '/doctors/$doctorId/details'
   id:
     | '__root__'
-    | '/'
+    | '/_layout-blank'
     | '/_layout-dashboard'
     | '/_layout-public-blank'
+    | '/_layout-public-nav'
     | '/future-appointment-pending'
     | '/future-appointment-succes'
     | '/my-booking'
     | '/payment-details'
     | '/success-page'
     | '/_layout-dashboard/dashboard'
-    | '/auth/login'
+    | '/_layout-public-nav/'
+    | '/_layout-blank/auth/login'
     | '/_layout-public-blank/doctors/search'
     | '/_layout-public-blank/doctors/$doctorId/booking'
     | '/_layout-public-blank/doctors/$doctorId/details'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  LayoutBlankRoute: typeof LayoutBlankRouteWithChildren
   LayoutDashboardRoute: typeof LayoutDashboardRouteWithChildren
   LayoutPublicBlankRoute: typeof LayoutPublicBlankRouteWithChildren
+  LayoutPublicNavRoute: typeof LayoutPublicNavRouteWithChildren
   FutureAppointmentPendingRoute: typeof FutureAppointmentPendingRoute
   FutureAppointmentSuccesRoute: typeof FutureAppointmentSuccesRoute
   MyBookingRoute: typeof MyBookingRoute
   PaymentDetailsRoute: typeof PaymentDetailsRoute
   SuccessPageRoute: typeof SuccessPageRoute
-  AuthLoginRoute: typeof AuthLoginRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -227,6 +241,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FutureAppointmentPendingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_layout-public-nav': {
+      id: '/_layout-public-nav'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof LayoutPublicNavRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_layout-public-blank': {
       id: '/_layout-public-blank'
       path: ''
@@ -241,19 +262,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
+    '/_layout-blank': {
+      id: '/_layout-blank'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof LayoutBlankRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/login': {
-      id: '/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_layout-public-nav/': {
+      id: '/_layout-public-nav/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof LayoutPublicNavIndexRouteImport
+      parentRoute: typeof LayoutPublicNavRoute
     }
     '/_layout-dashboard/dashboard': {
       id: '/_layout-dashboard/dashboard'
@@ -268,6 +289,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/doctors/search'
       preLoaderRoute: typeof LayoutPublicBlankDoctorsSearchRouteImport
       parentRoute: typeof LayoutPublicBlankRoute
+    }
+    '/_layout-blank/auth/login': {
+      id: '/_layout-blank/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof LayoutBlankAuthLoginRouteImport
+      parentRoute: typeof LayoutBlankRoute
     }
     '/_layout-public-blank/doctors/$doctorId/details': {
       id: '/_layout-public-blank/doctors/$doctorId/details'
@@ -285,6 +313,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface LayoutBlankRouteChildren {
+  LayoutBlankAuthLoginRoute: typeof LayoutBlankAuthLoginRoute
+}
+
+const LayoutBlankRouteChildren: LayoutBlankRouteChildren = {
+  LayoutBlankAuthLoginRoute: LayoutBlankAuthLoginRoute,
+}
+
+const LayoutBlankRouteWithChildren = LayoutBlankRoute._addFileChildren(
+  LayoutBlankRouteChildren,
+)
 
 interface LayoutDashboardRouteChildren {
   LayoutDashboardDashboardRoute: typeof LayoutDashboardDashboardRoute
@@ -315,16 +355,28 @@ const LayoutPublicBlankRouteChildren: LayoutPublicBlankRouteChildren = {
 const LayoutPublicBlankRouteWithChildren =
   LayoutPublicBlankRoute._addFileChildren(LayoutPublicBlankRouteChildren)
 
+interface LayoutPublicNavRouteChildren {
+  LayoutPublicNavIndexRoute: typeof LayoutPublicNavIndexRoute
+}
+
+const LayoutPublicNavRouteChildren: LayoutPublicNavRouteChildren = {
+  LayoutPublicNavIndexRoute: LayoutPublicNavIndexRoute,
+}
+
+const LayoutPublicNavRouteWithChildren = LayoutPublicNavRoute._addFileChildren(
+  LayoutPublicNavRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  LayoutBlankRoute: LayoutBlankRouteWithChildren,
   LayoutDashboardRoute: LayoutDashboardRouteWithChildren,
   LayoutPublicBlankRoute: LayoutPublicBlankRouteWithChildren,
+  LayoutPublicNavRoute: LayoutPublicNavRouteWithChildren,
   FutureAppointmentPendingRoute: FutureAppointmentPendingRoute,
   FutureAppointmentSuccesRoute: FutureAppointmentSuccesRoute,
   MyBookingRoute: MyBookingRoute,
   PaymentDetailsRoute: PaymentDetailsRoute,
   SuccessPageRoute: SuccessPageRoute,
-  AuthLoginRoute: AuthLoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

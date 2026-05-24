@@ -4,7 +4,7 @@ import { themeConfig } from '@/configs/theme-config';
 
 import { LoginForm } from '@/modules/auth/components/login-form';
 
-export const Route = createFileRoute('/auth/login')({
+export const Route = createFileRoute('/_layout-blank/auth/login')({
   component: LoginPage,
 });
 
