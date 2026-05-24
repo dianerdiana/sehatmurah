@@ -1,6 +1,8 @@
 import React from 'react';
 
+import { useMutation } from '@tanstack/react-query';
 import { format, getDay, isBefore, startOfDay } from 'date-fns';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -16,6 +18,8 @@ import { dayMapping } from '@/utils/utils';
 
 import { createAppointmentSchema } from '../schemas/public-facing.schema';
 import type { CreateAppointmentDto } from '../types/public-facing.type';
+
+import { createAppointmentOptions } from '@/queries/appointment.query';
 
 type ScheduleOption = {
   day: string;
@@ -33,17 +37,28 @@ export function FormBookingDoctor({
 }) {
   const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = React.useState<ScheduleOption | null>(null);
+  const createAppointmentMutation = useMutation(createAppointmentOptions());
 
   const form = useAppForm({
     defaultValues: {
       doctor: doctorId,
-      appointmentDate: format(new Date(), 'yyyy-mm-dd'),
+      appointmentDate: format(new Date(), 'yyyy-MM-dd'),
       startTime: '',
       endTime: '',
       reason: '',
     } as CreateAppointmentDto,
     validators: {
       onSubmit: createAppointmentSchema,
+    },
+    onSubmit: async ({ value }) => {
+      const response = await createAppointmentMutation.mutateAsync(value);
+
+      if (response.status === 'success') {
+        toast.success('Appointment created successfully');
+        return;
+      }
+
+      toast.error(response.message);
     },
   });
 
@@ -53,7 +68,7 @@ export function FormBookingDoctor({
     if (date) {
       setSelectedDate(date);
       setSelectedTimeSlot(null);
-      form.setFieldValue('appointmentDate', format(date, 'yyyy-mm-dd'));
+      form.setFieldValue('appointmentDate', format(date, 'yyyy-MM-dd'));
       form.setFieldValue('startTime', '');
       form.setFieldValue('endTime', '');
     }
@@ -207,6 +222,10 @@ export function FormBookingDoctor({
                 </Field>
               )}
             />
+
+            <Button type='submit' disabled={createAppointmentMutation.isPending} className='rounded-full'>
+              {createAppointmentMutation.isPending ? 'Submitting...' : 'Submit Appointment'}
+            </Button>
           </FieldGroup>
         </form>
       </CardContent>

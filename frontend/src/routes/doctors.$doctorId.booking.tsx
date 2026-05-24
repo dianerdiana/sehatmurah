@@ -49,7 +49,7 @@ function BookingDoctorPage() {
             <FixedBookingCta
               fee={doctor.consultationFee}
               continueTo={`/doctors/${doctor._id}/booking`}
-              label='Book Now'
+              label='Continue'
             />
             <FormBookingDoctor scheduleOptions={doctor.schedule} doctorId={doctor._id} />
           </React.Fragment>
