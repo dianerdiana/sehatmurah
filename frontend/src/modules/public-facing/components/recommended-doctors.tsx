@@ -8,16 +8,24 @@ import { Badge } from '@/components/ui/badge';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { formatCurrency } from '@/utils/utils';
-
 import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 import { specialistQueries } from '@/modules/specialists/specialist.query';
+
+import { formatCurrency } from '@/utils/utils';
 
 export function RecommendedDoctors() {
   const [currentTab, setCurrentTab] = React.useState<string>('all');
 
   const { data: specialists } = useQuery(specialistQueries.list());
-  const queryDoctors = useQuery(doctorQueryOptions.list({ specialist: currentTab === 'all' ? undefined : currentTab }));
+  const queryDoctors = useQuery(
+    doctorQueryOptions.list({
+      specialist: currentTab === 'all' ? undefined : currentTab,
+      page: 1,
+      limit: 10,
+      city: '',
+      search: '',
+    }),
+  );
 
   const onTabChange = (tab: string) => {
     setCurrentTab(tab);
@@ -70,9 +78,9 @@ export function RecommendedDoctors() {
                     <DoctorCardSkeleton />
                   </CarouselItem>
                 ))
-              ) : queryDoctors.data && queryDoctors.data.length ? (
+              ) : queryDoctors.data && queryDoctors.data.items ? (
                 // KONDISI 2: Tampilkan Data Dokter jika loading selesai dan sukses
-                queryDoctors.data.map((doctor) => (
+                queryDoctors.data.items.map((doctor) => (
                   <CarouselItem className='basis-[45%]' key={doctor._id}>
                     <Link
                       to={`/doctors/$doctorId/details`}
