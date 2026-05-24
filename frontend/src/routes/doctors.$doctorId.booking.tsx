@@ -32,10 +32,10 @@ function BookingDoctorPage() {
         </Button>
         <div className='absolute left-1/2 top-12 -translate-x-1/2'>
           <h1 className='mb-0.75 whitespace-nowrap text-center text-xl font-bold leading-[25.2px] text-white'>
-            Doctor Details
+            Appointment Details
           </h1>
           <h2 className='whitespace-nowrap text-center font-semibold leading-[20.16px] text-primary-light'>
-            We provide top doctors.
+            Set your appointment schedule
           </h2>
         </div>
       </header>

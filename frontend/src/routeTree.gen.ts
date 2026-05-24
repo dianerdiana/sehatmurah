@@ -15,8 +15,6 @@ import { Route as PaymentDetailsRouteImport } from './routes/payment-details'
 import { Route as MyBookingRouteImport } from './routes/my-booking'
 import { Route as FutureAppointmentSuccesRouteImport } from './routes/future-appointment-succes'
 import { Route as FutureAppointmentPendingRouteImport } from './routes/future-appointment-pending'
-import { Route as DoctorDetailsRouteImport } from './routes/doctor-details'
-import { Route as BookingConfirmationRouteImport } from './routes/booking-confirmation'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as dashboardLayoutRouteImport } from './routes/(dashboard)/_layout'
@@ -55,16 +53,6 @@ const FutureAppointmentPendingRoute =
     path: '/future-appointment-pending',
     getParentRoute: () => rootRouteImport,
   } as any)
-const DoctorDetailsRoute = DoctorDetailsRouteImport.update({
-  id: '/doctor-details',
-  path: '/doctor-details',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BookingConfirmationRoute = BookingConfirmationRouteImport.update({
-  id: '/booking-confirmation',
-  path: '/booking-confirmation',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -98,8 +86,6 @@ const dashboardLayoutDashboardRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/booking-confirmation': typeof BookingConfirmationRoute
-  '/doctor-details': typeof DoctorDetailsRoute
   '/future-appointment-pending': typeof FutureAppointmentPendingRoute
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
@@ -113,8 +99,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/booking-confirmation': typeof BookingConfirmationRoute
-  '/doctor-details': typeof DoctorDetailsRoute
   '/future-appointment-pending': typeof FutureAppointmentPendingRoute
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
@@ -129,8 +113,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/booking-confirmation': typeof BookingConfirmationRoute
-  '/doctor-details': typeof DoctorDetailsRoute
   '/future-appointment-pending': typeof FutureAppointmentPendingRoute
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
@@ -147,8 +129,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/booking-confirmation'
-    | '/doctor-details'
     | '/future-appointment-pending'
     | '/future-appointment-succes'
     | '/my-booking'
@@ -162,8 +142,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/booking-confirmation'
-    | '/doctor-details'
     | '/future-appointment-pending'
     | '/future-appointment-succes'
     | '/my-booking'
@@ -177,8 +155,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/booking-confirmation'
-    | '/doctor-details'
     | '/future-appointment-pending'
     | '/future-appointment-succes'
     | '/my-booking'
@@ -194,8 +170,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  BookingConfirmationRoute: typeof BookingConfirmationRoute
-  DoctorDetailsRoute: typeof DoctorDetailsRoute
   FutureAppointmentPendingRoute: typeof FutureAppointmentPendingRoute
   FutureAppointmentSuccesRoute: typeof FutureAppointmentSuccesRoute
   MyBookingRoute: typeof MyBookingRoute
@@ -250,20 +224,6 @@ declare module '@tanstack/react-router' {
       path: '/future-appointment-pending'
       fullPath: '/future-appointment-pending'
       preLoaderRoute: typeof FutureAppointmentPendingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/doctor-details': {
-      id: '/doctor-details'
-      path: '/doctor-details'
-      fullPath: '/doctor-details'
-      preLoaderRoute: typeof DoctorDetailsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/booking-confirmation': {
-      id: '/booking-confirmation'
-      path: '/booking-confirmation'
-      fullPath: '/booking-confirmation'
-      preLoaderRoute: typeof BookingConfirmationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -325,8 +285,6 @@ const dashboardLayoutRouteWithChildren = dashboardLayoutRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BookingConfirmationRoute: BookingConfirmationRoute,
-  DoctorDetailsRoute: DoctorDetailsRoute,
   FutureAppointmentPendingRoute: FutureAppointmentPendingRoute,
   FutureAppointmentSuccesRoute: FutureAppointmentSuccesRoute,
   MyBookingRoute: MyBookingRoute,
