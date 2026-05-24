@@ -5,12 +5,8 @@ import z from 'zod';
 
 import { Button } from '@/components/ui/button';
 
-import { PublicBlankLayout } from '@/layouts/public-blank-layout';
-import { PublicFacingLayout } from '@/layouts/public-facing-layout';
-
 import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 import { CardDoctor, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
-import { FormSearchDoctor } from '@/modules/public-facing/components/form-search-doctor';
 
 const searchParamsSchema = z.object({
   specialist: z.string().optional(),
@@ -35,16 +31,8 @@ function DoctorsSearchPage() {
     },
   });
 
-  if (specialist === undefined && city === undefined) {
-    return (
-      <PublicFacingLayout>
-        <FormSearchDoctor />
-      </PublicFacingLayout>
-    );
-  }
-
   return (
-    <PublicBlankLayout>
+    <>
       <header className='h-67 w-full rounded-b-2xl bg-primary px-4 pt-12'>
         <Button onClick={() => router.history.back()}>
           <img src='/assets/icons/arrow-left-blue.svg' alt='Image' />
@@ -79,6 +67,6 @@ function DoctorsSearchPage() {
           </div>
         )}
       </section>
-    </PublicBlankLayout>
+    </>
   );
 }
