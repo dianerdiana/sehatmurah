@@ -9,7 +9,7 @@ import { PublicBlankLayout } from '@/layouts/public-blank-layout';
 import { CardDoctor, CardDoctorNotFound, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
 import { FixedBookingCta } from '@/modules/public-facing/components/fixed-booking-cta';
 import { FormBookingDoctor } from '@/modules/public-facing/components/form-booking-doctor';
-import { doctorQueries } from '@/queries/doctor.query';
+import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 
 export const Route = createFileRoute('/doctors/$doctorId/booking')({
   component: BookingDoctorPage,
@@ -20,7 +20,7 @@ function BookingDoctorPage() {
   const { doctorId } = Route.useParams();
 
   const { data: doctor, isPending } = useQuery({
-    ...doctorQueries.getById(doctorId),
+    ...doctorQueryOptions.getById(doctorId),
     enabled: !!doctorId,
   });
 

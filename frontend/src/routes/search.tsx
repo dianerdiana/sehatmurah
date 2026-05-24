@@ -9,7 +9,7 @@ import { PublicBlankLayout } from '@/layouts/public-blank-layout';
 import { PublicFacingLayout } from '@/layouts/public-facing-layout';
 import { CardDoctor, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
 import { FormSearchDoctor } from '@/modules/public-facing/components/form-search-doctor';
-import { doctorQueries } from '@/queries/doctor.query';
+import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 
 const searchParamsSchema = z.object({
   specialist: z.string().optional(),
@@ -26,7 +26,7 @@ function DoctorsSearchPage() {
   const { specialist, city } = Route.useSearch();
 
   const { data: doctors, isPending } = useQuery({
-    ...doctorQueries.list({ specialist, city }),
+    ...doctorQueryOptions.list({ specialist, city }),
     enabled: Boolean(specialist !== undefined || city !== undefined),
   });
 

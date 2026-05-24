@@ -11,7 +11,7 @@ import { CardDoctor, CardDoctorNotFound, CardDoctorSkeleton } from '@/modules/pu
 import { CardDoctorPracticeLocation } from '@/modules/public-facing/components/card-doctor-location';
 import { CardDoctorReviews } from '@/modules/public-facing/components/card-doctor-reviews';
 import { FixedBookingCta } from '@/modules/public-facing/components/fixed-booking-cta';
-import { doctorQueries } from '@/queries/doctor.query';
+import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 
 export const Route = createFileRoute('/doctors/$doctorId/details')({
   component: RouteComponent,
@@ -22,12 +22,12 @@ function RouteComponent() {
   const { doctorId } = Route.useParams();
 
   const { data: doctor, isPending } = useQuery({
-    ...doctorQueries.getById(doctorId),
+    ...doctorQueryOptions.getById(doctorId),
     enabled: !!doctorId,
   });
 
   const { data: reviews } = useQuery({
-    ...doctorQueries.getDoctorReviews(doctorId),
+    ...doctorQueryOptions.getDoctorReviews(doctorId),
     placeholderData: [],
     enabled: !!doctorId,
   });
