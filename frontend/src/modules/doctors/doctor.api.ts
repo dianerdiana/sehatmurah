@@ -6,42 +6,99 @@ import { unwrapApiResponse, unwrapPaginatedApiResponse } from '@/utils/api-respo
 import type { ApiResponse } from '@/types/api-response.type';
 import type { Review } from '@/types/reviews.type';
 
-import type { ListDoctorsCitiesDto, ListDoctorsDto, ListReviewsByDoctorDto } from './doctor.schema';
+import type {
+  CreateDoctorDto,
+  ListDoctorsCitiesDto,
+  ListDoctorsDto,
+  ListReviewsByDoctorDto,
+  UpdateDoctorDto,
+  UpdateDoctorScheduleDto,
+} from './doctor.schema';
 import type { Doctor } from './doctor.type';
 
 export const doctorApi = {
   list: async (params?: ListDoctorsDto) => {
     try {
-      const res = await api.get<ApiResponse<Doctor[]>>('/doctors', { params });
+      const response = await api.get<ApiResponse<Doctor[]>>('/doctors', {
+        params,
+      });
 
-      return unwrapPaginatedApiResponse(res.data);
+      return unwrapPaginatedApiResponse(response.data);
     } catch (error) {
       throw toApiError(error);
     }
   },
+
   cities: async (params?: ListDoctorsCitiesDto) => {
     try {
-      const res = await api.get<ApiResponse<string[]>>('/doctors/cities', { params });
+      const response = await api.get<ApiResponse<string[]>>('/doctors/cities', {
+        params,
+      });
 
-      return unwrapApiResponse(res.data);
+      return unwrapApiResponse(response.data);
     } catch (error) {
       throw toApiError(error);
     }
   },
+
   getById: async (id: string) => {
     try {
-      const res = await api.get<ApiResponse<Doctor>>(`/doctors/${id}`);
+      const response = await api.get<ApiResponse<Doctor>>(`/doctors/${id}`);
 
-      return unwrapApiResponse(res.data);
+      return unwrapApiResponse(response.data);
     } catch (error) {
       throw toApiError(error);
     }
   },
+
   getDoctorReviews: async (id: string, params?: ListReviewsByDoctorDto) => {
     try {
-      const res = await api.get<ApiResponse<Review[]>>(`/doctors/${id}/reviews`, { params });
+      const response = await api.get<ApiResponse<Review[]>>(`/doctors/${id}/reviews`, { params });
 
-      return unwrapApiResponse(res.data);
+      return unwrapPaginatedApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
+  create: async (payload: CreateDoctorDto) => {
+    try {
+      const response = await api.post<CreateDoctorDto, ApiResponse<Doctor>>('/doctors', payload);
+
+      return unwrapApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
+  update: async (id: string, payload: UpdateDoctorDto) => {
+    try {
+      const response = await api.patch<UpdateDoctorDto, ApiResponse<Doctor>>(`/doctors/${id}`, payload);
+
+      return unwrapApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
+  updateSchedule: async (id: string, payload: UpdateDoctorScheduleDto) => {
+    try {
+      const response = await api.patch<UpdateDoctorScheduleDto, ApiResponse<Doctor>>(
+        `/doctors/${id}/schedule`,
+        payload,
+      );
+
+      return unwrapApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
+  delete: async (id: string) => {
+    try {
+      const response = await api.delete<ApiResponse<Record<string, never>>>(`/doctors/${id}`);
+
+      return unwrapApiResponse(response.data);
     } catch (error) {
       throw toApiError(error);
     }
