@@ -13,7 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 
-import { appointmentMutationOptions } from '@/modules/appointments/appointment.query';
+import { appointmentMutationOptions } from '@/modules/appointments/appointment.mutation';
 
 import { useAppForm } from '@/utils/hooks/use-app-form';
 import { dayMapping } from '@/utils/utils';
@@ -50,15 +50,12 @@ export function FormBookingDoctor({
     validators: {
       onSubmit: createAppointmentSchema,
     },
-    onSubmit: async ({ value }) => {
-      const response = await createAppointmentMutation.mutateAsync(value);
-
-      if (response.status === 'success') {
-        toast.success('Appointment created successfully');
-        return;
-      }
-
-      toast.error(response.message);
+    onSubmit: ({ value }) => {
+      createAppointmentMutation.mutate(value, {
+        onSuccess: () => {
+          toast.success('Appointment created successfully');
+        },
+      });
     },
   });
 
