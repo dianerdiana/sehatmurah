@@ -20,16 +20,19 @@ function RouteComponent() {
   const router = useRouter();
   const { doctorId } = Route.useParams();
 
-  const { data: doctor, isPending } = useQuery({
+  const queryDoctor = useQuery({
     ...doctorQueryOptions.getById(doctorId),
     enabled: !!doctorId,
   });
 
-  const { data: reviews } = useQuery({
+  const queryReviews = useQuery({
     ...doctorQueryOptions.getDoctorReviews(doctorId),
     placeholderData: { items: [], meta: {} },
     enabled: !!doctorId,
   });
+
+  const doctor = queryDoctor.data && queryDoctor.data;
+  const reviews = queryReviews.data && queryReviews.data.items;
 
   return (
     <>
@@ -48,7 +51,7 @@ function RouteComponent() {
       </header>
 
       <section id='ContainerCards' className='-mt-35 w-full space-y-4 px-4 pb-8'>
-        {isPending ? (
+        {queryDoctor.isPending ? (
           <CardDoctorSkeleton />
         ) : doctor ? (
           <React.Fragment>
@@ -60,7 +63,7 @@ function RouteComponent() {
               continueTo={`/doctors/${doctor._id}/booking`}
               label='Book Now'
             />
-            <CardDoctorReviews reviews={reviews?.items.length ? reviews.items : []} />
+            <CardDoctorReviews reviews={reviews ? reviews : []} />
           </React.Fragment>
         ) : (
           <CardDoctorNotFound />

@@ -18,10 +18,12 @@ function BookingDoctorPage() {
   const router = useRouter();
   const { doctorId } = Route.useParams();
 
-  const { data: doctor, isPending } = useQuery({
+  const queryDoctor = useQuery({
     ...doctorQueryOptions.getById(doctorId),
     enabled: !!doctorId,
   });
+
+  const doctor = queryDoctor.data && queryDoctor.data;
 
   return (
     <>
@@ -40,7 +42,7 @@ function BookingDoctorPage() {
       </header>
 
       <section id='ContainerCards' className='-mt-35 w-full space-y-4 px-4 pb-8'>
-        {isPending ? (
+        {queryDoctor.isPending ? (
           <CardDoctorSkeleton />
         ) : doctor ? (
           <React.Fragment>

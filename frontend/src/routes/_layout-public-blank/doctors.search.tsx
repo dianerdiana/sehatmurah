@@ -22,7 +22,7 @@ function DoctorsSearchPage() {
   const router = useRouter();
   const { specialist, city } = Route.useSearch();
 
-  const doctorQuery = useQuery({
+  const queryDoctors = useQuery({
     ...doctorQueryOptions.list({ specialist, city, limit: 10, page: 1, search: '' }),
     enabled: Boolean(specialist !== undefined || city !== undefined),
     placeholderData: {
@@ -30,6 +30,8 @@ function DoctorsSearchPage() {
       meta: {},
     },
   });
+
+  const doctors = queryDoctors.data && queryDoctors.data.items;
 
   return (
     <>
@@ -49,10 +51,10 @@ function DoctorsSearchPage() {
         </div>
       </header>
       <section id='ContainerCards' className='-mt-35 w-full space-y-4 px-4'>
-        {doctorQuery.isPending ? (
+        {queryDoctors.isPending ? (
           <CardDoctorSkeleton />
-        ) : doctorQuery.data && doctorQuery.data.items.length ? (
-          doctorQuery.data.items.map((doctor) => <CardDoctor doctor={doctor} key={doctor._id} footer />)
+        ) : doctors && doctors.length ? (
+          doctors.map((doctor) => <CardDoctor doctor={doctor} key={doctor._id} footer />)
         ) : (
           <div className='flex min-h-87.5 w-full flex-col items-center justify-center rounded-3xl border border-dashed border-gray-300 bg-white p-8 text-center'>
             <div className='flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-gray-400 mb-5'>
