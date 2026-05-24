@@ -17,7 +17,7 @@ export const navigation = [
     items: [
       {
         title: 'Appointment',
-        url: '/appointments',
+        url: '/app/appointments',
         icon: <Clipboard />,
       },
       {
