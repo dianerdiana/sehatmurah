@@ -15,12 +15,12 @@ import { Route as PaymentDetailsRouteImport } from './routes/payment-details'
 import { Route as MyBookingRouteImport } from './routes/my-booking'
 import { Route as FutureAppointmentSuccesRouteImport } from './routes/future-appointment-succes'
 import { Route as FutureAppointmentPendingRouteImport } from './routes/future-appointment-pending'
+import { Route as LayoutDashboardRouteImport } from './routes/_layout-dashboard'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthLoginRouteImport } from './routes/auth/login'
-import { Route as dashboardLayoutRouteImport } from './routes/(dashboard)/_layout'
+import { Route as AuthLoginRouteImport } from './routes/auth.login'
+import { Route as LayoutDashboardDashboardRouteImport } from './routes/_layout-dashboard/dashboard'
 import { Route as DoctorsDoctorIdDetailsRouteImport } from './routes/doctors.$doctorId.details'
 import { Route as DoctorsDoctorIdBookingRouteImport } from './routes/doctors.$doctorId.booking'
-import { Route as dashboardLayoutDashboardRouteImport } from './routes/(dashboard)/_layout/dashboard'
 
 const SuccessPageRoute = SuccessPageRouteImport.update({
   id: '/success-page',
@@ -53,6 +53,10 @@ const FutureAppointmentPendingRoute =
     path: '/future-appointment-pending',
     getParentRoute: () => rootRouteImport,
   } as any)
+const LayoutDashboardRoute = LayoutDashboardRouteImport.update({
+  id: '/_layout-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -63,10 +67,12 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardLayoutRoute = dashboardLayoutRouteImport.update({
-  id: '/(dashboard)/_layout',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const LayoutDashboardDashboardRoute =
+  LayoutDashboardDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => LayoutDashboardRoute,
+  } as any)
 const DoctorsDoctorIdDetailsRoute = DoctorsDoctorIdDetailsRouteImport.update({
   id: '/doctors/$doctorId/details',
   path: '/doctors/$doctorId/details',
@@ -77,12 +83,6 @@ const DoctorsDoctorIdBookingRoute = DoctorsDoctorIdBookingRouteImport.update({
   path: '/doctors/$doctorId/booking',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardLayoutDashboardRoute =
-  dashboardLayoutDashboardRouteImport.update({
-    id: '/dashboard',
-    path: '/dashboard',
-    getParentRoute: () => dashboardLayoutRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -92,8 +92,8 @@ export interface FileRoutesByFullPath {
   '/payment-details': typeof PaymentDetailsRoute
   '/search': typeof SearchRoute
   '/success-page': typeof SuccessPageRoute
+  '/dashboard': typeof LayoutDashboardDashboardRoute
   '/auth/login': typeof AuthLoginRoute
-  '/dashboard': typeof dashboardLayoutDashboardRoute
   '/doctors/$doctorId/booking': typeof DoctorsDoctorIdBookingRoute
   '/doctors/$doctorId/details': typeof DoctorsDoctorIdDetailsRoute
 }
@@ -105,23 +105,23 @@ export interface FileRoutesByTo {
   '/payment-details': typeof PaymentDetailsRoute
   '/search': typeof SearchRoute
   '/success-page': typeof SuccessPageRoute
+  '/dashboard': typeof LayoutDashboardDashboardRoute
   '/auth/login': typeof AuthLoginRoute
-  '/dashboard': typeof dashboardLayoutDashboardRoute
   '/doctors/$doctorId/booking': typeof DoctorsDoctorIdBookingRoute
   '/doctors/$doctorId/details': typeof DoctorsDoctorIdDetailsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_layout-dashboard': typeof LayoutDashboardRouteWithChildren
   '/future-appointment-pending': typeof FutureAppointmentPendingRoute
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
   '/search': typeof SearchRoute
   '/success-page': typeof SuccessPageRoute
-  '/(dashboard)/_layout': typeof dashboardLayoutRouteWithChildren
+  '/_layout-dashboard/dashboard': typeof LayoutDashboardDashboardRoute
   '/auth/login': typeof AuthLoginRoute
-  '/(dashboard)/_layout/dashboard': typeof dashboardLayoutDashboardRoute
   '/doctors/$doctorId/booking': typeof DoctorsDoctorIdBookingRoute
   '/doctors/$doctorId/details': typeof DoctorsDoctorIdDetailsRoute
 }
@@ -135,8 +135,8 @@ export interface FileRouteTypes {
     | '/payment-details'
     | '/search'
     | '/success-page'
-    | '/auth/login'
     | '/dashboard'
+    | '/auth/login'
     | '/doctors/$doctorId/booking'
     | '/doctors/$doctorId/details'
   fileRoutesByTo: FileRoutesByTo
@@ -148,35 +148,35 @@ export interface FileRouteTypes {
     | '/payment-details'
     | '/search'
     | '/success-page'
-    | '/auth/login'
     | '/dashboard'
+    | '/auth/login'
     | '/doctors/$doctorId/booking'
     | '/doctors/$doctorId/details'
   id:
     | '__root__'
     | '/'
+    | '/_layout-dashboard'
     | '/future-appointment-pending'
     | '/future-appointment-succes'
     | '/my-booking'
     | '/payment-details'
     | '/search'
     | '/success-page'
-    | '/(dashboard)/_layout'
+    | '/_layout-dashboard/dashboard'
     | '/auth/login'
-    | '/(dashboard)/_layout/dashboard'
     | '/doctors/$doctorId/booking'
     | '/doctors/$doctorId/details'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LayoutDashboardRoute: typeof LayoutDashboardRouteWithChildren
   FutureAppointmentPendingRoute: typeof FutureAppointmentPendingRoute
   FutureAppointmentSuccesRoute: typeof FutureAppointmentSuccesRoute
   MyBookingRoute: typeof MyBookingRoute
   PaymentDetailsRoute: typeof PaymentDetailsRoute
   SearchRoute: typeof SearchRoute
   SuccessPageRoute: typeof SuccessPageRoute
-  dashboardLayoutRoute: typeof dashboardLayoutRouteWithChildren
   AuthLoginRoute: typeof AuthLoginRoute
   DoctorsDoctorIdBookingRoute: typeof DoctorsDoctorIdBookingRoute
   DoctorsDoctorIdDetailsRoute: typeof DoctorsDoctorIdDetailsRoute
@@ -226,6 +226,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FutureAppointmentPendingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_layout-dashboard': {
+      id: '/_layout-dashboard'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof LayoutDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -240,12 +247,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/_layout': {
-      id: '/(dashboard)/_layout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof dashboardLayoutRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_layout-dashboard/dashboard': {
+      id: '/_layout-dashboard/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof LayoutDashboardDashboardRouteImport
+      parentRoute: typeof LayoutDashboardRoute
     }
     '/doctors/$doctorId/details': {
       id: '/doctors/$doctorId/details'
@@ -261,37 +268,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DoctorsDoctorIdBookingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/_layout/dashboard': {
-      id: '/(dashboard)/_layout/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof dashboardLayoutDashboardRouteImport
-      parentRoute: typeof dashboardLayoutRoute
-    }
   }
 }
 
-interface dashboardLayoutRouteChildren {
-  dashboardLayoutDashboardRoute: typeof dashboardLayoutDashboardRoute
+interface LayoutDashboardRouteChildren {
+  LayoutDashboardDashboardRoute: typeof LayoutDashboardDashboardRoute
 }
 
-const dashboardLayoutRouteChildren: dashboardLayoutRouteChildren = {
-  dashboardLayoutDashboardRoute: dashboardLayoutDashboardRoute,
+const LayoutDashboardRouteChildren: LayoutDashboardRouteChildren = {
+  LayoutDashboardDashboardRoute: LayoutDashboardDashboardRoute,
 }
 
-const dashboardLayoutRouteWithChildren = dashboardLayoutRoute._addFileChildren(
-  dashboardLayoutRouteChildren,
+const LayoutDashboardRouteWithChildren = LayoutDashboardRoute._addFileChildren(
+  LayoutDashboardRouteChildren,
 )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LayoutDashboardRoute: LayoutDashboardRouteWithChildren,
   FutureAppointmentPendingRoute: FutureAppointmentPendingRoute,
   FutureAppointmentSuccesRoute: FutureAppointmentSuccesRoute,
   MyBookingRoute: MyBookingRoute,
   PaymentDetailsRoute: PaymentDetailsRoute,
   SearchRoute: SearchRoute,
   SuccessPageRoute: SuccessPageRoute,
-  dashboardLayoutRoute: dashboardLayoutRouteWithChildren,
   AuthLoginRoute: AuthLoginRoute,
   DoctorsDoctorIdBookingRoute: DoctorsDoctorIdBookingRoute,
   DoctorsDoctorIdDetailsRoute: DoctorsDoctorIdDetailsRoute,

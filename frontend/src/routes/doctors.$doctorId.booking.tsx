@@ -6,10 +6,11 @@ import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 
 import { PublicBlankLayout } from '@/layouts/public-blank-layout';
+
+import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 import { CardDoctor, CardDoctorNotFound, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
 import { FixedBookingCta } from '@/modules/public-facing/components/fixed-booking-cta';
 import { FormBookingDoctor } from '@/modules/public-facing/components/form-booking-doctor';
-import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 
 export const Route = createFileRoute('/doctors/$doctorId/booking')({
   component: BookingDoctorPage,
