@@ -19,7 +19,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 
 import { themeConfig } from '@/configs/theme-config';
 import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
-import { specialistQueries } from '@/queries/specialist.query';
+import { specialistQueries } from '@/modules/specialists/specialist.query';
 
 export function FormSearchDoctor() {
   const [selectedSpecialist, setSelectedSpecialist] = React.useState<undefined | string>(undefined);

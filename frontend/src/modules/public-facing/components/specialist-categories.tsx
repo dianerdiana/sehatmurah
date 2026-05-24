@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 
-import { specialistQueries } from '@/queries/specialist.query';
+import { specialistQueries } from '@/modules/specialists/specialist.query';
 
 export function SpecialistCategories() {
   const { data: specialists, isPending } = useQuery(specialistQueries.list({ limit: 6 }));

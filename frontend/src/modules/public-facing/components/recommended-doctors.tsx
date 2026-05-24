@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { formatCurrency } from '@/utils/utils';
 
 import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
-import { specialistQueries } from '@/queries/specialist.query';
+import { specialistQueries } from '@/modules/specialists/specialist.query';
 
 export function RecommendedDoctors() {
   const [currentTab, setCurrentTab] = React.useState<string>('all');
