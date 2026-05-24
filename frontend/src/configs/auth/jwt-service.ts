@@ -106,6 +106,14 @@ export class JwtService {
     return this.axin.put(url, data, config);
   }
 
+  patch<TRequest = any, TResponse = any>(
+    url: string,
+    data?: TRequest,
+    config?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<TResponse>> {
+    return this.axin.patch(url, data, config);
+  }
+
   delete<TResponse = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<TResponse>> {
     return this.axin.delete(url, config);
   }

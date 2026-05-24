@@ -19,7 +19,7 @@ import { dayMapping } from '@/utils/utils';
 import { createAppointmentSchema } from '../schemas/public-facing.schema';
 import type { CreateAppointmentDto } from '../types/public-facing.type';
 
-import { createAppointmentOptions } from '@/queries/appointment.query';
+import { appointmentMutationOptions } from '@/queries/appointment.query';
 
 type ScheduleOption = {
   day: string;
@@ -37,7 +37,7 @@ export function FormBookingDoctor({
 }) {
   const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = React.useState<ScheduleOption | null>(null);
-  const createAppointmentMutation = useMutation(createAppointmentOptions());
+  const createAppointmentMutation = useMutation(appointmentMutationOptions.create());
 
   const form = useAppForm({
     defaultValues: {
