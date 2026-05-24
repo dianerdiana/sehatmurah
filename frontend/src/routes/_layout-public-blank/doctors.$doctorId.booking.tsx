@@ -5,19 +5,16 @@ import { createFileRoute, useRouter } from '@tanstack/react-router';
 
 import { Button } from '@/components/ui/button';
 
-import { PublicBlankLayout } from '@/layouts/public-blank-layout';
-import { CardAvailableSchedule } from '@/modules/public-facing/components/card-available-schedule';
-import { CardDoctor, CardDoctorNotFound, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
-import { CardDoctorPracticeLocation } from '@/modules/public-facing/components/card-doctor-location';
-import { CardDoctorReviews } from '@/modules/public-facing/components/card-doctor-reviews';
-import { FixedBookingCta } from '@/modules/public-facing/components/fixed-booking-cta';
 import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
+import { CardDoctor, CardDoctorNotFound, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
+import { FixedBookingCta } from '@/modules/public-facing/components/fixed-booking-cta';
+import { FormBookingDoctor } from '@/modules/public-facing/components/form-booking-doctor';
 
-export const Route = createFileRoute('/doctors/$doctorId/details')({
-  component: RouteComponent,
+export const Route = createFileRoute('/_layout-public-blank/doctors/$doctorId/booking')({
+  component: BookingDoctorPage,
 });
 
-function RouteComponent() {
+function BookingDoctorPage() {
   const router = useRouter();
   const { doctorId } = Route.useParams();
 
@@ -26,24 +23,18 @@ function RouteComponent() {
     enabled: !!doctorId,
   });
 
-  const { data: reviews } = useQuery({
-    ...doctorQueryOptions.getDoctorReviews(doctorId),
-    placeholderData: [],
-    enabled: !!doctorId,
-  });
-
   return (
-    <PublicBlankLayout>
+    <>
       <header className='h-67 w-full rounded-b-2xl bg-primary px-4 pt-12'>
         <Button onClick={() => router.history.back()}>
           <img src='/assets/icons/arrow-left-blue.svg' alt='Image' />
         </Button>
         <div className='absolute left-1/2 top-12 -translate-x-1/2'>
           <h1 className='mb-0.75 whitespace-nowrap text-center text-xl font-bold leading-[25.2px] text-white'>
-            Doctor Details
+            Appointment Details
           </h1>
           <h2 className='whitespace-nowrap text-center font-semibold leading-[20.16px] text-primary-light'>
-            We provide top doctors.
+            Set your appointment schedule
           </h2>
         </div>
       </header>
@@ -54,19 +45,17 @@ function RouteComponent() {
         ) : doctor ? (
           <React.Fragment>
             <CardDoctor doctor={doctor} />
-            <CardAvailableSchedule schedules={doctor.schedule} />
-            <CardDoctorPracticeLocation practiceLocation={doctor.practiceLocation} />
             <FixedBookingCta
               fee={doctor.consultationFee}
               continueTo={`/doctors/${doctor._id}/booking`}
-              label='Book Now'
+              label='Continue'
             />
-            <CardDoctorReviews reviews={reviews ? reviews : []} />
+            <FormBookingDoctor scheduleOptions={doctor.schedule} doctorId={doctor._id} />
           </React.Fragment>
         ) : (
           <CardDoctorNotFound />
         )}
       </section>
-    </PublicBlankLayout>
+    </>
   );
 }

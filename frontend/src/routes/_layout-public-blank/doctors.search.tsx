@@ -7,16 +7,17 @@ import { Button } from '@/components/ui/button';
 
 import { PublicBlankLayout } from '@/layouts/public-blank-layout';
 import { PublicFacingLayout } from '@/layouts/public-facing-layout';
+
+import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 import { CardDoctor, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
 import { FormSearchDoctor } from '@/modules/public-facing/components/form-search-doctor';
-import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 
 const searchParamsSchema = z.object({
   specialist: z.string().optional(),
   city: z.string().optional(),
 });
 
-export const Route = createFileRoute('/search')({
+export const Route = createFileRoute('/_layout-public-blank/doctors/search')({
   component: DoctorsSearchPage,
   validateSearch: searchParamsSchema,
 });
@@ -25,12 +26,16 @@ function DoctorsSearchPage() {
   const router = useRouter();
   const { specialist, city } = Route.useSearch();
 
-  const { data: doctors, isPending } = useQuery({
-    ...doctorQueryOptions.list({ specialist, city }),
+  const doctorQuery = useQuery({
+    ...doctorQueryOptions.list({ specialist, city, limit: 10, page: 1, search: '' }),
     enabled: Boolean(specialist !== undefined || city !== undefined),
+    placeholderData: {
+      items: [],
+      meta: {},
+    },
   });
 
-  if (!doctors) {
+  if (specialist === undefined && city === undefined) {
     return (
       <PublicFacingLayout>
         <FormSearchDoctor />
@@ -56,10 +61,10 @@ function DoctorsSearchPage() {
         </div>
       </header>
       <section id='ContainerCards' className='-mt-35 w-full space-y-4 px-4'>
-        {isPending ? (
+        {doctorQuery.isPending ? (
           <CardDoctorSkeleton />
-        ) : doctors && doctors.length ? (
-          doctors.map((doctor) => <CardDoctor doctor={doctor} key={doctor._id} footer />)
+        ) : doctorQuery.data && doctorQuery.data.items.length ? (
+          doctorQuery.data.items.map((doctor) => <CardDoctor doctor={doctor} key={doctor._id} footer />)
         ) : (
           <div className='flex min-h-87.5 w-full flex-col items-center justify-center rounded-3xl border border-dashed border-gray-300 bg-white p-8 text-center'>
             <div className='flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-gray-400 mb-5'>

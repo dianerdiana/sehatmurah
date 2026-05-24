@@ -10,26 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SuccessPageRouteImport } from './routes/success-page'
-import { Route as SearchRouteImport } from './routes/search'
 import { Route as PaymentDetailsRouteImport } from './routes/payment-details'
 import { Route as MyBookingRouteImport } from './routes/my-booking'
 import { Route as FutureAppointmentSuccesRouteImport } from './routes/future-appointment-succes'
 import { Route as FutureAppointmentPendingRouteImport } from './routes/future-appointment-pending'
+import { Route as LayoutPublicBlankRouteImport } from './routes/_layout-public-blank'
 import { Route as LayoutDashboardRouteImport } from './routes/_layout-dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthLoginRouteImport } from './routes/auth.login'
 import { Route as LayoutDashboardDashboardRouteImport } from './routes/_layout-dashboard/dashboard'
-import { Route as DoctorsDoctorIdDetailsRouteImport } from './routes/doctors.$doctorId.details'
-import { Route as DoctorsDoctorIdBookingRouteImport } from './routes/doctors.$doctorId.booking'
+import { Route as LayoutPublicBlankDoctorsSearchRouteImport } from './routes/_layout-public-blank/doctors.search'
+import { Route as LayoutPublicBlankDoctorsDoctorIdDetailsRouteImport } from './routes/_layout-public-blank/doctors.$doctorId.details'
+import { Route as LayoutPublicBlankDoctorsDoctorIdBookingRouteImport } from './routes/_layout-public-blank/doctors.$doctorId.booking'
 
 const SuccessPageRoute = SuccessPageRouteImport.update({
   id: '/success-page',
   path: '/success-page',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SearchRoute = SearchRouteImport.update({
-  id: '/search',
-  path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PaymentDetailsRoute = PaymentDetailsRouteImport.update({
@@ -53,6 +49,10 @@ const FutureAppointmentPendingRoute =
     path: '/future-appointment-pending',
     getParentRoute: () => rootRouteImport,
   } as any)
+const LayoutPublicBlankRoute = LayoutPublicBlankRouteImport.update({
+  id: '/_layout-public-blank',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LayoutDashboardRoute = LayoutDashboardRouteImport.update({
   id: '/_layout-dashboard',
   getParentRoute: () => rootRouteImport,
@@ -73,16 +73,24 @@ const LayoutDashboardDashboardRoute =
     path: '/dashboard',
     getParentRoute: () => LayoutDashboardRoute,
   } as any)
-const DoctorsDoctorIdDetailsRoute = DoctorsDoctorIdDetailsRouteImport.update({
-  id: '/doctors/$doctorId/details',
-  path: '/doctors/$doctorId/details',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DoctorsDoctorIdBookingRoute = DoctorsDoctorIdBookingRouteImport.update({
-  id: '/doctors/$doctorId/booking',
-  path: '/doctors/$doctorId/booking',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const LayoutPublicBlankDoctorsSearchRoute =
+  LayoutPublicBlankDoctorsSearchRouteImport.update({
+    id: '/doctors/search',
+    path: '/doctors/search',
+    getParentRoute: () => LayoutPublicBlankRoute,
+  } as any)
+const LayoutPublicBlankDoctorsDoctorIdDetailsRoute =
+  LayoutPublicBlankDoctorsDoctorIdDetailsRouteImport.update({
+    id: '/doctors/$doctorId/details',
+    path: '/doctors/$doctorId/details',
+    getParentRoute: () => LayoutPublicBlankRoute,
+  } as any)
+const LayoutPublicBlankDoctorsDoctorIdBookingRoute =
+  LayoutPublicBlankDoctorsDoctorIdBookingRouteImport.update({
+    id: '/doctors/$doctorId/booking',
+    path: '/doctors/$doctorId/booking',
+    getParentRoute: () => LayoutPublicBlankRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -90,12 +98,12 @@ export interface FileRoutesByFullPath {
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
-  '/search': typeof SearchRoute
   '/success-page': typeof SuccessPageRoute
   '/dashboard': typeof LayoutDashboardDashboardRoute
   '/auth/login': typeof AuthLoginRoute
-  '/doctors/$doctorId/booking': typeof DoctorsDoctorIdBookingRoute
-  '/doctors/$doctorId/details': typeof DoctorsDoctorIdDetailsRoute
+  '/doctors/search': typeof LayoutPublicBlankDoctorsSearchRoute
+  '/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
+  '/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -103,27 +111,28 @@ export interface FileRoutesByTo {
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
-  '/search': typeof SearchRoute
   '/success-page': typeof SuccessPageRoute
   '/dashboard': typeof LayoutDashboardDashboardRoute
   '/auth/login': typeof AuthLoginRoute
-  '/doctors/$doctorId/booking': typeof DoctorsDoctorIdBookingRoute
-  '/doctors/$doctorId/details': typeof DoctorsDoctorIdDetailsRoute
+  '/doctors/search': typeof LayoutPublicBlankDoctorsSearchRoute
+  '/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
+  '/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_layout-dashboard': typeof LayoutDashboardRouteWithChildren
+  '/_layout-public-blank': typeof LayoutPublicBlankRouteWithChildren
   '/future-appointment-pending': typeof FutureAppointmentPendingRoute
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
-  '/search': typeof SearchRoute
   '/success-page': typeof SuccessPageRoute
   '/_layout-dashboard/dashboard': typeof LayoutDashboardDashboardRoute
   '/auth/login': typeof AuthLoginRoute
-  '/doctors/$doctorId/booking': typeof DoctorsDoctorIdBookingRoute
-  '/doctors/$doctorId/details': typeof DoctorsDoctorIdDetailsRoute
+  '/_layout-public-blank/doctors/search': typeof LayoutPublicBlankDoctorsSearchRoute
+  '/_layout-public-blank/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
+  '/_layout-public-blank/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -133,10 +142,10 @@ export interface FileRouteTypes {
     | '/future-appointment-succes'
     | '/my-booking'
     | '/payment-details'
-    | '/search'
     | '/success-page'
     | '/dashboard'
     | '/auth/login'
+    | '/doctors/search'
     | '/doctors/$doctorId/booking'
     | '/doctors/$doctorId/details'
   fileRoutesByTo: FileRoutesByTo
@@ -146,40 +155,39 @@ export interface FileRouteTypes {
     | '/future-appointment-succes'
     | '/my-booking'
     | '/payment-details'
-    | '/search'
     | '/success-page'
     | '/dashboard'
     | '/auth/login'
+    | '/doctors/search'
     | '/doctors/$doctorId/booking'
     | '/doctors/$doctorId/details'
   id:
     | '__root__'
     | '/'
     | '/_layout-dashboard'
+    | '/_layout-public-blank'
     | '/future-appointment-pending'
     | '/future-appointment-succes'
     | '/my-booking'
     | '/payment-details'
-    | '/search'
     | '/success-page'
     | '/_layout-dashboard/dashboard'
     | '/auth/login'
-    | '/doctors/$doctorId/booking'
-    | '/doctors/$doctorId/details'
+    | '/_layout-public-blank/doctors/search'
+    | '/_layout-public-blank/doctors/$doctorId/booking'
+    | '/_layout-public-blank/doctors/$doctorId/details'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LayoutDashboardRoute: typeof LayoutDashboardRouteWithChildren
+  LayoutPublicBlankRoute: typeof LayoutPublicBlankRouteWithChildren
   FutureAppointmentPendingRoute: typeof FutureAppointmentPendingRoute
   FutureAppointmentSuccesRoute: typeof FutureAppointmentSuccesRoute
   MyBookingRoute: typeof MyBookingRoute
   PaymentDetailsRoute: typeof PaymentDetailsRoute
-  SearchRoute: typeof SearchRoute
   SuccessPageRoute: typeof SuccessPageRoute
   AuthLoginRoute: typeof AuthLoginRoute
-  DoctorsDoctorIdBookingRoute: typeof DoctorsDoctorIdBookingRoute
-  DoctorsDoctorIdDetailsRoute: typeof DoctorsDoctorIdDetailsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -189,13 +197,6 @@ declare module '@tanstack/react-router' {
       path: '/success-page'
       fullPath: '/success-page'
       preLoaderRoute: typeof SuccessPageRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/search': {
-      id: '/search'
-      path: '/search'
-      fullPath: '/search'
-      preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/payment-details': {
@@ -226,6 +227,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FutureAppointmentPendingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_layout-public-blank': {
+      id: '/_layout-public-blank'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof LayoutPublicBlankRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_layout-dashboard': {
       id: '/_layout-dashboard'
       path: ''
@@ -254,19 +262,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutDashboardDashboardRouteImport
       parentRoute: typeof LayoutDashboardRoute
     }
-    '/doctors/$doctorId/details': {
-      id: '/doctors/$doctorId/details'
+    '/_layout-public-blank/doctors/search': {
+      id: '/_layout-public-blank/doctors/search'
+      path: '/doctors/search'
+      fullPath: '/doctors/search'
+      preLoaderRoute: typeof LayoutPublicBlankDoctorsSearchRouteImport
+      parentRoute: typeof LayoutPublicBlankRoute
+    }
+    '/_layout-public-blank/doctors/$doctorId/details': {
+      id: '/_layout-public-blank/doctors/$doctorId/details'
       path: '/doctors/$doctorId/details'
       fullPath: '/doctors/$doctorId/details'
-      preLoaderRoute: typeof DoctorsDoctorIdDetailsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof LayoutPublicBlankDoctorsDoctorIdDetailsRouteImport
+      parentRoute: typeof LayoutPublicBlankRoute
     }
-    '/doctors/$doctorId/booking': {
-      id: '/doctors/$doctorId/booking'
+    '/_layout-public-blank/doctors/$doctorId/booking': {
+      id: '/_layout-public-blank/doctors/$doctorId/booking'
       path: '/doctors/$doctorId/booking'
       fullPath: '/doctors/$doctorId/booking'
-      preLoaderRoute: typeof DoctorsDoctorIdBookingRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof LayoutPublicBlankDoctorsDoctorIdBookingRouteImport
+      parentRoute: typeof LayoutPublicBlankRoute
     }
   }
 }
@@ -283,18 +298,33 @@ const LayoutDashboardRouteWithChildren = LayoutDashboardRoute._addFileChildren(
   LayoutDashboardRouteChildren,
 )
 
+interface LayoutPublicBlankRouteChildren {
+  LayoutPublicBlankDoctorsSearchRoute: typeof LayoutPublicBlankDoctorsSearchRoute
+  LayoutPublicBlankDoctorsDoctorIdBookingRoute: typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
+  LayoutPublicBlankDoctorsDoctorIdDetailsRoute: typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
+}
+
+const LayoutPublicBlankRouteChildren: LayoutPublicBlankRouteChildren = {
+  LayoutPublicBlankDoctorsSearchRoute: LayoutPublicBlankDoctorsSearchRoute,
+  LayoutPublicBlankDoctorsDoctorIdBookingRoute:
+    LayoutPublicBlankDoctorsDoctorIdBookingRoute,
+  LayoutPublicBlankDoctorsDoctorIdDetailsRoute:
+    LayoutPublicBlankDoctorsDoctorIdDetailsRoute,
+}
+
+const LayoutPublicBlankRouteWithChildren =
+  LayoutPublicBlankRoute._addFileChildren(LayoutPublicBlankRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LayoutDashboardRoute: LayoutDashboardRouteWithChildren,
+  LayoutPublicBlankRoute: LayoutPublicBlankRouteWithChildren,
   FutureAppointmentPendingRoute: FutureAppointmentPendingRoute,
   FutureAppointmentSuccesRoute: FutureAppointmentSuccesRoute,
   MyBookingRoute: MyBookingRoute,
   PaymentDetailsRoute: PaymentDetailsRoute,
-  SearchRoute: SearchRoute,
   SuccessPageRoute: SuccessPageRoute,
   AuthLoginRoute: AuthLoginRoute,
-  DoctorsDoctorIdBookingRoute: DoctorsDoctorIdBookingRoute,
-  DoctorsDoctorIdDetailsRoute: DoctorsDoctorIdDetailsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
