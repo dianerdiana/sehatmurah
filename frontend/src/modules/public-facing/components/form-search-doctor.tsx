@@ -18,15 +18,19 @@ import {
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 import { themeConfig } from '@/configs/theme-config';
+
 import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
-import { specialistQueries } from '@/modules/specialists/specialist.query';
+import { specialistQueryOptions } from '@/modules/specialists/specialist.query';
 
 export function FormSearchDoctor() {
   const [selectedSpecialist, setSelectedSpecialist] = React.useState<undefined | string>(undefined);
   const [selectedCity, setSelectedCity] = React.useState<undefined | string>(undefined);
 
-  const { data: cities } = useQuery(doctorQueryOptions.cities());
-  const { data: specialists } = useQuery(specialistQueries.list({ limit: 10 }));
+  const queryCities = useQuery(doctorQueryOptions.cities());
+  const querySpecialists = useQuery(specialistQueryOptions.list());
+
+  const specialists = querySpecialists.data ? querySpecialists.data.items : [];
+  const cities = queryCities.data ? queryCities.data : [];
 
   return (
     <div id='form' className='w-full rounded-3xl bg-white px-4 py-8'>
@@ -157,7 +161,7 @@ export function FormSearchDoctor() {
           </Dialog>
         </div>
         <Link
-          from='/search'
+          from='/doctors/search'
           to='.'
           search={{
             specialist: selectedSpecialist,

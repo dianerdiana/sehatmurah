@@ -1,12 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 
-import { specialistQueries } from '@/modules/specialists/specialist.query';
+import { specialistQueryOptions } from '@/modules/specialists/specialist.query';
 
 export function SpecialistCategories() {
-  const { data: specialists, isPending } = useQuery(specialistQueries.list({ limit: 6 }));
+  const querySpecialists = useQuery(
+    specialistQueryOptions.list({
+      limit: 6,
+      page: 1,
+      isActive: 'true',
+    }),
+  );
 
-  if (isPending) {
+  const specialists = querySpecialists.data ? querySpecialists.data.items : [];
+
+  if (querySpecialists.isPending) {
     return <SpecialistCategoriesSekeleton />;
   }
 
@@ -15,7 +23,7 @@ export function SpecialistCategories() {
       <div className='flex items-center justify-between'>
         <h2 className='font-jakarta text-[20px] font-bold leading-[25.2px] text-gray-900'>Specialist Categories</h2>
         <Link
-          to='/search'
+          to='/doctors/search'
           search={{ specialist: '', city: '' }}
           className='font-jakarta text-sm font-bold leading-[17.64px] text-gray-500'
         >
@@ -27,7 +35,7 @@ export function SpecialistCategories() {
           specialists.map((specialist) => (
             <Link
               key={specialist._id}
-              to='/search'
+              to='/doctors/search'
               search={{ specialist: specialist.name }}
               className='categori-1 h-25.5 w-27.75'
             >
