@@ -4,11 +4,14 @@ import { UserRole } from '../../common/enums/user-role.enum';
 import { normalizePagination } from '../../common/pagination';
 import { AppointmentModel } from '../../models/appointment.model';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
+import { PatientProfileModel } from '../../models/patient-profile.model';
 import { AuthUser } from '../../types/auth-user.type';
 import { generateBookingCode } from '../../utils/generate-booking-code';
 import { getPatientProfileId } from '../patients/patient.port';
 
 import { CreateAppointmentDto, ListAppointmentsDto } from './appointment.schema';
+
+const escapeRegex = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const getDoctorProfileIdByUserId = async (userId: string): Promise<string> => {
   const doctorProfile = await DoctorProfileModel.findOne({ user: userId });
@@ -90,13 +93,62 @@ export const listAppointments = async (user: AuthUser, payload: ListAppointments
     filter.doctor = doctorId;
   }
 
+  if (payload.status !== 'all') {
+    filter.status = payload.status;
+  }
+
+  if (payload.startDate || payload.endDate) {
+    const dateFilter: Record<string, Date> = {};
+
+    if (payload.startDate) {
+      const startDate = new Date(payload.startDate);
+
+      if (!Number.isNaN(startDate.getTime())) {
+        startDate.setHours(0, 0, 0, 0);
+        dateFilter.$gte = startDate;
+      }
+    }
+
+    if (payload.endDate) {
+      const endDate = new Date(payload.endDate);
+
+      if (!Number.isNaN(endDate.getTime())) {
+        endDate.setHours(23, 59, 59, 999);
+        dateFilter.$lte = endDate;
+      }
+    }
+
+    if (Object.keys(dateFilter).length > 0) {
+      filter.appointmentDate = dateFilter;
+    }
+  }
+
+  const searchText = payload.search.trim();
+
+  if (searchText) {
+    const regex = new RegExp(escapeRegex(searchText), 'i');
+
+    const [patients, doctors] = await Promise.all([
+      PatientProfileModel.find({ fullName: regex }).select('_id').lean(),
+      DoctorProfileModel.find({ fullName: regex }).select('_id').lean(),
+    ]);
+
+    filter.$or = [
+      { bookingCode: regex },
+      { patient: { $in: patients.map((patient) => patient._id) } },
+      { doctor: { $in: doctors.map((doctor) => doctor._id) } },
+    ];
+  }
+
   const { page, limit, skip } = normalizePagination(payload);
   const totalItems = await AppointmentModel.countDocuments(filter);
+
+  const sortDirection = payload.sort === 'asc' ? 1 : -1;
 
   const items = await AppointmentModel.find(filter)
     .populate('patient', 'fullName')
     .populate('doctor', 'fullName consultationFee')
-    .sort({ appointmentDate: -1, startTime: 1 })
+    .sort({ [payload.column]: sortDirection })
     .skip(skip)
     .limit(limit);
 
