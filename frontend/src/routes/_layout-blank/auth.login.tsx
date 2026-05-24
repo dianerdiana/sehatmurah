@@ -2,7 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 
 import { themeConfig } from '@/configs/theme-config';
 
-import { LoginForm } from '@/modules/auth/components/login-form';
+import { FormLogin } from '@/modules/auth/components/form-login';
 
 export const Route = createFileRoute('/_layout-blank/auth/login')({
   component: LoginPage,
@@ -21,7 +21,7 @@ function LoginPage() {
         </div>
         <div className='flex flex-1 pt-10 justify-center'>
           <div className='w-full max-w-xs'>
-            <LoginForm />
+            <FormLogin />
           </div>
         </div>
       </div>

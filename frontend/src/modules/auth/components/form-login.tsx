@@ -11,7 +11,7 @@ import { useAuth } from '@/utils/hooks/use-auth';
 
 import { loginSchema } from '../auth.schema';
 
-export function LoginForm() {
+export function FormLogin() {
   const { login, userData } = useAuth();
   const navigate = useNavigate();
   const mutation = useMutation({
