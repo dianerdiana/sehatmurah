@@ -8,5 +8,11 @@
   "search.exclude": {
     "**/routeTree.gen.ts": true
   },
-  "tailwindCSS.lint.suggestCanonicalClasses": "ignore"
+  "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.tsx": "${capture}.* index.tsx"
+  },
+  "workbench.editor.wrapTabs": true,
+  "workbench.editor.tabSizing": "shrink"
 }
