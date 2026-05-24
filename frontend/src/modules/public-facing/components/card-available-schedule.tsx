@@ -3,7 +3,7 @@ import { CalendarDays, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-import type { DoctorSchedule } from '@/types/doctor.type';
+import type { DoctorSchedule } from '@/modules/doctors/doctor.type';
 
 export function CardAvailableSchedule({ schedules }: { schedules: DoctorSchedule[] }) {
   const groupedSchedules = schedules.reduce(

@@ -3,7 +3,7 @@ import { MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-import type { DoctorPracticeLocation } from '@/types/doctor.type';
+import type { DoctorPracticeLocation } from '@/modules/doctors/doctor.type';
 
 export function CardDoctorPracticeLocation({ practiceLocation }: { practiceLocation: DoctorPracticeLocation }) {
   const urlLocation = encodeURIComponent(practiceLocation.address);

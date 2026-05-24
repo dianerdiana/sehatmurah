@@ -18,14 +18,14 @@ import {
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 import { themeConfig } from '@/configs/theme-config';
-import { doctorQueries } from '@/queries/doctor.query';
+import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 import { specialistQueries } from '@/queries/specialist.query';
 
 export function FormSearchDoctor() {
   const [selectedSpecialist, setSelectedSpecialist] = React.useState<undefined | string>(undefined);
   const [selectedCity, setSelectedCity] = React.useState<undefined | string>(undefined);
 
-  const { data: cities } = useQuery(doctorQueries.cities());
+  const { data: cities } = useQuery(doctorQueryOptions.cities());
   const { data: specialists } = useQuery(specialistQueries.list({ limit: 10 }));
 
   return (

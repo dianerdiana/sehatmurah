@@ -3,7 +3,7 @@ import { SearchX } from 'lucide-react';
 
 import { formatCurrency } from '@/utils/utils';
 
-import type { Doctor } from '@/types/doctor.type';
+import type { Doctor } from '@/modules/doctors/doctor.type';
 
 type CardDoctorProps = {
   doctor: Doctor;

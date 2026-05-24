@@ -10,14 +10,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { formatCurrency } from '@/utils/utils';
 
-import { doctorQueries } from '@/queries/doctor.query';
+import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 import { specialistQueries } from '@/queries/specialist.query';
 
 export function RecommendedDoctors() {
   const [currentTab, setCurrentTab] = React.useState<string>('all');
 
   const { data: specialists } = useQuery(specialistQueries.list());
-  const queryDoctors = useQuery(doctorQueries.list({ specialist: currentTab === 'all' ? undefined : currentTab }));
+  const queryDoctors = useQuery(doctorQueryOptions.list({ specialist: currentTab === 'all' ? undefined : currentTab }));
 
   const onTabChange = (tab: string) => {
     setCurrentTab(tab);
