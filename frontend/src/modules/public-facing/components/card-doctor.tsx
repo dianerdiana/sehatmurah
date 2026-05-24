@@ -20,7 +20,7 @@ export function CardDoctor({ doctor, footer = false }: CardDoctorProps) {
             src={doctor.profilePhoto}
             alt='Image'
           />
-          <img className='absolute left-2 top-2' src='/assets/icons/alert-online.svg' alt='Icon' />
+          <span className='absolute left-2 top-2 size-2 rounded-full bg-green-500 shadow' />
         </div>
         <div className='space-y-2'>
           <h3 className='font-bold leading-[20.16px] text-primary'>{doctor.practiceLocation.clinicName}</h3>
