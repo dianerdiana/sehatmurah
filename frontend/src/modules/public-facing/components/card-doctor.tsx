@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router';
 import { SearchX } from 'lucide-react';
 
-import { formatCurrency } from '@/utils/utils';
-
 import type { Doctor } from '@/modules/doctors/doctor.type';
+
+import { formatCurrency } from '@/utils/utils';
 
 type CardDoctorProps = {
   doctor: Doctor;

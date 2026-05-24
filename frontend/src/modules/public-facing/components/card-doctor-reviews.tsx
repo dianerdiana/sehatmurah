@@ -1,9 +1,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 
-import { formatTimeAgo } from '@/utils/format-time-ago.util';
-
 import type { Review } from '@/modules/reviews/reviews.type';
+
+import { formatTimeAgo } from '@/utils/format-time-ago.util';
 
 export function CardDoctorReviews({ reviews }: { reviews: Review[] }) {
   return (

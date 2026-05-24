@@ -14,12 +14,10 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 
 import { appointmentMutationOptions } from '@/modules/appointments/appointment.mutation';
+import { type CreateAppointmentDto, createAppointmentSchema } from '@/modules/appointments/appointment.schema';
 
 import { useAppForm } from '@/utils/hooks/use-app-form';
 import { dayMapping } from '@/utils/utils';
-
-import { createAppointmentSchema } from '../schemas/public-facing.schema';
-import type { CreateAppointmentDto } from '../types/public-facing.type';
 
 type ScheduleOption = {
   day: string;
