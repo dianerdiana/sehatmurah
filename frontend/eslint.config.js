@@ -43,13 +43,19 @@ export default defineConfig([
             ['^@?\\w'],
 
             // Internal alias
+            ['^@/assets'],
             ['^@/components'],
+            ['^@/configs'],
+            ['^@/context'],
             ['^@/hooks'],
             ['^@/integrations'],
+            ['^@/layouts'],
             ['^@/lib'],
-            ['^@/routes'],
-            ['^@/services'],
+            ['^@/modules'],
+            ['^@/navigation'],
             ['^@/utils'],
+            ['^@/queries'],
+            ['^@/types'],
 
             // Parent
             ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
