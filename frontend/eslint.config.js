@@ -88,6 +88,7 @@ export default defineConfig([
       //   },
       // ],
 
+      'react-hooks/incompatible-library': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
     },
   },
