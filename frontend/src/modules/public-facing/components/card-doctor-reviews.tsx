@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 import { formatTimeAgo } from '@/utils/format-time-ago.util';
 
-import type { Review } from '@/types/reviews.type';
+import type { Review } from '@/modules/reviews/reviews.type';
 
 export function CardDoctorReviews({ reviews }: { reviews: Review[] }) {
   return (
