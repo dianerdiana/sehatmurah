@@ -1,10 +1,11 @@
 import { api } from '@/configs/api-config';
 
+import type { Review } from '@/modules/reviews/reviews.type';
+
 import { toApiError } from '@/utils/api-error.util';
 import { unwrapApiResponse, unwrapPaginatedApiResponse } from '@/utils/api-response.util';
 
 import type { ApiResponse } from '@/types/api-response.type';
-import type { Review } from '@/types/reviews.type';
 
 import type {
   CreateDoctorDto,
