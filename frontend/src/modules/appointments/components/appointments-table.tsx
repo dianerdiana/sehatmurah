@@ -49,7 +49,7 @@ export function AppointmentsTable({ data, sorting, onSortingChange, isLoading = 
             Array.from({ length: LOADING_ROWS }).map((_, index) => (
               <TableRow key={index}>
                 {appointmentsColumns.map((column) => (
-                  <TableCell key={column.id}>
+                  <TableCell key={String((column as any).accessorKey ?? column.id)}>
                     <Skeleton className='h-4 w-full max-w-40' />
                   </TableCell>
                 ))}

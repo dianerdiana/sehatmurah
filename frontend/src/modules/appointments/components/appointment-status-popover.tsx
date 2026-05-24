@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Check, ChevronDown, Loader2 } from 'lucide-react';
+import { Check, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Badge } from '@/components/ui/badge';
@@ -46,16 +46,14 @@ export function AppointmentStatusPopover({ appointment }: AppointmentStatusPopov
           size='sm'
           className='h-auto gap-2 px-2 py-1 font-normal hover:bg-transparent'
         >
-          <Badge variant={appointmentStatusBadgeVariants[appointment.status]} className='px-2 py-0.5'>
+          <Badge variant={appointmentStatusBadgeVariants[appointment.status]} className='w-24 px-2 py-0.5'>
             {currentStatusLabel}
           </Badge>
-          <ChevronDown className='size-4 text-muted-foreground' />
         </Button>
       </PopoverTrigger>
       <PopoverContent align='start' className='w-64'>
         <div className='mb-3 space-y-1'>
-          <p className='text-sm font-semibold'>Update status</p>
-          <p className='text-xs text-muted-foreground'>Select a new status for this appointment.</p>
+          <p className='font-semibold text-center'>Select status</p>
         </div>
 
         <div className='space-y-2'>
@@ -67,7 +65,7 @@ export function AppointmentStatusPopover({ appointment }: AppointmentStatusPopov
               <Button
                 key={status}
                 type='button'
-                variant={isCurrent ? 'secondary' : 'outline'}
+                variant={isCurrent ? 'primary' : 'secondary'}
                 className='w-full justify-start gap-2'
                 disabled={isPending || isCurrent}
                 onClick={() => mutation.mutate({ status })}
@@ -75,7 +73,7 @@ export function AppointmentStatusPopover({ appointment }: AppointmentStatusPopov
                 {isPending && mutation.variables?.status === status ? (
                   <Loader2 className='size-4 animate-spin' />
                 ) : (
-                  <Check className={`size-4 ${isCurrent ? 'opacity-100' : 'opacity-0'}`} />
+                  <Check className={`${isCurrent ? 'opacity-100' : 'opacity-0'}`} />
                 )}
                 <span>{appointmentStatusLabels[status]}</span>
               </Button>

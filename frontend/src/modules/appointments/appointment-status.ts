@@ -20,14 +20,11 @@ export const appointmentStatusLabels: Record<AppointmentStatus, string> = {
   [AppointmentStatus.CANCELLED]: 'Cancelled',
 };
 
-export const appointmentStatusBadgeVariants: Record<
-  AppointmentStatus,
-  'secondary' | 'success' | 'outline' | 'destructive'
-> = {
-  [AppointmentStatus.PENDING]: 'secondary',
+export const appointmentStatusBadgeVariants: Record<AppointmentStatus, 'warning' | 'success' | 'primary' | 'danger'> = {
+  [AppointmentStatus.PENDING]: 'warning',
   [AppointmentStatus.CONFIRMED]: 'success',
-  [AppointmentStatus.COMPLETED]: 'outline',
-  [AppointmentStatus.CANCELLED]: 'destructive',
+  [AppointmentStatus.COMPLETED]: 'primary',
+  [AppointmentStatus.CANCELLED]: 'danger',
 };
 
 export const appointmentStatusOrder: AppointmentStatus[] = [
