@@ -24,6 +24,12 @@ export const updateAppointmentStatusSchema = z.object({
 export const listAppointmentsSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(10),
+  search: z.string().trim().default(''),
+  status: z.union([z.literal('all'), z.enum(AppointmentStatus)]).default('all'),
+  startDate: z.string().trim().default(''),
+  endDate: z.string().trim().default(''),
+  column: z.enum(['appointmentDate', 'status'] as const).default('appointmentDate'),
+  sort: z.enum(['asc', 'desc'] as const).default('desc'),
 });
 
 export type AppointmentIdDto = z.infer<typeof appointmentIdSchema>;
