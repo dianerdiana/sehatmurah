@@ -43,6 +43,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "@tanstack/router-plugin": "^1.168.3",
     "@types/babel__core": "^7.20.5",
+    "@types/date-fns": "^2.5.3",
     "@types/node": "^24.12.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
