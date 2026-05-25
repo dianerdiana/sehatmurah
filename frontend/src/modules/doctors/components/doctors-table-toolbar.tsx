@@ -39,10 +39,6 @@ export function DoctorsTableToolbar({
   const debouncedSearch = useDebounce(searchInput, 350);
 
   useEffect(() => {
-    setSearchInput(search);
-  }, [search]);
-
-  useEffect(() => {
     const normalizedSearch = debouncedSearch.trim();
 
     if (normalizedSearch === search) {

@@ -8,7 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 import { DoctorsTable } from '@/modules/doctors/components/doctors-table';
 import { DoctorsTablePagination } from '@/modules/doctors/components/doctors-table-pagination';
-import { type DoctorStatusFilter, DoctorsTableToolbar } from '@/modules/doctors/components/doctors-table-toolbar';
+import { DoctorsTableToolbar, type DoctorStatusFilter } from '@/modules/doctors/components/doctors-table-toolbar';
 import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 import { listDoctorsSchema, type ListDoctorsSearchState } from '@/modules/doctors/doctor.schema';
 import type { Doctor } from '@/modules/doctors/doctor.type';
