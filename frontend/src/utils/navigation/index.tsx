@@ -1,4 +1,4 @@
-import { Archive, BriefcaseBusiness, Clipboard, Home, UserRoundCog, Users } from 'lucide-react';
+import { Archive, BriefcaseBusiness, Clipboard, HeartPulse, Home, UserRoundCog, Users } from 'lucide-react';
 
 export const navigation = [
   {
@@ -22,13 +22,18 @@ export const navigation = [
       },
       {
         title: 'Doctor',
-        url: '/doctors',
+        url: '/app/doctors',
         icon: <Archive />,
       },
       {
         title: 'Patient',
-        url: '/patients',
+        url: '/app/patients',
         icon: <Users />,
+      },
+      {
+        title: 'Specialist',
+        url: '/app/specialists',
+        icon: <HeartPulse />,
       },
     ],
   },
