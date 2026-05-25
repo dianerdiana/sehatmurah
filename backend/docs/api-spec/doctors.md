@@ -44,9 +44,12 @@ Base URL: `/api/doctors`
 
 Query parameters:
 
+- `isAvailable` (optional enum: `all` | `true` | `false`, default `all`)
 - `specialist` (optional string)
 - `city` (optional string)
 - `search` (optional string, searches `fullName`)
+- `column` (optional enum: `fullName` | `createdAt`, default `createdAt`)
+- `sort` (optional enum: `asc` | `desc`, default `desc`)
 - `page` (number, default `1`)
 - `limit` (number, default `10`, max `100`)
 
