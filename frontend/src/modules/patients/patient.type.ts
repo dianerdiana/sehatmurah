@@ -19,3 +19,7 @@ export type PatientProfile = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type PatientListItem = Omit<PatientProfile, 'user'> & {
+  user: Required<PatientUser>;
+};
