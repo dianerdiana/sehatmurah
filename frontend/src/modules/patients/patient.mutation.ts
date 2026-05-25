@@ -10,4 +10,10 @@ export const patientMutationOptions = {
       mutationKey: patientKeys.updateMyProfile(),
       mutationFn: (payload: UpdateMyProfileDto) => patientApi.updateMyProfile(payload),
     }),
+
+  delete: (id: string) =>
+    mutationOptions({
+      mutationKey: patientKeys.delete(id),
+      mutationFn: () => patientApi.delete(id),
+    }),
 };
