@@ -5,9 +5,13 @@ export const specialistIdSchema = z.object({
 });
 
 export const listSpecialistsSchema = z.object({
-  isActive: z.enum(['true', 'false']).optional(),
+  isActive: z.enum(['all', 'true', 'false']).default('all'),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(10),
+  search: z.string().trim().default(''),
+  category: z.string().trim().default(''),
+  column: z.enum(['name', 'createdAt', 'sortOrder'] as const).default('createdAt'),
+  sort: z.enum(['asc', 'desc'] as const).default('desc'),
 });
 
 export const createSpecialistSchema = z.object({
@@ -25,6 +29,7 @@ export const updateSpecialistSchema = createSpecialistSchema
   .refine((value) => Object.keys(value).length > 0, 'at least one field must be provided');
 
 export type SpecialistIdDto = z.infer<typeof specialistIdSchema>;
-export type ListSpecialistsDto = z.infer<typeof listSpecialistsSchema>;
+export type ListSpecialistsDto = z.input<typeof listSpecialistsSchema>;
+export type ListSpecialistsSearchState = z.output<typeof listSpecialistsSchema>;
 export type CreateSpecialistDto = z.infer<typeof createSpecialistSchema>;
 export type UpdateSpecialistDto = z.infer<typeof updateSpecialistSchema>;
