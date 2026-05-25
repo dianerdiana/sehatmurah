@@ -4,6 +4,7 @@ import { Outlet } from '@tanstack/react-router';
 import { CompanyBrand } from '@/components/layouts/company-brand';
 import { NavMain } from '@/components/layouts/nav-main';
 import { NavUser } from '@/components/layouts/nav-user';
+import { ModeToggle } from '@/components/themes/mode-toogle';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -60,6 +61,7 @@ function DashboardLayout() {
               </BreadcrumbList>
             </Breadcrumb>
           </div>
+          <ModeToggle />
         </header>
         <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
           <Outlet />

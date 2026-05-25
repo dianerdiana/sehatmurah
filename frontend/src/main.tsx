@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 
 import { AuthContextProvider } from './utils/context/auth-context';
+import { ThemeProvider } from './utils/context/theme-context';
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 
@@ -23,9 +24,11 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <AuthContextProvider>
-        <RouterProvider router={router} />
-      </AuthContextProvider>
+      <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+        <AuthContextProvider>
+          <RouterProvider router={router} />
+        </AuthContextProvider>
+      </ThemeProvider>
     </StrictMode>,
   );
 }
