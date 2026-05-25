@@ -5,21 +5,12 @@ export const doctorIdSchema = z.object({
 });
 
 export const listDoctorsSchema = z.object({
-  specialist: z
-    .string()
-    .trim()
-    .optional()
-    .transform((val) => (val === '' ? undefined : val)),
-  city: z
-    .string()
-    .trim()
-    .optional()
-    .transform((val) => (val === '' ? undefined : val)),
-  search: z
-    .string()
-    .trim()
-    .optional()
-    .transform((val) => (val === '' ? undefined : val)),
+  isAvailable: z.enum(['all', 'true', 'false']).default('all'),
+  specialist: z.string().trim().default(''),
+  city: z.string().trim().default(''),
+  search: z.string().trim().default(''),
+  column: z.enum(['fullName', 'createdAt'] as const).default('createdAt'),
+  sort: z.enum(['asc', 'desc'] as const).default('desc'),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(10),
 });
@@ -74,7 +65,8 @@ export const listReviewsByDoctorSchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(10),
 });
 export type DoctorIdDto = z.infer<typeof doctorIdSchema>;
-export type ListDoctorsDto = z.infer<typeof listDoctorsSchema>;
+export type ListDoctorsDto = z.input<typeof listDoctorsSchema>;
+export type ListDoctorsSearchState = z.output<typeof listDoctorsSchema>;
 export type ListDoctorsCitiesDto = z.infer<typeof listDoctorsCitiesSchema>;
 export type CreateDoctorDto = z.infer<typeof createDoctorSchema>;
 export type UpdateDoctorDto = z.infer<typeof updateDoctorSchema>;
