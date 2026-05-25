@@ -6,12 +6,11 @@ import { AppointmentModel } from '../../models/appointment.model';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
 import { PatientProfileModel } from '../../models/patient-profile.model';
 import { AuthUser } from '../../types/auth-user.type';
+import { escapeRegex } from '../../utils/escape-regex';
 import { generateBookingCode } from '../../utils/generate-booking-code';
 import { getPatientProfileId } from '../patients/patient.port';
 
 import { CreateAppointmentDto, ListAppointmentsDto } from './appointment.schema';
-
-const escapeRegex = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const getDoctorProfileIdByUserId = async (userId: string): Promise<string> => {
   const doctorProfile = await DoctorProfileModel.findOne({ user: userId });
