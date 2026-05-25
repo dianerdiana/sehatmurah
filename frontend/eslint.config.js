@@ -90,6 +90,7 @@ export default defineConfig([
 
       'react-hooks/incompatible-library': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+      'react-refresh/only-export-components': 'off',
     },
   },
   {
