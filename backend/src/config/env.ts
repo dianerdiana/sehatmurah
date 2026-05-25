@@ -8,4 +8,7 @@ export const env = {
   mongoUri: process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017/sehatmurah',
   jwtSecret: process.env.JWT_SECRET ?? 'change-me-in-production',
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '1d',
+  uploadDir: process.env.UPLOAD_DIR ?? 'uploads',
+  uploadBaseUrl: process.env.UPLOAD_BASE_URL ?? '/uploads',
+  uploadMaxFileSizeMb: Number(process.env.UPLOAD_MAX_FILE_SIZE_MB ?? 5),
 };
