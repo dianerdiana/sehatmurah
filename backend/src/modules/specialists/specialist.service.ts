@@ -1,10 +1,9 @@
 import { ApiError } from '../../common/api-error';
 import { normalizePagination } from '../../common/pagination';
 import { SpecialistModel } from '../../models/specialist.model';
+import { escapeRegex } from '../../utils/escape-regex';
 
 import { CreateSpecialistDto, ListSpecialistsDto, UpdateSpecialistDto } from './specialist.schema';
-
-const escapeRegex = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const toSlug = (value: string): string =>
   value
