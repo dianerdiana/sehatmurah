@@ -5,6 +5,7 @@ export const doctorIdSchema = z.object({
 });
 
 export const listDoctorsSchema = z.object({
+  isAvailable: z.enum(['all', 'true', 'false']).default('all'),
   specialist: z
     .string()
     .trim()
@@ -20,6 +21,8 @@ export const listDoctorsSchema = z.object({
     .trim()
     .optional()
     .transform((val) => (val === '' ? undefined : val)),
+  column: z.enum(['fullName', 'createdAt'] as const).default('createdAt'),
+  sort: z.enum(['asc', 'desc'] as const).default('desc'),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(10),
 });

@@ -15,7 +15,7 @@ import * as doctorService from './doctor.service';
 
 export const listDoctors = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const query = req.query as unknown as ListDoctorsDto;
+    const query = req.sanitizedQuery as ListDoctorsDto;
     const result = await doctorService.listDoctors(query);
 
     res.json(
@@ -34,7 +34,7 @@ export const listDoctors = async (req: Request, res: Response, next: NextFunctio
 
 export const listDoctorsCities = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const query = req.query as unknown as ListDoctorsCitiesDto;
+    const query = req.sanitizedQuery as ListDoctorsCitiesDto;
     const result = await doctorService.listDoctorsCities(query);
 
     res.json(

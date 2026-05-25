@@ -7,6 +7,7 @@ import { DoctorProfileModel } from '../../models/doctor-profile.model';
 import { SpecialistModel } from '../../models/specialist.model';
 import { UserModel } from '../../models/user.model';
 import { AuthUser } from '../../types/auth-user.type';
+import { escapeRegex } from '../../utils/escape-regex';
 
 import {
   CreateDoctorDto,
@@ -17,6 +18,10 @@ import {
 
 export const listDoctors = async (query: ListDoctorsDto) => {
   const filter: Record<string, unknown> = {};
+
+  if (query.isAvailable !== 'all') {
+    filter.isAvailable = query.isAvailable === 'true';
+  }
 
   if (query.specialist) {
     const isObjectId = mongoose.Types.ObjectId.isValid(query.specialist);
@@ -41,19 +46,39 @@ export const listDoctors = async (query: ListDoctorsDto) => {
   }
 
   if (query.city) {
-    filter['practiceLocation.city'] = { $regex: query.city, $options: 'i' };
+    filter['practiceLocation.city'] = { $regex: escapeRegex(query.city), $options: 'i' };
   }
 
   if (query.search) {
-    filter.fullName = { $regex: query.search, $options: 'i' };
+    filter.fullName = { $regex: escapeRegex(query.search), $options: 'i' };
   }
 
   const { page, limit, skip } = normalizePagination(query);
   const totalItems = await DoctorProfileModel.countDocuments(filter);
 
+  const sortDirection = query.sort === 'asc' ? 1 : -1;
+  const sortByColumn: Record<ListDoctorsDto['column'], string> = {
+    fullName: 'fullName',
+    createdAt: 'createdAt',
+  };
+
+  const primarySortField = sortByColumn[query.column];
+  const sortOption: Record<string, 1 | -1> = {
+    [primarySortField]: sortDirection,
+    _id: 1,
+  };
+
+  if (primarySortField !== 'createdAt') {
+    sortOption.createdAt = -1;
+  }
+
+  if (primarySortField !== 'fullName') {
+    sortOption.fullName = 1;
+  }
+
   const items = await DoctorProfileModel.find(filter)
     .populate('specialist', 'name slug icon')
-    .sort({ ratingAverage: -1, createdAt: -1 })
+    .sort(sortOption)
     .skip(skip)
     .limit(limit);
 
