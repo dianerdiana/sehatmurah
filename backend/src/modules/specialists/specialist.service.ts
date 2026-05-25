@@ -4,6 +4,8 @@ import { SpecialistModel } from '../../models/specialist.model';
 
 import { CreateSpecialistDto, ListSpecialistsDto, UpdateSpecialistDto } from './specialist.schema';
 
+const escapeRegex = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 const toSlug = (value: string): string =>
   value
     .toLowerCase()
@@ -13,18 +15,58 @@ const toSlug = (value: string): string =>
     .replace(/-+/g, '-');
 
 export const listSpecialists = async (query: ListSpecialistsDto) => {
-  const filter: Record<string, unknown> = {};
+  const filters: Record<string, unknown>[] = [];
 
-  if (typeof query.isActive === 'string') {
-    filter.isActive = query.isActive === 'true';
+  if (query.isActive !== 'all') {
+    filters.push({ isActive: query.isActive === 'true' });
   }
+
+  const category = query.category.trim();
+  if (category) {
+    const categoryRegex = new RegExp(escapeRegex(category), 'i');
+    filters.push({
+      $or: [{ name: categoryRegex }, { slug: categoryRegex }],
+    });
+  }
+
+  const search = query.search.trim();
+  if (search) {
+    const searchRegex = new RegExp(escapeRegex(search), 'i');
+    filters.push({
+      $or: [{ name: searchRegex }, { slug: searchRegex }, { description: searchRegex }],
+    });
+  }
+
+  const filter =
+    filters.length === 0
+      ? {}
+      : filters.length === 1
+        ? filters[0]
+        : ({ $and: filters } as Record<string, unknown>);
 
   const { page, limit, skip } = normalizePagination(query);
   const totalItems = await SpecialistModel.countDocuments(filter);
 
+  const sortDirection = query.sort === 'asc' ? 1 : -1;
+  const sortByColumn: Record<ListSpecialistsDto['column'], string> = {
+    name: 'name',
+    createdAt: 'createdAt',
+    sortOrder: 'sortOrder',
+  };
+
+  const primarySortField = sortByColumn[query.column];
+  const sortOption: Record<string, 1 | -1> = {
+    [primarySortField]: sortDirection,
+    name: 1,
+  };
+
+  if (primarySortField !== 'sortOrder') {
+    sortOption.sortOrder = 1;
+  }
+
   const items = await SpecialistModel.find(filter)
     .populate('countDoctors')
-    .sort({ sortOrder: 1, name: 1 })
+    .sort(sortOption)
     .skip(skip)
     .limit(limit);
 
