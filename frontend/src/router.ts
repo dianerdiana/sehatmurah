@@ -1,8 +1,10 @@
+import type { MongoAbility } from '@casl/ability';
 import type { QueryClient } from '@tanstack/react-query';
 import { createRouter } from '@tanstack/react-router';
 
 import { UserRole } from '@/types/enums/user-role.enum';
 
+import { ability } from './configs/acl/initial-ability';
 import { queryClient } from './integrations/tanstack-query/root-provider';
 import type { UserData } from './types/user-data.type';
 import { routeTree } from './routeTree.gen';
@@ -14,6 +16,7 @@ export type RouterContext = {
     isInitialLoading: boolean;
     userData: UserData;
   };
+  ability: MongoAbility;
 };
 
 const defaultRouterContext: RouterContext = {
@@ -29,6 +32,7 @@ const defaultRouterContext: RouterContext = {
       permissions: [],
     },
   },
+  ability,
 };
 
 export const router = createRouter({

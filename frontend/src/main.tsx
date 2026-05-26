@@ -10,10 +10,12 @@ import { ability } from './configs/acl/initial-ability';
 import { queryClient } from './integrations/tanstack-query/root-provider';
 import { AuthContextProvider } from './utils/context/auth-context';
 import { ThemeProvider } from './utils/context/theme-context';
+import { useAppAbility } from './utils/hooks/use-app-ability';
 import { useAuth } from './utils/hooks/use-auth';
 import { router } from './router';
 
 function AppRouter() {
+  const ability = useAppAbility();
   const { isAuthenticated, isInitialLoading, userData } = useAuth();
   const { email, id, name, role } = userData;
 
@@ -35,6 +37,7 @@ function AppRouter() {
           isInitialLoading,
           userData,
         },
+        ability,
       }}
     />
   );
