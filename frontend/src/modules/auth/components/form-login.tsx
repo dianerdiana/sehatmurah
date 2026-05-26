@@ -1,19 +1,21 @@
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
+import { getSafeRedirectTarget } from '@/utils/auth/route-guard';
 import { useAppForm } from '@/utils/hooks/use-app-form';
 import { useAuth } from '@/utils/hooks/use-auth';
 
 import { loginSchema } from '../auth.schema';
 
 export function FormLogin() {
-  const { login, userData } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
+  const search = useSearch({ from: '/_layout-blank/auth/login' });
   const mutation = useMutation({
     mutationFn: login,
     mutationKey: ['auth', 'login'],
@@ -31,8 +33,8 @@ export function FormLogin() {
       mutation.mutate(value, {
         onSuccess: (props) => {
           if (props.status === 'success') {
-            toast.success(`Welcome to dashboard, ${userData.name}`);
-            navigate({ to: '/dashboard' });
+            toast.success(`Welcome to dashboard, ${props.data.user.name}`);
+            navigate({ to: getSafeRedirectTarget(search.redirect) });
           } else {
             toast.error(props.message);
           }

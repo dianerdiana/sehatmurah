@@ -1,6 +1,8 @@
 import type { UserData } from '@/types/user-data.type';
+import type { AbilityRule } from '@/types/ability-rule.type';
 
 export type LoginResponse = {
   token: string;
-  user: UserData;
+  user: Omit<UserData, 'permissions'>;
+  permissions: AbilityRule[];
 };
