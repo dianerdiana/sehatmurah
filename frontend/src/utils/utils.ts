@@ -4,6 +4,7 @@ import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 import { themeConfig } from '@/configs/theme-config';
+
 import type { AbilityRule } from '@/types/ability-rule.type';
 
 export function cn(...inputs: ClassValue[]) {
