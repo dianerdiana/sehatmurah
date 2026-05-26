@@ -1,15 +1,20 @@
 import * as React from 'react';
 
 import { useIsFetching } from '@tanstack/react-query';
+import { useRouterState } from '@tanstack/react-router';
 
 import { Progress } from './progress';
 
 export const TopLoadingBar = () => {
   const isFetching = useIsFetching();
+  const isPending = useRouterState({
+    select: (state) => state.status === 'pending' || state.isLoading,
+  });
+
   const [value, setValue] = React.useState(0);
   const [isVisible, setIsVisible] = React.useState(false);
 
-  const isLoading = isFetching > 0;
+  const isLoading = isFetching > 0 || isPending;
 
   React.useEffect(() => {
     let incTimer: number | undefined;
@@ -18,7 +23,7 @@ export const TopLoadingBar = () => {
     if (isLoading) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsVisible(true);
-      setValue((v) => (v === 0 ? 30 : v));
+      setValue((v) => (v === 0 ? 10 : v));
 
       incTimer = window.setInterval(() => {
         setValue((v) => {
