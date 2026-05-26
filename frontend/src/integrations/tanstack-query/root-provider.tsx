@@ -1,12 +1,11 @@
-/* eslint-disable react-refresh/only-export-components */
 import React from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+import { api } from '@/configs/api-config';
+
 import { toApiError } from '@/utils/api-error.util';
 import { unwrapApiResponse } from '@/utils/api-response.util';
-
-import { api } from '@/configs/api-config';
 
 const defaultQueryFn = async ({ queryKey }: { queryKey: any }) => {
   try {
@@ -17,32 +16,25 @@ const defaultQueryFn = async ({ queryKey }: { queryKey: any }) => {
   }
 };
 
-export function getContext() {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        queryFn: defaultQueryFn,
-        // Data remains fresh for 5 minutes (won't refetch in background)
-        staleTime: 1000 * 60 * 5,
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      queryFn: defaultQueryFn,
+      // Data remains fresh for 5 minutes (won't refetch in background)
+      staleTime: 1000 * 60 * 5,
 
-        // Data stays in memory for 10 minutes after being unused
-        gcTime: 1000 * 60 * 10,
+      // Data stays in memory for 10 minutes after being unused
+      gcTime: 1000 * 60 * 10,
 
-        // Disable automatic refetch on window focus globally
-        refetchOnWindowFocus: false,
+      // Disable automatic refetch on window focus globally
+      refetchOnWindowFocus: false,
 
-        // Retry failed queries twice instead of the default 3
-        retry: 2,
-      },
+      // Retry failed queries twice instead of the default 3
+      retry: 2,
     },
-  });
+  },
+});
 
-  return {
-    queryClient,
-  };
-}
 export default function TanstackQueryProvider({ children }: { children: React.ReactNode }) {
-  const [context] = React.useState(() => getContext());
-
-  return <QueryClientProvider client={context.queryClient}>{children}</QueryClientProvider>;
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 }
