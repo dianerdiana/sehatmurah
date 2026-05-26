@@ -5,7 +5,7 @@ import { unwrapApiResponse, unwrapPaginatedApiResponse } from '@/utils/api-respo
 
 import type { ApiResponse } from '@/types/api-response.type';
 
-import type { CreateSpecialistDto, ListSpecialistsDto, UpdateSpecialistDto } from './specialist.schema';
+import type { ListSpecialistsDto } from './specialist.schema';
 import type { Specialist } from './specialist.type';
 
 export const specialistApi = {
@@ -31,9 +31,13 @@ export const specialistApi = {
     }
   },
 
-  create: async (payload: CreateSpecialistDto) => {
+  create: async (payload: FormData) => {
     try {
-      const response = await api.post<CreateSpecialistDto, ApiResponse<Specialist>>('/specialists', payload);
+      const response = await api.post<FormData, ApiResponse<Specialist>>('/specialists', payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       return unwrapApiResponse(response.data);
     } catch (error) {
@@ -41,9 +45,13 @@ export const specialistApi = {
     }
   },
 
-  update: async (id: string, payload: UpdateSpecialistDto) => {
+  update: async (id: string, payload: FormData) => {
     try {
-      const response = await api.patch<UpdateSpecialistDto, ApiResponse<Specialist>>(`/specialists/${id}`, payload);
+      const response = await api.put<FormData, ApiResponse<Specialist>>(`/specialists/${id}`, payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       return unwrapApiResponse(response.data);
     } catch (error) {
