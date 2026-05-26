@@ -160,7 +160,7 @@ export class JwtService {
   }
 
   logout() {
-    return this.axin.post(this.jwtConfig.logoutUrl, {}, {});
+    this.removeToken();
   }
 }
 
