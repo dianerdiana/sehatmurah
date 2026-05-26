@@ -23,6 +23,7 @@ export type AuthContextType = {
   isInitialLoading: boolean;
   login: (credentials: any) => Promise<ApiResponse<LoginResponse>>;
   register: (credentials: any) => Promise<ApiResponse<LoginResponse>>;
+  logout: () => Promise<void>;
   userData: UserData;
 };
 
@@ -68,6 +69,12 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const logout = async () => {
+    await api.logout();
+
+    setUserData(null);
+  };
+
   useEffect(() => {
     const token = api.getToken();
 
@@ -101,6 +108,7 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
         isInitialLoading,
         login,
         register,
+        logout,
         userData: userData
           ? userData
           : ({
