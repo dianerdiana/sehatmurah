@@ -26,6 +26,7 @@ const defaultRouterContext: RouterContext = {
       name: '',
       role: UserRole.PATIENT,
       email: '',
+      permissions: [],
     },
   },
 };
