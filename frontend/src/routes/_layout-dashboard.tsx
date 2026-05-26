@@ -16,6 +16,7 @@ import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '@/components/ui/sidebar';
 
+import { useAuth } from '@/utils/hooks/use-auth';
 import { navigation } from '@/utils/navigation';
 
 export const Route = createFileRoute('/_layout-dashboard')({
@@ -33,11 +34,7 @@ export const Route = createFileRoute('/_layout-dashboard')({
 });
 
 function DashboardLayout() {
-  const user = {
-    name: 'Dian Erdiana',
-    email: 'dianerdiana@dianerdiana.com',
-    avatar: '/assets/image/doctordetails-dire-clove.png',
-  };
+  const { userData } = useAuth();
 
   return (
     <SidebarProvider>
@@ -49,7 +46,7 @@ function DashboardLayout() {
           <NavMain groups={navigation} />
         </SidebarContent>
         <SidebarFooter>
-          <NavUser user={user} />
+          <NavUser user={userData} />
         </SidebarFooter>
         <SidebarRail className='border-destructive' />
       </Sidebar>
