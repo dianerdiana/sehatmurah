@@ -1,5 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { Outlet } from '@tanstack/react-router';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
 import { CompanyBrand } from '@/components/layouts/company-brand';
 import { NavMain } from '@/components/layouts/nav-main';
@@ -20,6 +19,16 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } fr
 import { navigation } from '@/utils/navigation';
 
 export const Route = createFileRoute('/_layout-dashboard')({
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth.isAuthenticated) {
+      throw redirect({
+        to: '/auth/login',
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
   component: DashboardLayout,
 });
 

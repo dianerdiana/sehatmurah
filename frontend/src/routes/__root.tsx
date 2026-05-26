@@ -7,6 +7,7 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { TopLoadingBar } from '@/components/ui/top-loading-bar';
 
 import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools';
 import TanstackQueryProvider from '@/integrations/tanstack-query/root-provider';
@@ -26,6 +27,7 @@ function RootDocument() {
       <TanstackQueryProvider>
         <TooltipProvider>
           <Outlet />
+          <TopLoadingBar />
         </TooltipProvider>
         <TanStackDevtools
           config={{
