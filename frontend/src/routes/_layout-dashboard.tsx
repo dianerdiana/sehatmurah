@@ -20,7 +20,7 @@ import { navigation } from '@/utils/navigation';
 
 export const Route = createFileRoute('/_layout-dashboard')({
   beforeLoad: ({ context, location }) => {
-    if (!context.auth.isAuthenticated) {
+    if (!context.auth.isInitialLoading && !context.auth.isAuthenticated) {
       throw redirect({
         to: '/auth/login',
         search: {
