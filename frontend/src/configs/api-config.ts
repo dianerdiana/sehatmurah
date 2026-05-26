@@ -1,3 +1,4 @@
 import { createJwt } from './auth/jwt-service';
+import { env } from './env';
 
-export const api = createJwt({ baseURL: import.meta.env.VITE_BASE_API_URL });
+export const api = createJwt({ baseURL: env.baseApiUrl });

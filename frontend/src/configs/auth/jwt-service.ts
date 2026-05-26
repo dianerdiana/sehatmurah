@@ -1,6 +1,8 @@
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 
+import { env } from '../env';
+
 import jwtDefaultConfig from './jwt-default-config';
 
 export type JwtServiceConfig = {
@@ -24,7 +26,7 @@ export class JwtService {
     this.jwtConfig = { ...this.jwtConfig, ...overrideServiceConfig };
 
     this.axin = axios.create({
-      baseURL: this.jwtConfig.baseURL || import.meta.env.VITE_BASE_API_URL || '',
+      baseURL: this.jwtConfig.baseURL || env.baseApiUrl || '',
       // withCredentials: true, // WAJIB untuk HttpOnly Cookie
       headers: { 'Content-Type': 'application/json' },
     });
