@@ -1,10 +1,20 @@
+import type { QueryClient } from '@tanstack/react-query';
 import { createRouter } from '@tanstack/react-router';
 
 import { UserRole } from '@/types/enums/user-role.enum';
-import type { RouterContext } from '@/types/router-context.type';
 
 import { queryClient } from './integrations/tanstack-query/root-provider';
+import type { UserData } from './types/user-data.type';
 import { routeTree } from './routeTree.gen';
+
+export type RouterContext = {
+  queryClient: QueryClient;
+  auth: {
+    isAuthenticated: boolean;
+    isInitialLoading: boolean;
+    userData: UserData;
+  };
+};
 
 const defaultRouterContext: RouterContext = {
   queryClient,

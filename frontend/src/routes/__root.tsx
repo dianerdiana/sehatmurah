@@ -11,7 +11,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools';
 import TanstackQueryProvider from '@/integrations/tanstack-query/root-provider';
 
-import type { RouterContext } from '@/types/router-context.type';
+import type { RouterContext } from '../router';
 
 import '../styles.css';
 
