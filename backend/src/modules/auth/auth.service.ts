@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 import { ApiError } from '../../common/api-error';
 import { UserRole } from '../../common/enums/user-role.enum';
+import { getPermissionObjectsByRole } from '../../common/permissions';
 import { PatientProfileModel } from '../../models/patient-profile.model';
 import { UserModel } from '../../models/user.model';
 import { signAccessToken } from '../../utils/jwt';
@@ -94,6 +95,8 @@ export const login = async (payload: LoginDto) => {
     role: user.role,
   });
 
+  const permissions = getPermissionObjectsByRole(user.role);
+
   return {
     token,
     user: {
@@ -101,6 +104,7 @@ export const login = async (payload: LoginDto) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      permissions,
     },
   };
 };
@@ -111,11 +115,14 @@ export const me = async (userId: string) => {
     throw new ApiError(404, 'User not found');
   }
 
+  const permissions = getPermissionObjectsByRole(user.role);
+
   return {
     id: user._id,
     name: user.name,
     email: user.email,
     role: user.role,
     isActive: user.isActive,
+    permissions,
   };
 };
