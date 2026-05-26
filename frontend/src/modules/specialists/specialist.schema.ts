@@ -15,18 +15,28 @@ export const listSpecialistsSchema = z.object({
 });
 
 export const createSpecialistSchema = z.object({
-  name: z.string().trim().min(1, 'name is required'),
+  name: z.string().trim().min(1, 'Name is required'),
   slug: z.string().trim().min(1).optional(),
   description: z.string().trim().max(500).optional(),
-  icon: z.string().trim().max(255).optional(),
-  image: z.string().trim().max(255).optional(),
-  isActive: z.boolean().optional(),
-  sortOrder: z.number().int().optional(),
+  icon: z.instanceof(File, { message: 'Icon file is required' }),
+  image: z.instanceof(File, { message: 'Image file is required' }),
+  isActive: z.coerce.boolean().optional(),
+  sortOrder: z.coerce.number().int().optional(),
 });
 
-export const updateSpecialistSchema = createSpecialistSchema
-  .partial()
+export const updateSpecialistSchema = z
+  .object({
+    name: z.string().trim().min(1).optional(),
+    slug: z.string().trim().min(1).optional(),
+    description: z.string().trim().max(500).optional(),
+    icon: z.union([z.instanceof(File), z.string().trim().min(1)]).optional(),
+    image: z.union([z.instanceof(File), z.string().trim().min(1)]).optional(),
+    isActive: z.coerce.boolean().optional(),
+    sortOrder: z.coerce.number().int().optional(),
+  })
   .refine((value) => Object.keys(value).length > 0, 'at least one field must be provided');
+
+export type SpecialistAssetInput = File | string | undefined;
 
 export type SpecialistIdDto = z.infer<typeof specialistIdSchema>;
 export type ListSpecialistsDto = z.input<typeof listSpecialistsSchema>;
