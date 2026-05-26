@@ -20,8 +20,8 @@ export const createSpecialistSchema = z.object({
   description: z.string().trim().max(500).optional(),
   icon: z.string().trim().max(255).optional(),
   image: z.string().trim().max(255).optional(),
-  isActive: z.boolean().optional(),
-  sortOrder: z.number().int().optional(),
+  isActive: z.coerce.boolean().optional(),
+  sortOrder: z.coerce.number().int().optional(),
 });
 
 export const updateSpecialistSchema = createSpecialistSchema
@@ -32,8 +32,3 @@ export type SpecialistIdDto = z.infer<typeof specialistIdSchema>;
 export type ListSpecialistsDto = z.infer<typeof listSpecialistsSchema>;
 export type CreateSpecialistDto = z.infer<typeof createSpecialistSchema>;
 export type UpdateSpecialistDto = z.infer<typeof updateSpecialistSchema>;
-
-export type UploadSpecialistFileResponse = {
-  url: string;
-  filename: string;
-};
