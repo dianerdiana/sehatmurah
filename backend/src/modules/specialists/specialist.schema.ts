@@ -32,3 +32,8 @@ export type SpecialistIdDto = z.infer<typeof specialistIdSchema>;
 export type ListSpecialistsDto = z.infer<typeof listSpecialistsSchema>;
 export type CreateSpecialistDto = z.infer<typeof createSpecialistSchema>;
 export type UpdateSpecialistDto = z.infer<typeof updateSpecialistSchema>;
+
+export type UploadSpecialistFileResponse = {
+  url: string;
+  filename: string;
+};
