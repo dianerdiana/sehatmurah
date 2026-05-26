@@ -18,6 +18,8 @@ import { toApiError } from '../api-error.util';
 
 import { AbilityContext } from './ability-context';
 
+const EMPTY_PERMISSIONS: AbilityRule[] = [];
+
 export type AuthContextType = {
   isAuthenticated: boolean;
   isInitialLoading: boolean;
@@ -37,6 +39,13 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
   const updateAbility = (permissions: AbilityRule[]) => {
     const newAbility = createAbility(permissions);
     ability.update(newAbility.rules);
+  };
+
+  const clearAuthState = () => {
+    api.logout();
+    setUserData(null);
+    updateAbility(EMPTY_PERMISSIONS);
+    setIsInitialLoading(false);
   };
 
   const login = async (credentials: any): Promise<ApiResponse<LoginResponse>> => {
@@ -70,9 +79,7 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const logout = async () => {
-    await api.logout();
-
-    setUserData(null);
+    clearAuthState();
   };
 
   useEffect(() => {
@@ -92,12 +99,27 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
           setUserData(response.data.data);
           updateAbility(response.data.data.permissions);
         }
+      } catch {
+        clearAuthState();
       } finally {
         setIsInitialLoading(false);
       }
     };
 
     void bootstrap();
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key === api.getStorageTokenKeyName() && event.newValue === null) {
+        clearAuthState();
+      }
+    };
+
+    window.addEventListener('storage', handleStorage);
+
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+    };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -116,6 +138,7 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
               role: UserRole.PATIENT,
               name: '',
               email: '',
+              permissions: EMPTY_PERMISSIONS,
             } as UserData),
       }}
     >
