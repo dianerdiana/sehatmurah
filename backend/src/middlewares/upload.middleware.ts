@@ -1,22 +1,30 @@
 import fs from 'fs';
-import path from 'path';
-
 import multer from 'multer';
+import path from 'path';
 
 import { ApiError } from '../common/api-error';
 import { env } from '../config/env';
-
-const uploadDir = path.resolve(process.cwd(), env.uploadDir);
-
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+import { uploadDir } from '../utils/upload-dir';
 
 const allowedMimeTypes = new Set(['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml']);
 
 const storage = multer.diskStorage({
-  destination: (_req, _file, callback) => {
-    callback(null, uploadDir);
+  destination: (_req, file, callback) => {
+    let subFolder = '';
+
+    if (file.fieldname === 'icon') {
+      subFolder = 'icons';
+    } else if (file.fieldname === 'image') {
+      subFolder = 'images';
+    }
+
+    const targetDir = path.resolve(uploadDir, subFolder);
+
+    if (!fs.existsSync(targetDir)) {
+      fs.mkdirSync(targetDir, { recursive: true });
+    }
+
+    callback(null, targetDir);
   },
   filename: (_req, file, callback) => {
     const extension = path.extname(file.originalname || '').toLowerCase();
@@ -42,8 +50,3 @@ export const upload = multer({
     fileSize: env.uploadMaxFileSizeMb * 1024 * 1024,
   },
 });
-
-export const toUploadUrl = (filename: string): string => {
-  const base = env.uploadBaseUrl.endsWith('/') ? env.uploadBaseUrl.slice(0, -1) : env.uploadBaseUrl;
-  return `${base}/${filename}`;
-};
