@@ -1,21 +1,35 @@
-import { StrictMode } from 'react';
+import { StrictMode, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { createRouter, RouterProvider } from '@tanstack/react-router';
+import { RouterProvider } from '@tanstack/react-router';
 
+import { queryClient } from './integrations/tanstack-query/root-provider';
 import { AuthContextProvider } from './utils/context/auth-context';
 import { ThemeProvider } from './utils/context/theme-context';
-// Import the generated route tree
-import { routeTree } from './routeTree.gen';
+import { useAuth } from './utils/hooks/use-auth';
+import { router } from './router';
 
-// Create a new router instance
-const router = createRouter({ routeTree });
+function AppRouter() {
+  const { isAuthenticated, isInitialLoading, userData } = useAuth();
+  const { email, id, name, role } = userData;
 
-// Register the router instance for type safety
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router;
-  }
+  useEffect(() => {
+    void router.invalidate();
+  }, [email, id, isAuthenticated, isInitialLoading, name, role]);
+
+  return (
+    <RouterProvider
+      router={router}
+      context={{
+        queryClient,
+        auth: {
+          isAuthenticated,
+          isInitialLoading,
+          userData,
+        },
+      }}
+    />
+  );
 }
 
 // Render the app
@@ -26,7 +40,7 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
         <AuthContextProvider>
-          <RouterProvider router={router} />
+          <AppRouter />
         </AuthContextProvider>
       </ThemeProvider>
     </StrictMode>,
