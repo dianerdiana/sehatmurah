@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { TanStackDevtools } from '@tanstack/react-devtools';
-import { createRootRoute } from '@tanstack/react-router';
+import { createRootRouteWithContext } from '@tanstack/react-router';
 import { Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
@@ -11,9 +11,11 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools';
 import TanstackQueryProvider from '@/integrations/tanstack-query/root-provider';
 
+import type { RouterContext } from '@/types/router-context.type';
+
 import '../styles.css';
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootDocument,
   notFoundComponent: () => <p>NotFound</p>,
 });
