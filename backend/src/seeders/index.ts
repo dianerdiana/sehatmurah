@@ -9,6 +9,7 @@ import { PatientProfileModel } from '../models/patient-profile.model';
 import { ReviewModel } from '../models/review.model';
 import { SpecialistModel } from '../models/specialist.model';
 import { UserModel } from '../models/user.model';
+import { deleteFolderRecursive } from '../utils/delete-upload-file';
 
 import { generateAppointments } from './factories/appointment.factory';
 import { generateDoctorProfiles } from './factories/doctor-profile.factory';
@@ -124,6 +125,12 @@ class SeederRunner {
 
     for (const model of collections) {
       await (model as any).deleteMany({});
+    }
+
+    const uploadFolders = ['icons', 'images', 'doctors', 'specialists'];
+
+    for (const folder of uploadFolders) {
+      await deleteFolderRecursive(folder);
     }
   }
 

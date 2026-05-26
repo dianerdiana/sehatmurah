@@ -15,8 +15,7 @@ export function generateSpecialists(): ISpecialistSeed[] {
       slug: 'cardiologist',
       description: 'Heart and cardiovascular disease specialist',
       icon: '❤️',
-      image:
-        'https://ik.imagekit.io/dianerdiana/sehatmurah/specialists/doctorsearch-modal-cardiology.png',
+      image: 'default/specialists/doctorsearch-modal-cardiology.png',
       isActive: true,
       sortOrder: 1,
     } as ISpecialistSeed,
@@ -25,8 +24,7 @@ export function generateSpecialists(): ISpecialistSeed[] {
       slug: 'dermatologist',
       description: 'Skin disease specialist',
       icon: '🧴',
-      image:
-        'https://ik.imagekit.io/dianerdiana/sehatmurah/specialists/doctorsearch-modal-dermatology.png',
+      image: 'default/specialists/doctorsearch-modal-dermatology.png',
       isActive: true,
       sortOrder: 2,
     } as ISpecialistSeed,
@@ -35,7 +33,7 @@ export function generateSpecialists(): ISpecialistSeed[] {
       slug: 'orthopedic',
       description: 'Bone and joint specialist',
       icon: '🦴',
-      image: 'https://ik.imagekit.io/dianerdiana/sehatmurah/specialists/orthopedic.webp',
+      image: 'default/specialists/orthopedic.webp',
       isActive: true,
       sortOrder: 3,
     } as ISpecialistSeed,
@@ -44,8 +42,7 @@ export function generateSpecialists(): ISpecialistSeed[] {
       slug: 'pediatrician',
       description: 'Children health specialist',
       icon: '👶',
-      image:
-        'https://ik.imagekit.io/dianerdiana/sehatmurah/specialists/doctorsearch-modal-pediatric.png',
+      image: 'default/specialists/doctorsearch-modal-pediatric.png',
       isActive: true,
       sortOrder: 4,
     } as ISpecialistSeed,
@@ -54,8 +51,7 @@ export function generateSpecialists(): ISpecialistSeed[] {
       slug: 'general-practitioner',
       description: 'General health and wellness',
       icon: '⚕️',
-      image:
-        'https://ik.imagekit.io/dianerdiana/sehatmurah/specialists/homepage-specialist-cardiology.png',
+      image: 'default/specialists/homepage-specialist-cardiology.png',
       isActive: true,
       sortOrder: 5,
     } as ISpecialistSeed,
@@ -64,8 +60,7 @@ export function generateSpecialists(): ISpecialistSeed[] {
       slug: 'neurologist',
       description: 'Nervous system specialist',
       icon: '🧬',
-      image:
-        'https://ik.imagekit.io/dianerdiana/sehatmurah/specialists/doctorsearch-modal-neurology.png',
+      image: 'default/specialists/doctorsearch-modal-neurology.png',
       isActive: true,
       sortOrder: 6,
     } as ISpecialistSeed,
@@ -74,8 +69,7 @@ export function generateSpecialists(): ISpecialistSeed[] {
       slug: 'ophthalmologist',
       description: 'Eye care specialist',
       icon: '👁️',
-      image:
-        'https://ik.imagekit.io/dianerdiana/sehatmurah/specialists/doctorsearch-modal-ophthalmology.png',
+      image: 'default/specialists/doctorsearch-modal-ophthalmology.png',
       isActive: true,
       sortOrder: 7,
     } as ISpecialistSeed,
