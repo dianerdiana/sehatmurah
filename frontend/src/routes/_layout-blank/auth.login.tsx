@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, redirect } from '@tanstack/react-router';
 
 import { themeConfig } from '@/configs/theme-config';
 
@@ -6,6 +6,14 @@ import { FormLogin } from '@/modules/auth/components/form-login';
 
 export const Route = createFileRoute('/_layout-blank/auth/login')({
   component: LoginPage,
+  beforeLoad: ({ context }) => {
+    if (context.auth.isAuthenticated) {
+      throw redirect({
+        to: '/dashboard',
+        replace: true,
+      });
+    }
+  },
 });
 
 function LoginPage() {
