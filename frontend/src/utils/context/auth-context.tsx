@@ -33,30 +33,6 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const ability = useContext(AbilityContext);
 
-  useEffect(() => {
-    const token = api.getToken();
-
-    if (!token) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsInitialLoading(false);
-      return;
-    }
-
-    const bootstrap = async () => {
-      try {
-        const response = await api.get<ApiResponse<UserData>>('/auth/me');
-
-        if (response.data.status === 'success') {
-          setUserData(response.data.data);
-        }
-      } finally {
-        setIsInitialLoading(false);
-      }
-    };
-
-    void bootstrap();
-  }, []);
-
   const updateAbility = (permissions: AbilityRule[]) => {
     const newAbility = createAbility(permissions);
     ability.update(newAbility.rules);
@@ -68,7 +44,7 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (response.data.status === 'success') {
         const { data } = response.data;
-        updateAbility([{ action: 'read', subject: 'Auth' }]);
+        updateAbility(data.user.permissions);
         api.setToken(data.token);
         setUserData(data.user);
         setIsInitialLoading(false);
@@ -91,6 +67,32 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
       throw toApiError(error);
     }
   };
+
+  useEffect(() => {
+    const token = api.getToken();
+
+    if (!token) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsInitialLoading(false);
+      return;
+    }
+
+    const bootstrap = async () => {
+      try {
+        const response = await api.get<ApiResponse<UserData>>('/auth/me');
+
+        if (response.data.status === 'success') {
+          setUserData(response.data.data);
+          updateAbility(response.data.data.permissions);
+        }
+      } finally {
+        setIsInitialLoading(false);
+      }
+    };
+
+    void bootstrap();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <AuthContext.Provider
