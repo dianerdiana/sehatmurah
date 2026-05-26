@@ -13,8 +13,8 @@
     "check": "prettier --check ."
   },
   "dependencies": {
-    "@casl/ability": "^6.8.1",
-    "@casl/react": "^6.0.0",
+    "@casl/ability": "^7.0.0",
+    "@casl/react": "^7.0.0",
     "@tailwindcss/vite": "^4.3.0",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-form": "^1.32.0",
