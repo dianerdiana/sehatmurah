@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { UserRole } from '../../common/enums/user-role.enum';
 import { authMiddleware } from '../../middlewares/auth.middleware';
 import { roleMiddleware } from '../../middlewares/role.middleware';
+import { upload } from '../../middlewares/upload.middleware';
 import { validateRequest } from '../../middlewares/validate-request.middleware';
 
 import * as specialistController from './specialist.controller';
@@ -28,6 +29,14 @@ specialistRouter.get(
 );
 
 // Private Route
+specialistRouter.post(
+  '/upload',
+  authMiddleware,
+  roleMiddleware(UserRole.ADMIN),
+  upload.single('file'),
+  specialistController.uploadSpecialistAsset,
+);
+
 specialistRouter.post(
   '/',
   authMiddleware,
