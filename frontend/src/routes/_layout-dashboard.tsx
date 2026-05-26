@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
+import { createFileRoute, Outlet } from '@tanstack/react-router';
 
 import { CompanyBrand } from '@/components/layouts/company-brand';
 import { NavMain } from '@/components/layouts/nav-main';
@@ -16,19 +16,14 @@ import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '@/components/ui/sidebar';
 
+import { requireAuthenticated } from '@/utils/auth/route-guard';
 import { useAuth } from '@/utils/hooks/use-auth';
 import { navigation } from '@/utils/navigation';
 
 export const Route = createFileRoute('/_layout-dashboard')({
   beforeLoad: ({ context, location }) => {
-    if (!context.auth.isInitialLoading && !context.auth.isAuthenticated) {
-      throw redirect({
-        to: '/auth/login',
-        search: {
-          redirect: location.href,
-        },
-      });
-    }
+    const redirectTarget = location.href;
+    requireAuthenticated(context.auth, redirectTarget);
   },
   component: DashboardLayout,
 });
