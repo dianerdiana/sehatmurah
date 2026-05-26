@@ -14,6 +14,8 @@ import type { ListSpecialistsSearchState } from '@/modules/specialists/specialis
 import { listSpecialistsSchema } from '@/modules/specialists/specialist.schema';
 import type { Specialist } from '@/modules/specialists/specialist.type';
 
+import { Can } from '@/utils/context/ability-context';
+
 export const Route = createFileRoute('/_layout-dashboard/app/specialists/')({
   validateSearch: listSpecialistsSchema,
   component: SpecialistsListPage,
@@ -122,9 +124,11 @@ function SpecialistsListPage() {
                 <span className='font-medium text-foreground'>{totalItems}</span> specialists
               </div>
 
-              <Button className='rounded-full' asChild>
-                <Link to='/app/specialists/create'>Add Specialist</Link>
-              </Button>
+              <Can I='create' a='Specialist'>
+                <Button className='rounded-full' asChild>
+                  <Link to='/app/specialists/create'>Add Specialist</Link>
+                </Button>
+              </Can>
             </div>
           </div>
         </CardContent>
