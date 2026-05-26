@@ -1,19 +1,19 @@
-import { createMongoAbility } from '@casl/ability';
+import { createMongoAbility, type MongoQuery } from '@casl/ability';
 import type { ClassValue } from 'clsx';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 import { themeConfig } from '@/configs/theme-config';
 
-import type { AbilityRule } from '@/types/ability-rule.type';
+import type { AbilityRule, AppAbility, PermissionAction, PermissionSubject } from '@/types/ability-rule.type';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function createAbility(rules: AbilityRule[]) {
-  return createMongoAbility(rules, {
-    detectSubjectType: (object: any) => object!.type,
+export function createAbility(rules: AbilityRule[]): AppAbility {
+  return createMongoAbility<[PermissionAction, PermissionSubject], MongoQuery>(rules, {
+    detectSubjectType: (object: any) => object.type,
   });
 }
 
