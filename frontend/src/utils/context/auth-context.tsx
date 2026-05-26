@@ -1,20 +1,22 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import type { AxiosResponse } from 'axios';
 
-import { createAbility } from '@/utils/utils';
-
-import { toApiError } from '../api-error.util';
-
-import { AbilityContext } from './ability-context';
-
 import { api } from '@/configs/api-config';
+
 import type { LoginResponse } from '@/modules/auth/auth.response';
 import type { LoginDto } from '@/modules/auth/auth.schema';
+
+import { createAbility } from '@/utils/utils';
+
 import type { AbilityRule } from '@/types/ability-rule.type';
 import type { ApiResponse } from '@/types/api-response.type';
 import { UserRole } from '@/types/enums/user-role.enum';
 import type { UserData } from '@/types/user-data.type';
+
+import { toApiError } from '../api-error.util';
+
+import { AbilityContext } from './ability-context';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -30,6 +32,30 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const ability = useContext(AbilityContext);
+
+  useEffect(() => {
+    const token = api.getToken();
+
+    if (!token) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsInitialLoading(false);
+      return;
+    }
+
+    const bootstrap = async () => {
+      try {
+        const response = await api.get<ApiResponse<UserData>>('/auth/me');
+
+        if (response.data.status === 'success') {
+          setUserData(response.data.data);
+        }
+      } finally {
+        setIsInitialLoading(false);
+      }
+    };
+
+    void bootstrap();
+  }, []);
 
   const updateAbility = (permissions: AbilityRule[]) => {
     const newAbility = createAbility(permissions);
