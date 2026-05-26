@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 
 import { RouterProvider } from '@tanstack/react-router';
 
+import { FallbackSpinner } from '@/components/ui/fallback-spinner';
+
 import { queryClient } from './integrations/tanstack-query/root-provider';
 import { AuthContextProvider } from './utils/context/auth-context';
 import { ThemeProvider } from './utils/context/theme-context';
@@ -16,6 +18,10 @@ function AppRouter() {
   useEffect(() => {
     void router.invalidate();
   }, [email, id, isAuthenticated, isInitialLoading, name, role]);
+
+  if (isInitialLoading) {
+    return <FallbackSpinner fullscreen />;
+  }
 
   return (
     <RouterProvider
