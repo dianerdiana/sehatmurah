@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { Eye } from 'lucide-react';
 
+import { ImageServer } from '@/components/image-server';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -44,7 +45,7 @@ export function SpecialistDetailDialog({ specialist }: SpecialistDetailDialogPro
           <div className='flex items-start gap-4 rounded-lg border bg-muted/20 p-4'>
             <div className='size-16 shrink-0 overflow-hidden rounded-xl border bg-background'>
               {specialist.image ? (
-                <img src={specialist.image} alt={specialist.name} className='size-full object-cover' />
+                <ImageServer src={specialist.image} alt={specialist.name} className='size-full object-cover' />
               ) : (
                 <div className='flex size-full items-center justify-center text-xs text-muted-foreground'>No image</div>
               )}

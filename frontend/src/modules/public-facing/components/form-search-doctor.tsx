@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Search } from 'lucide-react';
 
+import { ImageServer } from '@/components/image-server';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -123,7 +124,7 @@ export function FormSearchDoctor() {
                           <div className='flex items-center justify-between'>
                             <div className='flex items-center gap-3'>
                               <div className='flex size-17.5 items-center justify-center'>
-                                <img
+                                <ImageServer
                                   src={specialist.image}
                                   alt='Image'
                                   className='h-full w-full rounded-3xl object-cover'

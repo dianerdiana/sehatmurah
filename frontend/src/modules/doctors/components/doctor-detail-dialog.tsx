@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { Eye, Star } from 'lucide-react';
 
+import { ImageServer } from '@/components/image-server';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -46,7 +47,7 @@ export function DoctorDetailDialog({ doctor }: DoctorDetailDialogProps) {
           <div className='flex flex-col gap-4 rounded-lg border bg-muted/20 p-4 sm:flex-row'>
             <div className='size-20 shrink-0 overflow-hidden rounded-xl border bg-background'>
               {doctor.profilePhoto ? (
-                <img src={doctor.profilePhoto} alt={doctor.fullName} className='size-full object-cover' />
+                <ImageServer src={doctor.profilePhoto} alt={doctor.fullName} className='size-full object-cover' />
               ) : (
                 <div className='flex size-full items-center justify-center text-xs text-muted-foreground'>No image</div>
               )}

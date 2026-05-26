@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Star, User } from 'lucide-react';
 
+import { ImageServer } from '@/components/image-server';
 import { Badge } from '@/components/ui/badge';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -91,7 +92,7 @@ export function RecommendedDoctors() {
                       className='w-70 shrink-0 rounded-3xl'
                     >
                       <div className='relative h-45 w-full overflow-hidden rounded-t-3xl border border-gray-200 bg-gray-100'>
-                        <img src={doctor.profilePhoto} alt='Image' className='w-full h-full object-contain' />
+                        <ImageServer src={doctor.profilePhoto} alt='Image' className='w-full h-full object-contain' />
 
                         {doctor.isAvailable ? (
                           <Badge variant='success' className='absolute left-4 top-4 align-middle'>

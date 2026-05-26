@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 
+import { ImageServer } from '@/components/image-server';
+
 import { specialistQueryOptions } from '@/modules/specialists/specialist.query';
 
 export function SpecialistCategories() {
@@ -40,7 +42,7 @@ export function SpecialistCategories() {
               className='categori-1 h-25.5 w-27.75'
             >
               <div className='mx-auto flex size-18 items-center justify-center overflow-hidden rounded-3xl'>
-                <img src={specialist.image} alt='Image' className='h-full w-full object-cover' />
+                <ImageServer src={specialist.image} alt='Image' className='h-full w-full object-cover' />
               </div>
               <h3 className='mt-2.5 text-center font-jakarta font-semibold leading-[20.16px] text-gray-500'>
                 {specialist.name}

@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router';
 import { SearchX } from 'lucide-react';
 
+import { ImageServer } from '@/components/image-server';
+
 import type { Doctor } from '@/modules/doctors/doctor.type';
 
 import { formatCurrency } from '@/utils/utils';
@@ -15,7 +17,7 @@ export function CardDoctor({ doctor, footer = false }: CardDoctorProps) {
     <section key={doctor._id} id={doctor._id} className='space-y-5 rounded-3xl shadow-sm bg-white p-5'>
       <header className='cardHeader flex items-center gap-x-3'>
         <div className='relative h-30 w-25'>
-          <img
+          <ImageServer
             className='rounded-ee-md rounded-es-3xl rounded-se-3xl rounded-ss-md bg-gray-100 object-cover'
             src={doctor.profilePhoto}
             alt='Image'
