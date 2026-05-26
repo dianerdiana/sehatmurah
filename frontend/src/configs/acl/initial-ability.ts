@@ -1,3 +1,3 @@
 import { createAbility } from '@/utils/utils';
 
-export default createAbility([{ action: 'read', subject: 'Auth' }]);
+export const ability = createAbility([{ action: 'read', subject: 'Auth' }]);
