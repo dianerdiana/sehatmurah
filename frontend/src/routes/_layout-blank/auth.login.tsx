@@ -1,15 +1,21 @@
 import { createFileRoute, Link, redirect } from '@tanstack/react-router';
+import { z } from 'zod';
 
 import { themeConfig } from '@/configs/theme-config';
 
 import { FormLogin } from '@/modules/auth/components/form-login';
 
+import { getSafeRedirectTarget } from '@/utils/auth/route-guard';
+
 export const Route = createFileRoute('/_layout-blank/auth/login')({
+  validateSearch: z.object({
+    redirect: z.string().optional(),
+  }),
   component: LoginPage,
-  beforeLoad: ({ context }) => {
+  beforeLoad: ({ context, search }) => {
     if (context.auth.isAuthenticated) {
       throw redirect({
-        to: '/dashboard',
+        to: getSafeRedirectTarget(search.redirect),
         replace: true,
       });
     }
