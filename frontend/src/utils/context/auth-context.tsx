@@ -18,7 +18,7 @@ import { toApiError } from '../api-error.util';
 
 import { AbilityContext } from './ability-context';
 
-type AuthContextType = {
+export type AuthContextType = {
   isAuthenticated: boolean;
   isInitialLoading: boolean;
   login: (credentials: any) => Promise<ApiResponse<LoginResponse>>;
