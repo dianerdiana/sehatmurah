@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -20,6 +20,15 @@ import type { UserData } from '@/types/user-data.type';
 export function NavUser({ user }: { user: UserData }) {
   const { isMobile } = useSidebar();
   const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    await navigate({
+      to: '/auth/login',
+      replace: true,
+    });
+  };
 
   return (
     <SidebarMenu>
@@ -82,11 +91,14 @@ export function NavUser({ user }: { user: UserData }) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link to='/auth/login' replace onClick={logout}>
-                <LogOut />
-                Log out
-              </Link>
+            <DropdownMenuItem
+              onSelect={(event) => {
+                event.preventDefault();
+                void handleLogout();
+              }}
+            >
+              <LogOut />
+              Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
