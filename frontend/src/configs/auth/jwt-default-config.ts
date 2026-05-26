@@ -2,8 +2,8 @@ export default {
   baseURL: '',
   tokenType: 'Bearer',
   storageTokenKeyName: 'accessToken',
-  loginUrl: '/login',
-  registerUrl: '/register',
-  logoutUrl: '/signout',
-  refreshTokenUrl: '/refresh',
+  loginUrl: '/auth/login',
+  registerUrl: '/auth/register',
+  logoutUrl: '/auth/logout',
+  refreshTokenUrl: '/auth/me',
 };
