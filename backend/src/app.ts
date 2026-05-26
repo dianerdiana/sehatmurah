@@ -1,7 +1,9 @@
 import cors from 'cors';
 import express from 'express';
+import path from 'path';
 
 import { HttpResponse } from './common/http-response';
+import { env } from './config/env';
 import { errorHandler, notFoundHandler } from './middlewares/error.middleware';
 import { appointmentRouter } from './modules/appointments/appointment.routes';
 import { authRouter } from './modules/auth/auth.routes';
@@ -14,6 +16,7 @@ export const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(env.uploadBaseUrl, express.static(path.resolve(process.cwd(), env.uploadDir)));
 
 app.get('/health', (_req, res) => {
   res.json(
