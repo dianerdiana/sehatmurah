@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate, useSearch } from '@tanstack/react-router';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -91,6 +91,13 @@ export function FormLogin() {
             </Button>
           )}
         />
+
+        <p className='text-sm text-muted-foreground text-center'>
+          Don't have an account?{' '}
+          <Link to='/auth/register' className='underline text-primary underline-offset-4 hover:no-underline'>
+            Register
+          </Link>
+        </p>
       </FieldGroup>
     </form>
   );
