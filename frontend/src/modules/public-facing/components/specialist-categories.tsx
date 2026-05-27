@@ -11,6 +11,8 @@ export function SpecialistCategories() {
       limit: 6,
       page: 1,
       isActive: 'true',
+      column: 'sortOrder',
+      sort: 'asc',
     }),
   );
 
