@@ -13,7 +13,7 @@ import { LoginDto, RegisterDto } from './auth.schema';
 export const register = async (payload: RegisterDto) => {
   const session = await mongoose.startSession();
 
-  const role = payload.role ?? UserRole.PATIENT;
+  const role = UserRole.PATIENT;
 
   const existingUser = await UserModel.findOne({
     email: payload.email.toLowerCase(),
@@ -40,17 +40,15 @@ export const register = async (payload: RegisterDto) => {
       { session },
     );
 
-    if (role === UserRole.PATIENT) {
-      await PatientProfileModel.create(
-        [
-          {
-            user: user._id,
-            fullName: payload.name,
-          },
-        ],
-        { session },
-      );
-    }
+    await PatientProfileModel.create(
+      [
+        {
+          user: user._id,
+          fullName: payload.name,
+        },
+      ],
+      { session },
+    );
 
     await session.commitTransaction();
 
