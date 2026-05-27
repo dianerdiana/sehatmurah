@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 
 import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 import { CardDoctor, CardDoctorNotFound, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
-import { FixedBookingCta } from '@/modules/public-facing/components/fixed-booking-cta';
 import { FormBookingDoctor } from '@/modules/public-facing/components/form-booking-doctor';
 
 export const Route = createFileRoute('/_layout-public-blank/doctors/$doctorId/booking')({
@@ -47,12 +46,11 @@ function BookingDoctorPage() {
         ) : doctor ? (
           <React.Fragment>
             <CardDoctor doctor={doctor} />
-            <FixedBookingCta
-              fee={doctor.consultationFee}
-              continueTo={`/doctors/${doctor._id}/booking`}
-              label='Continue'
+            <FormBookingDoctor
+              scheduleOptions={doctor.schedule}
+              doctorId={doctor._id}
+              consultationFee={doctor.consultationFee}
             />
-            <FormBookingDoctor scheduleOptions={doctor.schedule} doctorId={doctor._id} />
           </React.Fragment>
         ) : (
           <CardDoctorNotFound />
