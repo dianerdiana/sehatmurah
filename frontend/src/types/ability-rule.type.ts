@@ -9,6 +9,7 @@ export type PermissionSubject =
   | 'Review'
   | 'Specialist'
   | 'Dashboard'
+  | 'PlatformTitle'
   | 'ListAppointment'
   | 'ListDoctor'
   | 'ListPatient'
