@@ -17,7 +17,7 @@ import { appointmentMutationOptions } from '@/modules/appointments/appointment.m
 import { type CreateAppointmentDto, createAppointmentSchema } from '@/modules/appointments/appointment.schema';
 
 import { useAppForm } from '@/utils/hooks/use-app-form';
-import { dayMapping } from '@/utils/utils';
+import { dayMapping, formatCurrency } from '@/utils/utils';
 
 type ScheduleOption = {
   day: string;
@@ -29,9 +29,11 @@ type ScheduleOption = {
 export function FormBookingDoctor({
   scheduleOptions,
   doctorId,
+  consultationFee,
 }: {
   scheduleOptions: ScheduleOption[];
   doctorId: string;
+  consultationFee: number;
 }) {
   const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = React.useState<ScheduleOption | null>(null);
@@ -52,6 +54,9 @@ export function FormBookingDoctor({
       createAppointmentMutation.mutate(value, {
         onSuccess: () => {
           toast.success('Appointment created successfully');
+        },
+        onError(error) {
+          toast.error(error.message);
         },
       });
     },
@@ -94,8 +99,8 @@ export function FormBookingDoctor({
 
     setSelectedTimeSlot(selectedSlot);
 
-    form.setFieldValue('startTime', selectedSlot?.startTime ?? '');
     form.setFieldValue('endTime', selectedSlot?.endTime ?? '');
+    form.setFieldValue('startTime', selectedSlot?.startTime ?? '');
   };
 
   return (
@@ -199,6 +204,13 @@ export function FormBookingDoctor({
             />
 
             <form.Field
+              name='endTime'
+              children={(field) => (
+                <input type='hidden' name={field.name} value={field.state.value} readOnly aria-hidden='true' />
+              )}
+            />
+
+            <form.Field
               name='reason'
               children={(field) => (
                 <Field>
@@ -218,9 +230,30 @@ export function FormBookingDoctor({
               )}
             />
 
-            <Button type='submit' disabled={createAppointmentMutation.isPending} className='rounded-full'>
-              {createAppointmentMutation.isPending ? 'Submitting...' : 'Submit Appointment'}
-            </Button>
+            <nav id='BookingCta' className='fixed bottom-0 left-0 right-0 z-30 mb-0'>
+              <div className='mx-auto max-w-170'>
+                <div className='flex h-30 w-full items-center justify-between space-x-2 rounded-t-3xl bg-white px-4'>
+                  <div>
+                    <p className='mb-0.5 whitespace-nowrap text-[24px] font-bold leading-[30.24px] text-accent-red'>
+                      {formatCurrency(consultationFee)}
+                    </p>
+                    <p className='font-semibold leading-[20.16px] text-gray-500'>/hours</p>
+                  </div>
+                  <form.Subscribe
+                    selector={(state) => [state.canSubmit, state.isSubmitting]}
+                    children={([canSubmit, isSubmitting]) => (
+                      <Button
+                        type='submit'
+                        className='flex h-13 w-49.25 items-center justify-center rounded-[100px] bg-primary font-bold leading-[20.16px] text-white'
+                        disabled={!canSubmit || createAppointmentMutation.isPending || isSubmitting}
+                      >
+                        {createAppointmentMutation.isPending ? 'Submitting...' : 'Submit Appointment'}
+                      </Button>
+                    )}
+                  />
+                </div>
+              </div>
+            </nav>
           </FieldGroup>
         </form>
       </CardContent>
