@@ -24,6 +24,10 @@ export const navigation: NavigationGroup[] = [
   {
     label: 'DASHBOARD',
     isActive: true,
+    permission: {
+      action: 'read',
+      subject: 'Dashboard',
+    },
     items: [
       {
         title: 'Dashboard',
@@ -38,6 +42,10 @@ export const navigation: NavigationGroup[] = [
   },
   {
     label: 'PLATFORM',
+    permission: {
+      action: 'read',
+      subject: 'PlatformTitle',
+    },
     items: [
       {
         title: 'Appointment',
