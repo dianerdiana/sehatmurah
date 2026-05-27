@@ -17,7 +17,12 @@ import { formatCurrency } from '@/utils/utils';
 export function RecommendedDoctors() {
   const [currentTab, setCurrentTab] = React.useState<string>('all');
 
-  const querySpecialists = useQuery(specialistQueryOptions.list());
+  const querySpecialists = useQuery(
+    specialistQueryOptions.list({
+      column: 'sortOrder',
+      sort: 'asc',
+    }),
+  );
   const queryDoctors = useQuery(
     doctorQueryOptions.list({
       specialist: currentTab === 'all' ? undefined : currentTab,
