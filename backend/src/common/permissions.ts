@@ -54,7 +54,6 @@ export const permissionsByRole: Record<UserRole, PermissionTuple[]> = {
 
     ['read', 'Dashboard'],
     ['read', 'ListAppointment'],
-    ['read', 'ListDoctor'],
     ['read', 'ListSpecialist'],
   ],
   [UserRole.PATIENT]: [
