@@ -13,6 +13,7 @@ import {
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 
+import { Can } from '@/utils/context/ability-context';
 import { useAppAbility } from '@/utils/hooks/use-app-ability';
 import type { NavigationGroup, NavigationItem } from '@/utils/navigation';
 
@@ -80,10 +81,8 @@ const renderMenuItem = (item: NavigationItem, ability: AppAbility) => {
   );
 };
 
-export function NavMain({ groups }: { groups: NavigationGroup[] }) {
-  const ability = useAppAbility();
-
-  return groups.map((group) => (
+const renderGroup = (group: NavigationGroup, ability: AppAbility) => {
+  return (
     <SidebarGroup key={group.label}>
       <SidebarGroupLabel className='font-bold'>{group.label}</SidebarGroupLabel>
       <SidebarMenu>
@@ -92,5 +91,21 @@ export function NavMain({ groups }: { groups: NavigationGroup[] }) {
         })}
       </SidebarMenu>
     </SidebarGroup>
-  ));
+  );
+};
+
+export function NavMain({ groups }: { groups: NavigationGroup[] }) {
+  const ability = useAppAbility();
+
+  return groups.map((group) => {
+    if (group.permission) {
+      return (
+        <Can I={group.permission.action} an={group.permission.subject}>
+          {renderGroup(group, ability)}
+        </Can>
+      );
+    } else {
+      return renderGroup(group, ability);
+    }
+  });
 }
