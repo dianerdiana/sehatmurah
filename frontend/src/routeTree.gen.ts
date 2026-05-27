@@ -21,7 +21,9 @@ import { Route as LayoutBlankRouteImport } from './routes/_layout-blank'
 import { Route as LayoutPublicNavIndexRouteImport } from './routes/_layout-public-nav/index'
 import { Route as LayoutPublicNavAppointmentsRouteImport } from './routes/_layout-public-nav/appointments'
 import { Route as LayoutDashboardDashboardRouteImport } from './routes/_layout-dashboard/dashboard'
+import { Route as LayoutBlankAuthRouteImport } from './routes/_layout-blank/auth'
 import { Route as LayoutPublicBlankDoctorsSearchRouteImport } from './routes/_layout-public-blank/doctors.search'
+import { Route as LayoutBlankAuthRegisterRouteImport } from './routes/_layout-blank/auth.register'
 import { Route as LayoutBlankAuthLoginRouteImport } from './routes/_layout-blank/auth.login'
 import { Route as LayoutDashboardAppSpecialistsIndexRouteImport } from './routes/_layout-dashboard/app.specialists/index'
 import { Route as LayoutDashboardAppPatientsIndexRouteImport } from './routes/_layout-dashboard/app.patients/index'
@@ -95,16 +97,26 @@ const LayoutDashboardDashboardRoute =
     path: '/dashboard',
     getParentRoute: () => LayoutDashboardRoute,
   } as any)
+const LayoutBlankAuthRoute = LayoutBlankAuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => LayoutBlankRoute,
+} as any)
 const LayoutPublicBlankDoctorsSearchRoute =
   LayoutPublicBlankDoctorsSearchRouteImport.update({
     id: '/doctors/search',
     path: '/doctors/search',
     getParentRoute: () => LayoutPublicBlankRoute,
   } as any)
+const LayoutBlankAuthRegisterRoute = LayoutBlankAuthRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => LayoutBlankAuthRoute,
+} as any)
 const LayoutBlankAuthLoginRoute = LayoutBlankAuthLoginRouteImport.update({
-  id: '/auth/login',
-  path: '/auth/login',
-  getParentRoute: () => LayoutBlankRoute,
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => LayoutBlankAuthRoute,
 } as any)
 const LayoutDashboardAppSpecialistsIndexRoute =
   LayoutDashboardAppSpecialistsIndexRouteImport.update({
@@ -186,9 +198,11 @@ export interface FileRoutesByFullPath {
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
   '/success-page': typeof SuccessPageRoute
+  '/auth': typeof LayoutBlankAuthRouteWithChildren
   '/dashboard': typeof LayoutDashboardDashboardRoute
   '/appointments': typeof LayoutPublicNavAppointmentsRoute
   '/auth/login': typeof LayoutBlankAuthLoginRoute
+  '/auth/register': typeof LayoutBlankAuthRegisterRoute
   '/doctors/search': typeof LayoutPublicBlankDoctorsSearchRoute
   '/app/doctors/create': typeof LayoutDashboardAppDoctorsCreateRoute
   '/app/patients/create': typeof LayoutDashboardAppPatientsCreateRoute
@@ -210,9 +224,11 @@ export interface FileRoutesByTo {
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
   '/success-page': typeof SuccessPageRoute
+  '/auth': typeof LayoutBlankAuthRouteWithChildren
   '/dashboard': typeof LayoutDashboardDashboardRoute
   '/appointments': typeof LayoutPublicNavAppointmentsRoute
   '/auth/login': typeof LayoutBlankAuthLoginRoute
+  '/auth/register': typeof LayoutBlankAuthRegisterRoute
   '/doctors/search': typeof LayoutPublicBlankDoctorsSearchRoute
   '/app/doctors/create': typeof LayoutDashboardAppDoctorsCreateRoute
   '/app/patients/create': typeof LayoutDashboardAppPatientsCreateRoute
@@ -238,10 +254,12 @@ export interface FileRoutesById {
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
   '/success-page': typeof SuccessPageRoute
+  '/_layout-blank/auth': typeof LayoutBlankAuthRouteWithChildren
   '/_layout-dashboard/dashboard': typeof LayoutDashboardDashboardRoute
   '/_layout-public-nav/appointments': typeof LayoutPublicNavAppointmentsRoute
   '/_layout-public-nav/': typeof LayoutPublicNavIndexRoute
   '/_layout-blank/auth/login': typeof LayoutBlankAuthLoginRoute
+  '/_layout-blank/auth/register': typeof LayoutBlankAuthRegisterRoute
   '/_layout-public-blank/doctors/search': typeof LayoutPublicBlankDoctorsSearchRoute
   '/_layout-dashboard/app/doctors/create': typeof LayoutDashboardAppDoctorsCreateRoute
   '/_layout-dashboard/app/patients/create': typeof LayoutDashboardAppPatientsCreateRoute
@@ -265,9 +283,11 @@ export interface FileRouteTypes {
     | '/my-booking'
     | '/payment-details'
     | '/success-page'
+    | '/auth'
     | '/dashboard'
     | '/appointments'
     | '/auth/login'
+    | '/auth/register'
     | '/doctors/search'
     | '/app/doctors/create'
     | '/app/patients/create'
@@ -289,9 +309,11 @@ export interface FileRouteTypes {
     | '/my-booking'
     | '/payment-details'
     | '/success-page'
+    | '/auth'
     | '/dashboard'
     | '/appointments'
     | '/auth/login'
+    | '/auth/register'
     | '/doctors/search'
     | '/app/doctors/create'
     | '/app/patients/create'
@@ -316,10 +338,12 @@ export interface FileRouteTypes {
     | '/my-booking'
     | '/payment-details'
     | '/success-page'
+    | '/_layout-blank/auth'
     | '/_layout-dashboard/dashboard'
     | '/_layout-public-nav/appointments'
     | '/_layout-public-nav/'
     | '/_layout-blank/auth/login'
+    | '/_layout-blank/auth/register'
     | '/_layout-public-blank/doctors/search'
     | '/_layout-dashboard/app/doctors/create'
     | '/_layout-dashboard/app/patients/create'
@@ -433,6 +457,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutDashboardDashboardRouteImport
       parentRoute: typeof LayoutDashboardRoute
     }
+    '/_layout-blank/auth': {
+      id: '/_layout-blank/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof LayoutBlankAuthRouteImport
+      parentRoute: typeof LayoutBlankRoute
+    }
     '/_layout-public-blank/doctors/search': {
       id: '/_layout-public-blank/doctors/search'
       path: '/doctors/search'
@@ -440,12 +471,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPublicBlankDoctorsSearchRouteImport
       parentRoute: typeof LayoutPublicBlankRoute
     }
+    '/_layout-blank/auth/register': {
+      id: '/_layout-blank/auth/register'
+      path: '/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof LayoutBlankAuthRegisterRouteImport
+      parentRoute: typeof LayoutBlankAuthRoute
+    }
     '/_layout-blank/auth/login': {
       id: '/_layout-blank/auth/login'
-      path: '/auth/login'
+      path: '/login'
       fullPath: '/auth/login'
       preLoaderRoute: typeof LayoutBlankAuthLoginRouteImport
-      parentRoute: typeof LayoutBlankRoute
+      parentRoute: typeof LayoutBlankAuthRoute
     }
     '/_layout-dashboard/app/specialists/': {
       id: '/_layout-dashboard/app/specialists/'
@@ -534,12 +572,26 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface LayoutBlankRouteChildren {
+interface LayoutBlankAuthRouteChildren {
   LayoutBlankAuthLoginRoute: typeof LayoutBlankAuthLoginRoute
+  LayoutBlankAuthRegisterRoute: typeof LayoutBlankAuthRegisterRoute
+}
+
+const LayoutBlankAuthRouteChildren: LayoutBlankAuthRouteChildren = {
+  LayoutBlankAuthLoginRoute: LayoutBlankAuthLoginRoute,
+  LayoutBlankAuthRegisterRoute: LayoutBlankAuthRegisterRoute,
+}
+
+const LayoutBlankAuthRouteWithChildren = LayoutBlankAuthRoute._addFileChildren(
+  LayoutBlankAuthRouteChildren,
+)
+
+interface LayoutBlankRouteChildren {
+  LayoutBlankAuthRoute: typeof LayoutBlankAuthRouteWithChildren
 }
 
 const LayoutBlankRouteChildren: LayoutBlankRouteChildren = {
-  LayoutBlankAuthLoginRoute: LayoutBlankAuthLoginRoute,
+  LayoutBlankAuthRoute: LayoutBlankAuthRouteWithChildren,
 }
 
 const LayoutBlankRouteWithChildren = LayoutBlankRoute._addFileChildren(
