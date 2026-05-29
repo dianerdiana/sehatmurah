@@ -1,11 +1,86 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { Loader2, SearchX } from 'lucide-react';
+import { toast } from 'sonner';
 
-export const Route = createFileRoute(
-  '/_layout-dashboard/app/users/$userId/edit',
-)({
-  component: RouteComponent,
-})
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
-function RouteComponent() {
-  return <div>Hello "/_layout-dashboard/app/users/$userId/edit"!</div>
+import { UserForm } from '@/modules/users/components/user-form';
+import { userKeys } from '@/modules/users/user.key';
+import { userMutationOptions } from '@/modules/users/user.mutation';
+import { userQueryOptions } from '@/modules/users/user.query';
+
+export const Route = createFileRoute('/_layout-dashboard/app/users/$userId/edit')({
+  component: UsersEditPage,
+});
+
+function UsersEditPage() {
+  const navigate = useNavigate({ from: '/app/users/$userId/edit' });
+  const queryClient = useQueryClient();
+  const { userId } = Route.useParams();
+
+  const userQuery = useQuery({
+    ...userQueryOptions.getById(userId),
+  });
+
+  const updateMutation = useMutation({
+    ...userMutationOptions.update(userId),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: userKeys.lists() }),
+        queryClient.invalidateQueries({ queryKey: userKeys.detail(userId) }),
+      ]);
+      toast.success('User updated successfully');
+      navigate({ to: '/app/users' });
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Failed to update user');
+    },
+  });
+
+  if (userQuery.isError) {
+    return (
+      <Card className='rounded-2xl'>
+        <CardContent className='flex min-h-64 flex-col items-center justify-center gap-3 text-center'>
+          <SearchX className='size-7 text-muted-foreground' />
+          <p className='font-medium'>Unable to load user details.</p>
+          <Button variant='outline' onClick={() => userQuery.refetch()}>
+            Retry
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (userQuery.isPending || !userQuery.data) {
+    return (
+      <div className='flex min-h-60 items-center justify-center'>
+        <Loader2 className='size-6 animate-spin text-muted-foreground' />
+      </div>
+    );
+  }
+
+  return (
+    <div className='space-y-4'>
+      <Card className='rounded-2xl shadow-sm'>
+        <CardContent>
+          <div className='space-y-1'>
+            <p className='text-sm font-medium text-muted-foreground'>Users</p>
+            <h1 className='text-2xl font-semibold tracking-tight'>Edit User</h1>
+            <p className='max-w-2xl text-sm text-muted-foreground'>
+              Update account profile, role access, and account status. This action is restricted to administrators.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <UserForm
+        mode='edit'
+        initialValue={userQuery.data}
+        isSubmitting={updateMutation.isPending}
+        onSubmit={(payload) => updateMutation.mutate(payload)}
+      />
+    </div>
+  );
 }
