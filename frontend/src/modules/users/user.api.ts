@@ -5,7 +5,7 @@ import { unwrapApiResponse, unwrapPaginatedApiResponse } from '@/utils/api-respo
 
 import type { ApiResponse } from '@/types/api-response.type';
 
-import type { ListUsersDto } from './user.schema';
+import type { CreateUserDto, ListUsersDto, UpdateUserDto } from './user.schema';
 import type { UserListItem } from './user.type';
 
 export const userApi = {
@@ -24,6 +24,26 @@ export const userApi = {
       const response = await api.get<ApiResponse<UserListItem[]>>('/users', { params });
 
       return unwrapPaginatedApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
+  create: async (payload: CreateUserDto) => {
+    try {
+      const response = await api.post<ApiResponse<UserListItem>>('/users', payload);
+
+      return unwrapApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
+  update: async (id: string, payload: UpdateUserDto) => {
+    try {
+      const response = await api.put<ApiResponse<UserListItem>>(`/users/${id}`, payload);
+
+      return unwrapApiResponse(response.data);
     } catch (error) {
       throw toApiError(error);
     }
