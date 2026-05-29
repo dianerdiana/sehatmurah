@@ -83,20 +83,23 @@ export const navigation: NavigationGroup[] = [
           subject: 'ListSpecialist',
         },
       },
-    ],
-  },
-  {
-    label: 'SETTING',
-    items: [
       {
         title: 'User',
-        url: '/users',
+        url: '/app/users',
         icon: <UserRoundCog />,
+        permission: {
+          action: 'read',
+          subject: 'ListUser',
+        },
       },
       {
         title: 'Review',
-        url: '/reviews',
+        url: '/app/reviews',
         icon: <BriefcaseBusiness />,
+        permission: {
+          action: 'read',
+          subject: 'ListReview',
+        },
       },
     ],
   },
