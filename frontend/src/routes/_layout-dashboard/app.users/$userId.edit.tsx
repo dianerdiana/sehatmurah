@@ -11,11 +11,14 @@ import { userKeys } from '@/modules/users/user.key';
 import { userMutationOptions } from '@/modules/users/user.mutation';
 import { userQueryOptions } from '@/modules/users/user.query';
 
+import { useAuth } from '@/utils/hooks/use-auth';
+
 export const Route = createFileRoute('/_layout-dashboard/app/users/$userId/edit')({
   component: UsersEditPage,
 });
 
 function UsersEditPage() {
+  const { userData } = useAuth();
   const navigate = useNavigate({ from: '/app/users/$userId/edit' });
   const queryClient = useQueryClient();
   const { userId } = Route.useParams();
@@ -78,6 +81,7 @@ function UsersEditPage() {
       <UserForm
         mode='edit'
         initialValue={userQuery.data}
+        isSelfEdit={userData.id === userId}
         isSubmitting={updateMutation.isPending}
         onSubmit={(payload) => updateMutation.mutate(payload)}
       />
