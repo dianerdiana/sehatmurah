@@ -13,7 +13,9 @@ export type PermissionSubject =
   | 'ListAppointment'
   | 'ListDoctor'
   | 'ListPatient'
-  | 'ListSpecialist';
+  | 'ListSpecialist'
+  | 'ListUser'
+  | 'ListReview';
 
 export type AbilityRule = {
   action: PermissionAction;
