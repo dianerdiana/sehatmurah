@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import type { SortingState, Updater } from '@tanstack/react-table';
 import { SearchX } from 'lucide-react';
 
@@ -117,8 +117,14 @@ function UsersListPage() {
               </p>
             </div>
 
-            <div className='rounded-full border bg-muted/40 px-4 py-2 text-sm text-muted-foreground'>
-              <span className='font-medium text-foreground'>{totalItems}</span> users
+            <div className='flex flex-col gap-2'>
+              <div className='rounded-full border bg-muted/40 px-4 py-2 text-sm text-muted-foreground'>
+                <span className='font-medium text-foreground'>{totalItems}</span> users
+              </div>
+
+              <Button className='rounded-full' asChild>
+                <Link to='/app/users/create'>Add User</Link>
+              </Button>
             </div>
           </div>
         </CardContent>
