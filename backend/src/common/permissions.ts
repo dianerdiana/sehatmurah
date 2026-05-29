@@ -13,7 +13,9 @@ export type PermissionSubject =
   | 'ListAppointment'
   | 'ListDoctor'
   | 'ListPatient'
-  | 'ListSpecialist';
+  | 'ListSpecialist'
+  | 'ListUser'
+  | 'ListReview';
 
 export type PermissionTuple = [PermissionAction, PermissionSubject];
 
@@ -44,6 +46,8 @@ export const permissionsByRole: Record<UserRole, PermissionTuple[]> = {
     ['read', 'ListDoctor'],
     ['read', 'ListPatient'],
     ['read', 'ListSpecialist'],
+    ['read', 'ListUser'],
+    ['read', 'ListReview'],
   ],
   [UserRole.DOCTOR]: [
     ['create', 'Auth'],
