@@ -3,8 +3,19 @@ import { NextFunction, Request, Response } from 'express';
 import { HttpResponse } from '../../common/http-response';
 import { buildResponseMeta } from '../../common/pagination';
 
-import { ListUsersDto } from './user.schema';
+import { CreateUserDto, ListUsersDto, UpdateUserDto } from './user.schema';
 import * as userService from './user.service';
+
+export const createUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const payload = req.body as CreateUserDto;
+    const data = await userService.createUser(payload);
+
+    res.status(201).json(HttpResponse.success({ data }));
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const getUserById = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -31,6 +42,18 @@ export const listUsers = async (req: Request, res: Response, next: NextFunction)
         }),
       }),
     );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = String(req.params.id);
+    const payload = req.body as UpdateUserDto;
+    const data = await userService.updateUser(userId, payload);
+
+    res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
   }
