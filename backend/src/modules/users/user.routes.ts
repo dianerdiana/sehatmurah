@@ -6,7 +6,7 @@ import { roleMiddleware } from '../../middlewares/role.middleware';
 import { validateRequest } from '../../middlewares/validate-request.middleware';
 
 import * as userController from './user.controller';
-import { listUsersSchema, userIdSchema } from './user.schema';
+import { createUserSchema, listUsersSchema, updateUserSchema, userIdSchema } from './user.schema';
 
 export const userRouter = Router();
 
@@ -19,11 +19,25 @@ userRouter.get(
   userController.listUsers,
 );
 
+userRouter.post(
+  '/',
+  roleMiddleware(UserRole.ADMIN),
+  validateRequest({ body: createUserSchema }),
+  userController.createUser,
+);
+
 userRouter.get(
   '/:id',
   roleMiddleware(UserRole.ADMIN),
   validateRequest({ params: userIdSchema }),
   userController.getUserById,
+);
+
+userRouter.put(
+  '/:id',
+  roleMiddleware(UserRole.ADMIN),
+  validateRequest({ params: userIdSchema, body: updateUserSchema }),
+  userController.updateUser,
 );
 
 userRouter.delete(
