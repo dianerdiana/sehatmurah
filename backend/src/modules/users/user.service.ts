@@ -86,7 +86,11 @@ export const createUser = async (payload: CreateUserDto) => {
   return UserModel.findById(user._id).select(USER_SELECT_FIELDS);
 };
 
-export const updateUser = async (userId: string, payload: UpdateUserDto) => {
+export const updateUser = async (userId: string, payload: UpdateUserDto, actorUserId?: string) => {
+  if (payload.isActive === false && actorUserId === userId) {
+    throw new ApiError(400, 'You cannot deactivate your own account');
+  }
+
   const existingUser = await UserModel.findById(userId).select('email');
 
   if (!existingUser) {
