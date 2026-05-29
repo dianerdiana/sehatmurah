@@ -51,7 +51,8 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
   try {
     const userId = String(req.params.id);
     const payload = req.body as UpdateUserDto;
-    const data = await userService.updateUser(userId, payload);
+    const actorUserId = req.user?.id;
+    const data = await userService.updateUser(userId, payload, actorUserId);
 
     res.json(HttpResponse.success({ data }));
   } catch (error) {
