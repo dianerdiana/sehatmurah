@@ -20,6 +20,7 @@ import type { UserListItem } from '../user.type';
 type UserFormProps = {
   mode: 'create' | 'edit';
   initialValue?: UserListItem;
+  isSelfEdit?: boolean;
   isSubmitting: boolean;
   onSubmit: (payload: CreateUserDto | UpdateUserDto) => void;
 };
@@ -40,7 +41,7 @@ const buildDefaultValues = (value?: UserListItem): FormValues => ({
   password: '',
 });
 
-export function UserForm({ mode, initialValue, isSubmitting, onSubmit }: UserFormProps) {
+export function UserForm({ mode, initialValue, isSelfEdit = false, isSubmitting, onSubmit }: UserFormProps) {
   const subtitle = useMemo(() => {
     if (mode === 'create') {
       return 'Create a new account with role and initial status.';
@@ -87,6 +88,11 @@ export function UserForm({ mode, initialValue, isSubmitting, onSubmit }: UserFor
 
       if (initialValue && value.isActive !== initialValue.isActive) {
         payload.isActive = value.isActive;
+      }
+
+      if (isSelfEdit && payload.isActive === false) {
+        toast.error('You cannot deactivate your own account');
+        return;
       }
 
       const nextPassword = value.password.trim();
@@ -183,9 +189,15 @@ export function UserForm({ mode, initialValue, isSubmitting, onSubmit }: UserFor
                   <div className='flex items-center justify-between rounded-lg border p-3'>
                     <div>
                       <p className='text-sm font-medium'>Active Status</p>
-                      <p className='text-xs text-muted-foreground'>Controls whether user can log in.</p>
+                      <p className='text-xs text-muted-foreground'>
+                        {isSelfEdit ? 'Your own account cannot be deactivated.' : 'Controls whether user can log in.'}
+                      </p>
                     </div>
-                    <Switch checked={field.state.value} onCheckedChange={(checked) => field.handleChange(checked)} />
+                    <Switch
+                      checked={field.state.value}
+                      disabled={isSelfEdit}
+                      onCheckedChange={(checked) => field.handleChange(checked)}
+                    />
                   </div>
                 )}
               />
