@@ -13,5 +13,9 @@ export const userKeys = {
 
   mutations: () => [...userKeys.all, 'mutation'] as const,
 
+  create: () => [...userKeys.mutations(), 'create'] as const,
+
+  update: (id: string) => [...userKeys.mutations(), 'update', id] as const,
+
   delete: (id: string) => [...userKeys.mutations(), 'delete', id] as const,
 };
