@@ -11,6 +11,7 @@ import { doctorRouter } from './modules/doctors/doctor.routes';
 import { patientRouter } from './modules/patients/patient.routes';
 import { reviewRouter } from './modules/reviews/review.routes';
 import { specialistRouter } from './modules/specialists/specialist.routes';
+import { userRouter } from './modules/users/user.routes';
 import { uploadDir } from './utils/upload-dir';
 
 export const app = express();
@@ -41,6 +42,7 @@ app.use('/api/appointments', appointmentRouter);
 app.use('/api/patients', patientRouter);
 app.use('/api/specialists', specialistRouter);
 app.use('/api/reviews', reviewRouter);
+app.use('/api/users', userRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
