@@ -1,5 +1,7 @@
-import type { AppAbility, PermissionAction, PermissionSubject } from '@/types/ability-rule.type';
+import type { MongoAbility } from '@casl/ability';
 
-export const hasPermission = (ability: AppAbility, action: PermissionAction, subject: PermissionSubject) => {
+import type { PermissionAction, PermissionSubject } from '@/types/ability-rule.type';
+
+export const hasPermission = (ability: MongoAbility, action: PermissionAction, subject: PermissionSubject) => {
   return ability.can(action, subject);
 };
