@@ -122,17 +122,25 @@ export const createDoctor = async (payload: CreateDoctorDto) => {
     throw new ApiError(404, 'User not found');
   }
 
-  if (user.role !== UserRole.DOCTOR) {
-    throw new ApiError(400, 'User role must be Doctor');
-  }
-
   const existingProfile = await DoctorProfileModel.findOne({ user: userId });
 
   if (existingProfile) {
     throw new ApiError(409, 'Doctor profile already exists for this user');
   }
 
-  return DoctorProfileModel.create(payload);
+  const doctorProfile = await DoctorProfileModel.create(payload);
+
+  if (user.role !== UserRole.DOCTOR) {
+    try {
+      user.role = UserRole.DOCTOR;
+      await user.save();
+    } catch (error) {
+      await DoctorProfileModel.findByIdAndDelete(doctorProfile._id);
+      throw error;
+    }
+  }
+
+  return doctorProfile;
 };
 
 export const updateDoctor = async (doctorId: string, payload: UpdateDoctorDto, user: AuthUser) => {
