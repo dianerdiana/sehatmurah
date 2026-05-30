@@ -7,7 +7,7 @@ import { formatTimeAgo } from '@/utils/format-time-ago.util';
 
 export function CardDoctorReviews({ reviews }: { reviews: Review[] }) {
   return (
-    <section id='Reviews' className='w-full rounded-3xl bg-white px-4 py-8'>
+    <section id='Reviews' className='w-full rounded-3xl bg-white px-4 py-8 shadow-md'>
       <div className='mb-4 flex justify-between items-center'>
         <h2 className='text-xl font-bold leading-[25.2px] text-gray-900'>Reviews and Ratings</h2>
         <a href='#' className='text-sm font-bold leading-[17.64px] text-gray-500 hover:underline'>
