@@ -16,6 +16,8 @@ const storage = multer.diskStorage({
       subFolder = 'icons';
     } else if (file.fieldname === 'image') {
       subFolder = 'images';
+    } else if (file.fieldname === 'profilePhoto') {
+      subFolder = 'doctors';
     }
 
     const targetDir = path.resolve(uploadDir, subFolder);
