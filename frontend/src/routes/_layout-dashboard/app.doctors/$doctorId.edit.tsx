@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { DoctorForm } from '@/modules/doctors/components/doctor-form';
 import { doctorKeys } from '@/modules/doctors/doctor.key';
@@ -152,18 +153,26 @@ function DoctorsEditPage() {
         </CardContent>
       </Card>
 
-      <DoctorForm
-        mode='edit'
-        initialValue={doctorQuery.data}
-        isSubmitting={updateMutation.isPending}
-        specialistOptions={specialistOptions}
-        cityOptions={cityOptions}
-        isSpecialistsLoading={specialistQuery.isFetching}
-        isCitiesLoading={citiesQuery.isFetching}
-        onSpecialistSearchChange={setSpecialistSearch}
-        onCitySearchChange={setCitySearch}
-        onSubmit={(payload) => updateMutation.mutate(payload)}
-      />
+      <Tabs defaultValue='profile'>
+        <TabsList>
+          <TabsTrigger value='profile'>Profile</TabsTrigger>
+          <TabsTrigger value='schedule'>Schedule</TabsTrigger>
+        </TabsList>
+        <TabsContent value='profile'>
+          <DoctorForm
+            mode='edit'
+            initialValue={doctorQuery.data}
+            isSubmitting={updateMutation.isPending}
+            specialistOptions={specialistOptions}
+            cityOptions={cityOptions}
+            isSpecialistsLoading={specialistQuery.isFetching}
+            isCitiesLoading={citiesQuery.isFetching}
+            onSpecialistSearchChange={setSpecialistSearch}
+            onCitySearchChange={setCitySearch}
+            onSubmit={(payload) => updateMutation.mutate(payload)}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
