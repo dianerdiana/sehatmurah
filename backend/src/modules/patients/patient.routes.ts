@@ -6,7 +6,12 @@ import { roleMiddleware } from '../../middlewares/role.middleware';
 import { validateRequest } from '../../middlewares/validate-request.middleware';
 
 import * as patientController from './patient.controller';
-import { listPatientsSchema, patientIdSchema, updateMyProfileSchema } from './patient.schema';
+import {
+  listPatientsSchema,
+  patientIdSchema,
+  updateMyProfileSchema,
+  updatePatientSchema,
+} from './patient.schema';
 
 export const patientRouter = Router();
 
@@ -32,6 +37,16 @@ patientRouter.get(
   roleMiddleware(UserRole.ADMIN),
   validateRequest({ params: patientIdSchema }),
   patientController.getPatientById,
+);
+
+patientRouter.patch(
+  '/:id',
+  roleMiddleware(UserRole.ADMIN),
+  validateRequest({
+    params: patientIdSchema,
+    body: updatePatientSchema,
+  }),
+  patientController.updatePatientById,
 );
 
 patientRouter.delete(
