@@ -224,8 +224,10 @@ export function DoctorForm({
                       items={availableUserOptions}
                       value={availableUserOptions.find((item) => item.value === field.state.value) ?? null}
                       onValueChange={(value) => field.handleChange(value?.value ?? '')}
-                      onInputValueChange={(value) => {
-                        onUserSearchChange?.(value);
+                      onInputValueChange={(value, eventDetails) => {
+                        if (eventDetails.reason === 'input-change') {
+                          onUserSearchChange?.(value);
+                        }
                       }}
                       itemToStringLabel={(item) => item.label}
                       itemToStringValue={(item) => item.value}
@@ -282,8 +284,10 @@ export function DoctorForm({
                     items={specialistOptions}
                     value={specialistOptions.find((item) => item.value === field.state.value) ?? null}
                     onValueChange={(value) => field.handleChange(value?.value ?? '')}
-                    onInputValueChange={(value) => {
-                      onSpecialistSearchChange?.(value);
+                    onInputValueChange={(value, eventDetails) => {
+                      if (eventDetails.reason === 'input-change') {
+                        onSpecialistSearchChange?.(value);
+                      }
                     }}
                     itemToStringLabel={(item) => item.label}
                     itemToStringValue={(item) => item.value}
@@ -455,9 +459,11 @@ export function DoctorForm({
                         items={cityOptions}
                         value={cityOptions.find((item) => item.value === field.state.value) ?? null}
                         onValueChange={(value) => field.handleChange(value?.value ?? '')}
-                        onInputValueChange={(value) => {
+                        onInputValueChange={(value, eventDetails) => {
                           field.handleChange(value);
-                          onCitySearchChange?.(value);
+                          if (eventDetails.reason === 'input-change') {
+                            onCitySearchChange?.(value);
+                          }
                         }}
                         itemToStringLabel={(item) => item.label}
                         itemToStringValue={(item) => item.value}
