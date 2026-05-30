@@ -15,6 +15,8 @@ export const patientKeys = {
 
   mutations: () => [...patientKeys.all, 'mutation'] as const,
 
+  update: (id: string) => [...patientKeys.mutations(), 'update', id] as const,
+
   updateMyProfile: () => [...patientKeys.mutations(), 'update-my-profile'] as const,
 
   delete: (id: string) => [...patientKeys.mutations(), 'delete', id] as const,
