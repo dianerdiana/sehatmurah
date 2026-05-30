@@ -35,7 +35,6 @@ import { Route as LayoutPublicBlankDoctorsDoctorIdBookingRouteImport } from './r
 import { Route as LayoutDashboardSettingsDoctorsScheduleRouteImport } from './routes/_layout-dashboard/settings.doctors/schedule'
 import { Route as LayoutDashboardAppUsersCreateRouteImport } from './routes/_layout-dashboard/app.users/create'
 import { Route as LayoutDashboardAppSpecialistsCreateRouteImport } from './routes/_layout-dashboard/app.specialists/create'
-import { Route as LayoutDashboardAppPatientsCreateRouteImport } from './routes/_layout-dashboard/app.patients/create'
 import { Route as LayoutDashboardAppDoctorsCreateRouteImport } from './routes/_layout-dashboard/app.doctors/create'
 import { Route as LayoutDashboardAppUsersUserIdEditRouteImport } from './routes/_layout-dashboard/app.users/$userId.edit'
 import { Route as LayoutDashboardAppSpecialistsSpecialistIdEditRouteImport } from './routes/_layout-dashboard/app.specialists/$specialistId.edit'
@@ -182,12 +181,6 @@ const LayoutDashboardAppSpecialistsCreateRoute =
     path: '/app/specialists/create',
     getParentRoute: () => LayoutDashboardRoute,
   } as any)
-const LayoutDashboardAppPatientsCreateRoute =
-  LayoutDashboardAppPatientsCreateRouteImport.update({
-    id: '/app/patients/create',
-    path: '/app/patients/create',
-    getParentRoute: () => LayoutDashboardRoute,
-  } as any)
 const LayoutDashboardAppDoctorsCreateRoute =
   LayoutDashboardAppDoctorsCreateRouteImport.update({
     id: '/app/doctors/create',
@@ -233,7 +226,6 @@ export interface FileRoutesByFullPath {
   '/auth/register': typeof LayoutBlankAuthRegisterRoute
   '/doctors/search': typeof LayoutPublicBlankDoctorsSearchRoute
   '/app/doctors/create': typeof LayoutDashboardAppDoctorsCreateRoute
-  '/app/patients/create': typeof LayoutDashboardAppPatientsCreateRoute
   '/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
   '/app/users/create': typeof LayoutDashboardAppUsersCreateRoute
   '/settings/doctors/schedule': typeof LayoutDashboardSettingsDoctorsScheduleRoute
@@ -263,7 +255,6 @@ export interface FileRoutesByTo {
   '/auth/register': typeof LayoutBlankAuthRegisterRoute
   '/doctors/search': typeof LayoutPublicBlankDoctorsSearchRoute
   '/app/doctors/create': typeof LayoutDashboardAppDoctorsCreateRoute
-  '/app/patients/create': typeof LayoutDashboardAppPatientsCreateRoute
   '/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
   '/app/users/create': typeof LayoutDashboardAppUsersCreateRoute
   '/settings/doctors/schedule': typeof LayoutDashboardSettingsDoctorsScheduleRoute
@@ -298,7 +289,6 @@ export interface FileRoutesById {
   '/_layout-blank/auth/register': typeof LayoutBlankAuthRegisterRoute
   '/_layout-public-blank/doctors/search': typeof LayoutPublicBlankDoctorsSearchRoute
   '/_layout-dashboard/app/doctors/create': typeof LayoutDashboardAppDoctorsCreateRoute
-  '/_layout-dashboard/app/patients/create': typeof LayoutDashboardAppPatientsCreateRoute
   '/_layout-dashboard/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
   '/_layout-dashboard/app/users/create': typeof LayoutDashboardAppUsersCreateRoute
   '/_layout-dashboard/settings/doctors/schedule': typeof LayoutDashboardSettingsDoctorsScheduleRoute
@@ -330,7 +320,6 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/doctors/search'
     | '/app/doctors/create'
-    | '/app/patients/create'
     | '/app/specialists/create'
     | '/app/users/create'
     | '/settings/doctors/schedule'
@@ -360,7 +349,6 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/doctors/search'
     | '/app/doctors/create'
-    | '/app/patients/create'
     | '/app/specialists/create'
     | '/app/users/create'
     | '/settings/doctors/schedule'
@@ -394,7 +382,6 @@ export interface FileRouteTypes {
     | '/_layout-blank/auth/register'
     | '/_layout-public-blank/doctors/search'
     | '/_layout-dashboard/app/doctors/create'
-    | '/_layout-dashboard/app/patients/create'
     | '/_layout-dashboard/app/specialists/create'
     | '/_layout-dashboard/app/users/create'
     | '/_layout-dashboard/settings/doctors/schedule'
@@ -607,13 +594,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutDashboardAppSpecialistsCreateRouteImport
       parentRoute: typeof LayoutDashboardRoute
     }
-    '/_layout-dashboard/app/patients/create': {
-      id: '/_layout-dashboard/app/patients/create'
-      path: '/app/patients/create'
-      fullPath: '/app/patients/create'
-      preLoaderRoute: typeof LayoutDashboardAppPatientsCreateRouteImport
-      parentRoute: typeof LayoutDashboardRoute
-    }
     '/_layout-dashboard/app/doctors/create': {
       id: '/_layout-dashboard/app/doctors/create'
       path: '/app/doctors/create'
@@ -681,7 +661,6 @@ const LayoutBlankRouteWithChildren = LayoutBlankRoute._addFileChildren(
 interface LayoutDashboardRouteChildren {
   LayoutDashboardDashboardRoute: typeof LayoutDashboardDashboardRoute
   LayoutDashboardAppDoctorsCreateRoute: typeof LayoutDashboardAppDoctorsCreateRoute
-  LayoutDashboardAppPatientsCreateRoute: typeof LayoutDashboardAppPatientsCreateRoute
   LayoutDashboardAppSpecialistsCreateRoute: typeof LayoutDashboardAppSpecialistsCreateRoute
   LayoutDashboardAppUsersCreateRoute: typeof LayoutDashboardAppUsersCreateRoute
   LayoutDashboardSettingsDoctorsScheduleRoute: typeof LayoutDashboardSettingsDoctorsScheduleRoute
@@ -699,7 +678,6 @@ interface LayoutDashboardRouteChildren {
 const LayoutDashboardRouteChildren: LayoutDashboardRouteChildren = {
   LayoutDashboardDashboardRoute: LayoutDashboardDashboardRoute,
   LayoutDashboardAppDoctorsCreateRoute: LayoutDashboardAppDoctorsCreateRoute,
-  LayoutDashboardAppPatientsCreateRoute: LayoutDashboardAppPatientsCreateRoute,
   LayoutDashboardAppSpecialistsCreateRoute:
     LayoutDashboardAppSpecialistsCreateRoute,
   LayoutDashboardAppUsersCreateRoute: LayoutDashboardAppUsersCreateRoute,
