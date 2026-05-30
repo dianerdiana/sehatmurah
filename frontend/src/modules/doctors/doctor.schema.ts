@@ -42,11 +42,10 @@ export const createDoctorSchema = z.object({
   userId: z.string().trim().min(1, 'user is required'),
   fullName: z.string().trim().min(1, 'fullName is required'),
   specialist: z.string().trim().min(1, 'specialist is required'),
-  profilePhoto: z.url().optional(),
+  profilePhoto: z.instanceof(File).optional(),
   experienceYears: z.number().int().min(0).optional(),
   description: z.string().trim().optional(),
   practiceLocation: practiceLocationSchema,
-  schedule: z.array(doctorScheduleItemSchema).optional(),
   consultationFee: z.number().min(0, 'consultationFee must be >= 0'),
   isAvailable: z.boolean().optional(),
 });
@@ -68,7 +67,9 @@ export type DoctorIdDto = z.infer<typeof doctorIdSchema>;
 export type ListDoctorsDto = z.input<typeof listDoctorsSchema>;
 export type ListDoctorsSearchState = z.output<typeof listDoctorsSchema>;
 export type ListDoctorsCitiesDto = z.infer<typeof listDoctorsCitiesSchema>;
-export type CreateDoctorDto = z.infer<typeof createDoctorSchema>;
-export type UpdateDoctorDto = z.infer<typeof updateDoctorSchema>;
+export type CreateDoctorFormDto = z.infer<typeof createDoctorSchema>;
+export type UpdateDoctorFormDto = z.infer<typeof updateDoctorSchema>;
+export type CreateDoctorDto = FormData;
+export type UpdateDoctorDto = FormData;
 export type UpdateDoctorScheduleDto = z.infer<typeof updateDoctorScheduleSchema>;
 export type ListReviewsByDoctorDto = z.infer<typeof listReviewsByDoctorSchema>;
