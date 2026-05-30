@@ -50,17 +50,30 @@ const practiceLocationSchema = z.object({
   city: z.string().trim().min(1, 'city is required'),
 });
 
+const parseObjectField = <T extends z.ZodTypeAny>(schema: T) =>
+  z.preprocess((value) => {
+    if (typeof value === 'string') {
+      try {
+        return JSON.parse(value);
+      } catch {
+        return value;
+      }
+    }
+
+    return value;
+  }, schema);
+
 export const createDoctorSchema = z.object({
   userId: z.string().trim().min(1, 'user is required'),
   fullName: z.string().trim().min(1, 'fullName is required'),
   specialist: z.string().trim().min(1, 'specialist is required'),
-  profilePhoto: z.url().optional(),
-  experienceYears: z.number().int().min(0).optional(),
+  profilePhoto: z.string().trim().max(255).optional(),
+  experienceYears: z.coerce.number().int().min(0).optional(),
   description: z.string().trim().optional(),
-  practiceLocation: practiceLocationSchema,
-  schedule: z.array(doctorScheduleItemSchema).optional(),
-  consultationFee: z.number().min(0, 'consultationFee must be >= 0'),
-  isAvailable: z.boolean().optional(),
+  practiceLocation: parseObjectField(practiceLocationSchema),
+  schedule: parseObjectField(z.array(doctorScheduleItemSchema)).optional(),
+  consultationFee: z.coerce.number().min(0, 'consultationFee must be >= 0'),
+  isAvailable: z.coerce.boolean().optional(),
 });
 
 export const updateDoctorSchema = createDoctorSchema
