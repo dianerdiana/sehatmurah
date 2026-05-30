@@ -13,6 +13,8 @@ export const doctorKeys = {
 
   detail: (id: string) => [...doctorKeys.details(), id] as const,
 
+  me: () => [...doctorKeys.all, 'me'] as const,
+
   reviews: (id: string, params?: ListReviewsByDoctorDto) => [...doctorKeys.detail(id), 'reviews', params] as const,
 
   mutations: () => [...doctorKeys.all, 'mutation'] as const,
