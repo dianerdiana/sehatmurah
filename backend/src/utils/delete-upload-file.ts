@@ -3,10 +3,39 @@ import path from 'path';
 
 import { uploadDir } from './upload-dir';
 
-export const resolveUploadAbsolutePath = (relativePath: string): string | null => {
+const allowedUploadFolders = new Set(['icons', 'images', 'doctors']);
+
+const normalizeRelativePath = (relativePath: string): string | null => {
   if (!relativePath) return null;
 
-  return path.resolve(uploadDir, relativePath);
+  const normalized = path.posix.normalize(relativePath.replace(/\\/g, '/')).replace(/^\/+/, '');
+
+  if (!normalized || normalized.includes('..') || path.isAbsolute(normalized)) {
+    return null;
+  }
+
+  const [folder] = normalized.split('/');
+
+  if (!folder || !allowedUploadFolders.has(folder)) {
+    return null;
+  }
+
+  return normalized;
+};
+
+export const resolveUploadAbsolutePath = (relativePath: string): string | null => {
+  const normalizedPath = normalizeRelativePath(relativePath);
+
+  if (!normalizedPath) return null;
+
+  const baseDir = path.resolve(uploadDir);
+  const resolvedPath = path.resolve(baseDir, normalizedPath);
+
+  if (resolvedPath !== baseDir && !resolvedPath.startsWith(`${baseDir}${path.sep}`)) {
+    return null;
+  }
+
+  return resolvedPath;
 };
 
 export const deleteUploadFile = async (relativePath?: string): Promise<void> => {
