@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import { format, getDay, isBefore, startOfDay } from 'date-fns';
 import { toast } from 'sonner';
 
@@ -35,8 +36,12 @@ export function FormBookingDoctor({
   doctorId: string;
   consultationFee: number;
 }) {
+  const navigate = useNavigate();
+  const calendarRef = React.useRef<HTMLButtonElement>(null);
+
   const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = React.useState<ScheduleOption | null>(null);
+
   const createAppointmentMutation = useMutation(appointmentMutationOptions.create());
 
   const form = useAppForm({
@@ -52,11 +57,23 @@ export function FormBookingDoctor({
     },
     onSubmit: ({ value }) => {
       createAppointmentMutation.mutate(value, {
-        onSuccess: () => {
+        onSuccess: (appointment) => {
           toast.success('Appointment created successfully');
+          navigate({ to: '/appointments/$appointmentId/success', params: { appointmentId: appointment._id } });
         },
         onError(error) {
           toast.error(error.message);
+          if (error.httpStatus === 401) {
+            const redirectTarget = `${window.location.pathname}${window.location.search}`;
+
+            navigate({
+              to: '/auth/login',
+              search: {
+                redirect: redirectTarget,
+                reason: 'booking-auth',
+              },
+            });
+          }
         },
       });
     },
@@ -103,6 +120,12 @@ export function FormBookingDoctor({
     form.setFieldValue('startTime', selectedSlot?.startTime ?? '');
   };
 
+  const handleClickDate = () => {
+    if (calendarRef.current) {
+      calendarRef.current.click();
+    }
+  };
+
   return (
     <Card className='shadow-sm rounded-3xl'>
       <CardHeader>
@@ -124,7 +147,7 @@ export function FormBookingDoctor({
               children={(field) => (
                 <Field>
                   <div className='flex w-full items-center justify-between rounded-3xl border border-gray-200 bg-[#2C40FF08] p-6'>
-                    <div>
+                    <div onClick={handleClickDate} className='cursor-pointer'>
                       <h3 className='mb-0.5 text-lg font-bold leading-[22.68px] text-gray-900'>
                         {format(selectedDate, 'dd MMMM yyyy')}
                       </h3>
@@ -134,7 +157,7 @@ export function FormBookingDoctor({
                     </div>
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant='ghost'>
+                        <Button variant='ghost' ref={calendarRef}>
                           <img src='/assets/icons/doctordetails-doctor-available.svg' alt='Icon' loading='lazy' />
                         </Button>
                       </PopoverTrigger>
