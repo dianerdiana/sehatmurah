@@ -14,7 +14,7 @@ import { useAppForm } from '@/utils/hooks/use-app-form';
 
 import { Gender } from '@/types/enums/gender.enum';
 
-import { updatePatientSchema, type UpdatePatientDto } from '../patient.schema';
+import { type UpdatePatientDto, updatePatientSchema } from '../patient.schema';
 import type { PatientProfile } from '../patient.type';
 
 type PatientFormProps = {
