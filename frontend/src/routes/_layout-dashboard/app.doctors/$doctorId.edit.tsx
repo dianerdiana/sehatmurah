@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useMemo, useState } from 'react';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -46,6 +45,7 @@ function DoctorsEditPage() {
       column: 'name',
       sort: 'asc',
     }),
+    placeholderData: (prev) => prev,
   });
 
   const citiesQuery = useQuery({
@@ -54,6 +54,7 @@ function DoctorsEditPage() {
       limit: 10,
       search: debouncedCitySearch,
     }),
+    placeholderData: (prev) => prev,
   });
 
   const updateMutation = useMutation({
@@ -70,6 +71,43 @@ function DoctorsEditPage() {
       toast.error(error instanceof Error ? error.message : 'Failed to update doctor profile');
     },
   });
+
+  const specialistOptions = useMemo(() => {
+    if (!doctorQuery.data) return [];
+
+    const fetchedOptions = (specialistQuery.data?.items ?? []).map((specialist) => ({
+      value: specialist._id,
+      label: specialist.name,
+    }));
+
+    const currentOption = {
+      value: doctorQuery.data.specialist._id,
+      label: doctorQuery.data.specialist.name,
+    };
+
+    if (fetchedOptions.some((item) => item.value === currentOption.value)) {
+      return fetchedOptions;
+    }
+
+    return [currentOption, ...fetchedOptions];
+  }, [doctorQuery.data, specialistQuery.data?.items]);
+
+  const cityOptions = useMemo(() => {
+    if (!doctorQuery.data) return [];
+
+    const fetchedOptions = (citiesQuery.data ?? []).map((city) => ({
+      value: city,
+      label: city,
+    }));
+
+    const currentCity = doctorQuery.data.practiceLocation.city;
+
+    if (fetchedOptions.some((item) => item.value === currentCity)) {
+      return fetchedOptions;
+    }
+
+    return [{ value: currentCity, label: currentCity }, ...fetchedOptions];
+  }, [citiesQuery.data, doctorQuery.data]);
 
   if (doctorQuery.isError || specialistQuery.isError || citiesQuery.isError) {
     return (
@@ -99,39 +137,6 @@ function DoctorsEditPage() {
       </div>
     );
   }
-
-  const specialistOptions = useMemo(() => {
-    const fetchedOptions = (specialistQuery.data?.items ?? []).map((specialist) => ({
-      value: specialist._id,
-      label: specialist.name,
-    }));
-
-    const currentOption = {
-      value: doctorQuery.data.specialist._id,
-      label: doctorQuery.data.specialist.name,
-    };
-
-    if (fetchedOptions.some((item) => item.value === currentOption.value)) {
-      return fetchedOptions;
-    }
-
-    return [currentOption, ...fetchedOptions];
-  }, [doctorQuery.data.specialist._id, doctorQuery.data.specialist.name, specialistQuery.data?.items]);
-
-  const cityOptions = useMemo(() => {
-    const fetchedOptions = (citiesQuery.data ?? []).map((city) => ({
-      value: city,
-      label: city,
-    }));
-
-    const currentCity = doctorQuery.data.practiceLocation.city;
-
-    if (fetchedOptions.some((item) => item.value === currentCity)) {
-      return fetchedOptions;
-    }
-
-    return [{ value: currentCity, label: currentCity }, ...fetchedOptions];
-  }, [citiesQuery.data, doctorQuery.data.practiceLocation.city]);
 
   return (
     <div className='space-y-4'>
