@@ -6,6 +6,7 @@ import { getSafeRedirectTarget } from '@/utils/auth/route-guard';
 export const Route = createFileRoute('/_layout-blank/auth')({
   validateSearch: z.object({
     redirect: z.string().optional(),
+    reason: z.enum(['booking-auth']).optional(),
   }),
   component: Outlet,
   beforeLoad: ({ context, search }) => {
