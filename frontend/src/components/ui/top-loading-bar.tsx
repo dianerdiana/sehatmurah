@@ -1,12 +1,10 @@
 import * as React from 'react';
 
-import { useIsFetching } from '@tanstack/react-query';
 import { useRouterState } from '@tanstack/react-router';
 
 import { Progress } from './progress';
 
 export const TopLoadingBar = () => {
-  const isFetching = useIsFetching();
   const isPending = useRouterState({
     select: (state) => state.status === 'pending' || state.isLoading,
   });
@@ -14,7 +12,7 @@ export const TopLoadingBar = () => {
   const [value, setValue] = React.useState(0);
   const [isVisible, setIsVisible] = React.useState(false);
 
-  const isLoading = isFetching > 0 || isPending;
+  const isLoading = isPending;
 
   React.useEffect(() => {
     let incTimer: number | undefined;
