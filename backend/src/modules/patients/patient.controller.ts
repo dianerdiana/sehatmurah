@@ -4,7 +4,7 @@ import { HttpResponse } from '../../common/http-response';
 import { buildResponseMeta } from '../../common/pagination';
 import { AuthUser } from '../../types/auth-user.type';
 
-import { ListPatientsDto, UpdateMyProfileDto } from './patient.schema';
+import { ListPatientsDto, UpdateMyProfileDto, UpdatePatientDto } from './patient.schema';
 import * as patientService from './patient.service';
 
 export const getMyProfile = async (req: Request, res: Response, next: NextFunction) => {
@@ -35,6 +35,18 @@ export const getPatientById = async (req: Request, res: Response, next: NextFunc
     const patientId = String(req.params.id);
 
     const data = await patientService.getPatientById(patientId);
+    res.json(HttpResponse.success({ data }));
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updatePatientById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const patientId = String(req.params.id);
+    const payload = req.body as UpdatePatientDto;
+
+    const data = await patientService.updatePatientById(patientId, payload);
     res.json(HttpResponse.success({ data }));
   } catch (error) {
     next(error);
