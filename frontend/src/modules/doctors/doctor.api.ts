@@ -52,6 +52,16 @@ export const doctorApi = {
     }
   },
 
+  getMe: async () => {
+    try {
+      const response = await api.get<ApiResponse<Doctor>>('/doctors/me');
+
+      return unwrapApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
   getDoctorReviews: async (id: string, params?: ListReviewsByDoctorDto) => {
     try {
       const response = await api.get<ApiResponse<Review[]>>(`/doctors/${id}/reviews`, { params });
