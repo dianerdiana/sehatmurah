@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { DoctorForm } from '@/modules/doctors/components/doctor-form';
+import { DoctorScheduleForm } from '@/modules/doctors/components/doctor-schedule-form';
 import { doctorKeys } from '@/modules/doctors/doctor.key';
 import { doctorMutationOptions } from '@/modules/doctors/doctor.mutation';
 import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
@@ -70,6 +71,20 @@ function DoctorsEditPage() {
     },
     onError: (error) => {
       toast.error(error instanceof Error ? error.message : 'Failed to update doctor profile');
+    },
+  });
+
+  const updateScheduleMutation = useMutation({
+    ...doctorMutationOptions.updateSchedule(doctorId),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: doctorKeys.lists() }),
+        queryClient.invalidateQueries({ queryKey: doctorKeys.detail(doctorId) }),
+      ]);
+      toast.success('Doctor schedule updated successfully');
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Failed to update doctor schedule');
     },
   });
 
@@ -170,6 +185,16 @@ function DoctorsEditPage() {
             onSpecialistSearchChange={setSpecialistSearch}
             onCitySearchChange={setCitySearch}
             onSubmit={(payload) => updateMutation.mutate(payload)}
+          />
+        </TabsContent>
+        <TabsContent value='schedule'>
+          <DoctorScheduleForm
+            initialSchedule={doctorQuery.data.schedule}
+            isSubmitting={updateScheduleMutation.isPending}
+            title='Edit Doctor Schedule'
+            description='Manage doctor availability in row-based time slots.'
+            submitLabel='Save Schedule'
+            onSubmit={(payload) => updateScheduleMutation.mutate(payload)}
           />
         </TabsContent>
       </Tabs>
