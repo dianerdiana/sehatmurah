@@ -67,6 +67,17 @@ export const getDoctorById = async (req: Request, res: Response, next: NextFunct
   }
 };
 
+export const getMyDoctorProfile = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const authUser = req.user as AuthUser;
+
+    const data = await doctorService.getMyDoctorProfile(authUser.id);
+    res.json(HttpResponse.success({ data }));
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createDoctor = async (req: Request, res: Response, next: NextFunction) => {
   const uploadedProfilePhoto = getFirstUploadedFileByField(req, 'profilePhoto');
 
