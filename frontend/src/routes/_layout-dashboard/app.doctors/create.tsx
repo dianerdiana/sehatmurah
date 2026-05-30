@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Loader2, SearchX } from 'lucide-react';
+import { SearchX } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -45,6 +45,7 @@ function DoctorsCreatePage() {
       column: 'name',
       sort: 'asc',
     }),
+    placeholderData: (prev) => prev,
   });
 
   const usersQuery = useQuery({
@@ -57,6 +58,7 @@ function DoctorsCreatePage() {
       column: 'name',
       sort: 'asc',
     }),
+    placeholderData: (prev) => prev,
   });
 
   const doctorsQuery = useQuery({
@@ -70,6 +72,10 @@ function DoctorsCreatePage() {
       column: 'createdAt',
       sort: 'desc',
     }),
+    placeholderData: {
+      items: [],
+      meta: {},
+    },
   });
 
   const citiesQuery = useQuery({
@@ -78,6 +84,7 @@ function DoctorsCreatePage() {
       limit: 10,
       search: debouncedCitySearch,
     }),
+    placeholderData: (prev) => prev,
   });
 
   const createMutation = useMutation({
@@ -143,14 +150,6 @@ function DoctorsCreatePage() {
           </Button>
         </CardContent>
       </Card>
-    );
-  }
-
-  if (specialistQuery.isPending || usersQuery.isPending || doctorsQuery.isPending || citiesQuery.isPending) {
-    return (
-      <div className='flex min-h-60 items-center justify-center'>
-        <Loader2 className='size-6 animate-spin text-muted-foreground' />
-      </div>
     );
   }
 
