@@ -30,6 +30,7 @@ doctorRouter.get(
   validateRequest({ query: listDoctorsCitiesSchema }),
   doctorController.listDoctorsCities,
 );
+doctorRouter.get('/me', authMiddleware, doctorController.getMyDoctorProfile);
 doctorRouter.get(
   '/:id',
   validateRequest({ params: doctorIdSchema }),
