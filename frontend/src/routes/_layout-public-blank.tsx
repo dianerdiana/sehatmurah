@@ -12,8 +12,8 @@ function PublicBlankLayout() {
   setTheme('light');
 
   return (
-    <main className='mx-auto max-w-170 overflow-hidden pb-24.5 min-h-screen'>
+    <div className='mx-auto max-w-170 overflow-hidden min-h-screen'>
       <Outlet />
-    </main>
+    </div>
   );
 }
