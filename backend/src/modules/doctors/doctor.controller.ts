@@ -3,6 +3,11 @@ import { NextFunction, Request, Response } from 'express';
 import { HttpResponse } from '../../common/http-response';
 import { buildResponseMeta } from '../../common/pagination';
 import { AuthUser } from '../../types/auth-user.type';
+import { deleteUploadFile } from '../../utils/delete-upload-file';
+import {
+  cleanupUploadedFilesFromRequest,
+  getFirstUploadedFileByField,
+} from '../../utils/uploaded-file-request';
 
 import {
   CreateDoctorDto,
@@ -63,25 +68,55 @@ export const getDoctorById = async (req: Request, res: Response, next: NextFunct
 };
 
 export const createDoctor = async (req: Request, res: Response, next: NextFunction) => {
+  const uploadedProfilePhoto = getFirstUploadedFileByField(req, 'profilePhoto');
+
   try {
     const payload = req.body as CreateDoctorDto;
 
     const data = await doctorService.createDoctor(payload);
     res.status(201).json(HttpResponse.success({ data }));
   } catch (error) {
+    if (uploadedProfilePhoto) {
+      await cleanupUploadedFilesFromRequest(req, ['profilePhoto']);
+    }
+
     next(error);
   }
 };
 
 export const updateDoctor = async (req: Request, res: Response, next: NextFunction) => {
+  const uploadedProfilePhoto = getFirstUploadedFileByField(req, 'profilePhoto');
+  let isUpdated = false;
+
   try {
     const doctorId = String(req.params.id);
     const payload = req.body as UpdateDoctorDto;
     const authUser = req.user as AuthUser;
+    const existingDoctor = uploadedProfilePhoto
+      ? await doctorService.getDoctorById(doctorId)
+      : null;
 
     const data = await doctorService.updateDoctor(doctorId, payload, authUser);
+    isUpdated = true;
+
+    if (
+      uploadedProfilePhoto &&
+      existingDoctor?.profilePhoto &&
+      existingDoctor.profilePhoto !== data.profilePhoto
+    ) {
+      try {
+        await deleteUploadFile(existingDoctor.profilePhoto);
+      } catch {
+        // Ignore cleanup failure for old file so update response is not blocked.
+      }
+    }
+
     res.json(HttpResponse.success({ data }));
   } catch (error) {
+    if (!isUpdated) {
+      await cleanupUploadedFilesFromRequest(req, ['profilePhoto']);
+    }
+
     next(error);
   }
 };
