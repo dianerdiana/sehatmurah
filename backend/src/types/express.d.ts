@@ -12,6 +12,7 @@ declare global {
       user?: AuthUser;
       sanitizedQuery: Record<string, any>;
       sanitizedParams: Record<string, any>;
+      uploadedFiles?: Record<string, string[]>;
     }
   }
 }
