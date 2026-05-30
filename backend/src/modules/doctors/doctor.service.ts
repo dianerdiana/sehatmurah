@@ -113,6 +113,19 @@ export const getDoctorById = async (doctorId: string) => {
   return doctor;
 };
 
+export const getMyDoctorProfile = async (userId: string) => {
+  const doctor = await DoctorProfileModel.findOne({ user: userId }).populate(
+    'specialist',
+    'name slug icon',
+  );
+
+  if (!doctor) {
+    throw new ApiError(404, 'Doctor not found');
+  }
+
+  return doctor;
+};
+
 export const createDoctor = async (payload: CreateDoctorDto) => {
   const userId = payload.userId;
 
