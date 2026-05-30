@@ -18,5 +18,6 @@
       "@/queries/*": ["./src/queries/*"],
       "@/integrations/*": ["./src/integrations/*"]
     }
-  }
+  },
+  "ignoredModules": ["@radix-ui/*", "@base-ui/*"]
 }
