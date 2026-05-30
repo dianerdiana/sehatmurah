@@ -7,5 +7,9 @@ export const Route = createFileRoute('/_layout-public-nav/appointments')({
 });
 
 function RouteComponent() {
-  return <FormSearchDoctor />;
+  return (
+    <div className='pt-4'>
+      <FormSearchDoctor />
+    </div>
+  );
 }
