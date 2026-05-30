@@ -5,7 +5,7 @@ import { unwrapApiResponse, unwrapPaginatedApiResponse } from '@/utils/api-respo
 
 import type { ApiResponse } from '@/types/api-response.type';
 
-import type { ListPatientsDto, UpdateMyProfileDto } from './patient.schema';
+import type { ListPatientsDto, UpdateMyProfileDto, UpdatePatientDto } from './patient.schema';
 import type { PatientListItem, PatientProfile } from './patient.type';
 
 export const patientApi = {
@@ -42,6 +42,16 @@ export const patientApi = {
   updateMyProfile: async (payload: UpdateMyProfileDto) => {
     try {
       const response = await api.patch<UpdateMyProfileDto, ApiResponse<PatientProfile>>('/patients/me', payload);
+
+      return unwrapApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
+  update: async (id: string, payload: UpdatePatientDto) => {
+    try {
+      const response = await api.patch<UpdatePatientDto, ApiResponse<PatientProfile>>(`/patients/${id}`, payload);
 
       return unwrapApiResponse(response.data);
     } catch (error) {
