@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import { Archive, BriefcaseBusiness, Clipboard, HeartPulse, Home, UserRoundCog, Users } from 'lucide-react';
+import { Archive, BriefcaseBusiness, Calendar, Clipboard, HeartPulse, Home, UserRoundCog, Users } from 'lucide-react';
 
 import type { AbilityRule } from '@/types/ability-rule.type';
 
@@ -99,6 +99,24 @@ export const navigation: NavigationGroup[] = [
         permission: {
           action: 'read',
           subject: 'ListReview',
+        },
+      },
+    ],
+  },
+  {
+    label: 'SETTING',
+    permission: {
+      action: 'read',
+      subject: 'PlatformTitle',
+    },
+    items: [
+      {
+        title: 'Doctor Schedule',
+        url: '/settings/doctors/schedule',
+        icon: <Calendar />,
+        permission: {
+          action: 'update',
+          subject: 'DoctorProfile',
         },
       },
     ],
