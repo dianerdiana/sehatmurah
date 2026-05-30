@@ -25,7 +25,7 @@ function BookingDoctorPage() {
   const doctor = queryDoctor.data && queryDoctor.data;
 
   return (
-    <>
+    <div className='pb-24.5'>
       <header className='h-67 w-full rounded-b-2xl bg-primary px-4 pt-12'>
         <Button onClick={() => router.history.back()}>
           <img src='/assets/icons/arrow-left-blue.svg' alt='Image' />
@@ -56,6 +56,6 @@ function BookingDoctorPage() {
           <CardDoctorNotFound />
         )}
       </section>
-    </>
+    </div>
   );
 }
