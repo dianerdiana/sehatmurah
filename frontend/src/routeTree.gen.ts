@@ -32,6 +32,7 @@ import { Route as LayoutDashboardAppDoctorsIndexRouteImport } from './routes/_la
 import { Route as LayoutDashboardAppAppointmentsIndexRouteImport } from './routes/_layout-dashboard/app.appointments/index'
 import { Route as LayoutPublicBlankDoctorsDoctorIdDetailsRouteImport } from './routes/_layout-public-blank/doctors.$doctorId.details'
 import { Route as LayoutPublicBlankDoctorsDoctorIdBookingRouteImport } from './routes/_layout-public-blank/doctors.$doctorId.booking'
+import { Route as LayoutDashboardSettingsDoctorsScheduleRouteImport } from './routes/_layout-dashboard/settings.doctors/schedule'
 import { Route as LayoutDashboardAppUsersCreateRouteImport } from './routes/_layout-dashboard/app.users/create'
 import { Route as LayoutDashboardAppSpecialistsCreateRouteImport } from './routes/_layout-dashboard/app.specialists/create'
 import { Route as LayoutDashboardAppPatientsCreateRouteImport } from './routes/_layout-dashboard/app.patients/create'
@@ -163,6 +164,12 @@ const LayoutPublicBlankDoctorsDoctorIdBookingRoute =
     path: '/doctors/$doctorId/booking',
     getParentRoute: () => LayoutPublicBlankRoute,
   } as any)
+const LayoutDashboardSettingsDoctorsScheduleRoute =
+  LayoutDashboardSettingsDoctorsScheduleRouteImport.update({
+    id: '/settings/doctors/schedule',
+    path: '/settings/doctors/schedule',
+    getParentRoute: () => LayoutDashboardRoute,
+  } as any)
 const LayoutDashboardAppUsersCreateRoute =
   LayoutDashboardAppUsersCreateRouteImport.update({
     id: '/app/users/create',
@@ -229,6 +236,7 @@ export interface FileRoutesByFullPath {
   '/app/patients/create': typeof LayoutDashboardAppPatientsCreateRoute
   '/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
   '/app/users/create': typeof LayoutDashboardAppUsersCreateRoute
+  '/settings/doctors/schedule': typeof LayoutDashboardSettingsDoctorsScheduleRoute
   '/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
   '/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
   '/app/appointments/': typeof LayoutDashboardAppAppointmentsIndexRoute
@@ -258,6 +266,7 @@ export interface FileRoutesByTo {
   '/app/patients/create': typeof LayoutDashboardAppPatientsCreateRoute
   '/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
   '/app/users/create': typeof LayoutDashboardAppUsersCreateRoute
+  '/settings/doctors/schedule': typeof LayoutDashboardSettingsDoctorsScheduleRoute
   '/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
   '/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
   '/app/appointments': typeof LayoutDashboardAppAppointmentsIndexRoute
@@ -292,6 +301,7 @@ export interface FileRoutesById {
   '/_layout-dashboard/app/patients/create': typeof LayoutDashboardAppPatientsCreateRoute
   '/_layout-dashboard/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
   '/_layout-dashboard/app/users/create': typeof LayoutDashboardAppUsersCreateRoute
+  '/_layout-dashboard/settings/doctors/schedule': typeof LayoutDashboardSettingsDoctorsScheduleRoute
   '/_layout-public-blank/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
   '/_layout-public-blank/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
   '/_layout-dashboard/app/appointments/': typeof LayoutDashboardAppAppointmentsIndexRoute
@@ -323,6 +333,7 @@ export interface FileRouteTypes {
     | '/app/patients/create'
     | '/app/specialists/create'
     | '/app/users/create'
+    | '/settings/doctors/schedule'
     | '/doctors/$doctorId/booking'
     | '/doctors/$doctorId/details'
     | '/app/appointments/'
@@ -352,6 +363,7 @@ export interface FileRouteTypes {
     | '/app/patients/create'
     | '/app/specialists/create'
     | '/app/users/create'
+    | '/settings/doctors/schedule'
     | '/doctors/$doctorId/booking'
     | '/doctors/$doctorId/details'
     | '/app/appointments'
@@ -385,6 +397,7 @@ export interface FileRouteTypes {
     | '/_layout-dashboard/app/patients/create'
     | '/_layout-dashboard/app/specialists/create'
     | '/_layout-dashboard/app/users/create'
+    | '/_layout-dashboard/settings/doctors/schedule'
     | '/_layout-public-blank/doctors/$doctorId/booking'
     | '/_layout-public-blank/doctors/$doctorId/details'
     | '/_layout-dashboard/app/appointments/'
@@ -573,6 +586,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPublicBlankDoctorsDoctorIdBookingRouteImport
       parentRoute: typeof LayoutPublicBlankRoute
     }
+    '/_layout-dashboard/settings/doctors/schedule': {
+      id: '/_layout-dashboard/settings/doctors/schedule'
+      path: '/settings/doctors/schedule'
+      fullPath: '/settings/doctors/schedule'
+      preLoaderRoute: typeof LayoutDashboardSettingsDoctorsScheduleRouteImport
+      parentRoute: typeof LayoutDashboardRoute
+    }
     '/_layout-dashboard/app/users/create': {
       id: '/_layout-dashboard/app/users/create'
       path: '/app/users/create'
@@ -664,6 +684,7 @@ interface LayoutDashboardRouteChildren {
   LayoutDashboardAppPatientsCreateRoute: typeof LayoutDashboardAppPatientsCreateRoute
   LayoutDashboardAppSpecialistsCreateRoute: typeof LayoutDashboardAppSpecialistsCreateRoute
   LayoutDashboardAppUsersCreateRoute: typeof LayoutDashboardAppUsersCreateRoute
+  LayoutDashboardSettingsDoctorsScheduleRoute: typeof LayoutDashboardSettingsDoctorsScheduleRoute
   LayoutDashboardAppAppointmentsIndexRoute: typeof LayoutDashboardAppAppointmentsIndexRoute
   LayoutDashboardAppDoctorsIndexRoute: typeof LayoutDashboardAppDoctorsIndexRoute
   LayoutDashboardAppPatientsIndexRoute: typeof LayoutDashboardAppPatientsIndexRoute
@@ -682,6 +703,8 @@ const LayoutDashboardRouteChildren: LayoutDashboardRouteChildren = {
   LayoutDashboardAppSpecialistsCreateRoute:
     LayoutDashboardAppSpecialistsCreateRoute,
   LayoutDashboardAppUsersCreateRoute: LayoutDashboardAppUsersCreateRoute,
+  LayoutDashboardSettingsDoctorsScheduleRoute:
+    LayoutDashboardSettingsDoctorsScheduleRoute,
   LayoutDashboardAppAppointmentsIndexRoute:
     LayoutDashboardAppAppointmentsIndexRoute,
   LayoutDashboardAppDoctorsIndexRoute: LayoutDashboardAppDoctorsIndexRoute,
