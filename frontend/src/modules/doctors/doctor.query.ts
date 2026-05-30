@@ -24,6 +24,12 @@ export const doctorQueryOptions = {
       enabled: !!id,
     }),
 
+  me: () =>
+    queryOptions({
+      queryKey: doctorKeys.me(),
+      queryFn: () => doctorApi.getMe(),
+    }),
+
   getDoctorReviews: (id: string, params?: ListReviewsByDoctorDto) =>
     queryOptions({
       queryKey: doctorKeys.reviews(id, params),
