@@ -35,7 +35,7 @@ function RouteComponent() {
   const reviews = queryReviews.data && queryReviews.data.items;
 
   return (
-    <>
+    <div className='pb-24.5'>
       <header className='h-67 w-full rounded-b-2xl bg-primary px-4 pt-12'>
         <Button onClick={() => router.history.back()}>
           <img src='/assets/icons/arrow-left-blue.svg' alt='Image' />
@@ -69,6 +69,6 @@ function RouteComponent() {
           <CardDoctorNotFound />
         )}
       </section>
-    </>
+    </div>
   );
 }
