@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SuccessPageRouteImport } from './routes/success-page'
 import { Route as PaymentDetailsRouteImport } from './routes/payment-details'
 import { Route as MyBookingRouteImport } from './routes/my-booking'
 import { Route as FutureAppointmentSuccesRouteImport } from './routes/future-appointment-succes'
@@ -32,6 +31,7 @@ import { Route as LayoutDashboardAppDoctorsIndexRouteImport } from './routes/_la
 import { Route as LayoutDashboardAppAppointmentsIndexRouteImport } from './routes/_layout-dashboard/app.appointments/index'
 import { Route as LayoutPublicBlankDoctorsDoctorIdDetailsRouteImport } from './routes/_layout-public-blank/doctors.$doctorId.details'
 import { Route as LayoutPublicBlankDoctorsDoctorIdBookingRouteImport } from './routes/_layout-public-blank/doctors.$doctorId.booking'
+import { Route as LayoutPublicBlankAppointmentsAppointmentIdSuccessRouteImport } from './routes/_layout-public-blank/appointments.$appointmentId.success'
 import { Route as LayoutDashboardSettingsDoctorsScheduleRouteImport } from './routes/_layout-dashboard/settings.doctors/schedule'
 import { Route as LayoutDashboardAppUsersCreateRouteImport } from './routes/_layout-dashboard/app.users/create'
 import { Route as LayoutDashboardAppSpecialistsCreateRouteImport } from './routes/_layout-dashboard/app.specialists/create'
@@ -41,11 +41,6 @@ import { Route as LayoutDashboardAppSpecialistsSpecialistIdEditRouteImport } fro
 import { Route as LayoutDashboardAppPatientsPatientIdEditRouteImport } from './routes/_layout-dashboard/app.patients/$patientId.edit'
 import { Route as LayoutDashboardAppDoctorsDoctorIdEditRouteImport } from './routes/_layout-dashboard/app.doctors/$doctorId.edit'
 
-const SuccessPageRoute = SuccessPageRouteImport.update({
-  id: '/success-page',
-  path: '/success-page',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PaymentDetailsRoute = PaymentDetailsRouteImport.update({
   id: '/payment-details',
   path: '/payment-details',
@@ -163,6 +158,12 @@ const LayoutPublicBlankDoctorsDoctorIdBookingRoute =
     path: '/doctors/$doctorId/booking',
     getParentRoute: () => LayoutPublicBlankRoute,
   } as any)
+const LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute =
+  LayoutPublicBlankAppointmentsAppointmentIdSuccessRouteImport.update({
+    id: '/appointments/$appointmentId/success',
+    path: '/appointments/$appointmentId/success',
+    getParentRoute: () => LayoutPublicBlankRoute,
+  } as any)
 const LayoutDashboardSettingsDoctorsScheduleRoute =
   LayoutDashboardSettingsDoctorsScheduleRouteImport.update({
     id: '/settings/doctors/schedule',
@@ -218,7 +219,6 @@ export interface FileRoutesByFullPath {
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
-  '/success-page': typeof SuccessPageRoute
   '/auth': typeof LayoutBlankAuthRouteWithChildren
   '/dashboard': typeof LayoutDashboardDashboardRoute
   '/appointments': typeof LayoutPublicNavAppointmentsRoute
@@ -229,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
   '/app/users/create': typeof LayoutDashboardAppUsersCreateRoute
   '/settings/doctors/schedule': typeof LayoutDashboardSettingsDoctorsScheduleRoute
+  '/appointments/$appointmentId/success': typeof LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute
   '/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
   '/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
   '/app/appointments/': typeof LayoutDashboardAppAppointmentsIndexRoute
@@ -247,7 +248,6 @@ export interface FileRoutesByTo {
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
-  '/success-page': typeof SuccessPageRoute
   '/auth': typeof LayoutBlankAuthRouteWithChildren
   '/dashboard': typeof LayoutDashboardDashboardRoute
   '/appointments': typeof LayoutPublicNavAppointmentsRoute
@@ -258,6 +258,7 @@ export interface FileRoutesByTo {
   '/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
   '/app/users/create': typeof LayoutDashboardAppUsersCreateRoute
   '/settings/doctors/schedule': typeof LayoutDashboardSettingsDoctorsScheduleRoute
+  '/appointments/$appointmentId/success': typeof LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute
   '/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
   '/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
   '/app/appointments': typeof LayoutDashboardAppAppointmentsIndexRoute
@@ -280,7 +281,6 @@ export interface FileRoutesById {
   '/future-appointment-succes': typeof FutureAppointmentSuccesRoute
   '/my-booking': typeof MyBookingRoute
   '/payment-details': typeof PaymentDetailsRoute
-  '/success-page': typeof SuccessPageRoute
   '/_layout-blank/auth': typeof LayoutBlankAuthRouteWithChildren
   '/_layout-dashboard/dashboard': typeof LayoutDashboardDashboardRoute
   '/_layout-public-nav/appointments': typeof LayoutPublicNavAppointmentsRoute
@@ -292,6 +292,7 @@ export interface FileRoutesById {
   '/_layout-dashboard/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
   '/_layout-dashboard/app/users/create': typeof LayoutDashboardAppUsersCreateRoute
   '/_layout-dashboard/settings/doctors/schedule': typeof LayoutDashboardSettingsDoctorsScheduleRoute
+  '/_layout-public-blank/appointments/$appointmentId/success': typeof LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute
   '/_layout-public-blank/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
   '/_layout-public-blank/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
   '/_layout-dashboard/app/appointments/': typeof LayoutDashboardAppAppointmentsIndexRoute
@@ -312,7 +313,6 @@ export interface FileRouteTypes {
     | '/future-appointment-succes'
     | '/my-booking'
     | '/payment-details'
-    | '/success-page'
     | '/auth'
     | '/dashboard'
     | '/appointments'
@@ -323,6 +323,7 @@ export interface FileRouteTypes {
     | '/app/specialists/create'
     | '/app/users/create'
     | '/settings/doctors/schedule'
+    | '/appointments/$appointmentId/success'
     | '/doctors/$doctorId/booking'
     | '/doctors/$doctorId/details'
     | '/app/appointments/'
@@ -341,7 +342,6 @@ export interface FileRouteTypes {
     | '/future-appointment-succes'
     | '/my-booking'
     | '/payment-details'
-    | '/success-page'
     | '/auth'
     | '/dashboard'
     | '/appointments'
@@ -352,6 +352,7 @@ export interface FileRouteTypes {
     | '/app/specialists/create'
     | '/app/users/create'
     | '/settings/doctors/schedule'
+    | '/appointments/$appointmentId/success'
     | '/doctors/$doctorId/booking'
     | '/doctors/$doctorId/details'
     | '/app/appointments'
@@ -373,7 +374,6 @@ export interface FileRouteTypes {
     | '/future-appointment-succes'
     | '/my-booking'
     | '/payment-details'
-    | '/success-page'
     | '/_layout-blank/auth'
     | '/_layout-dashboard/dashboard'
     | '/_layout-public-nav/appointments'
@@ -385,6 +385,7 @@ export interface FileRouteTypes {
     | '/_layout-dashboard/app/specialists/create'
     | '/_layout-dashboard/app/users/create'
     | '/_layout-dashboard/settings/doctors/schedule'
+    | '/_layout-public-blank/appointments/$appointmentId/success'
     | '/_layout-public-blank/doctors/$doctorId/booking'
     | '/_layout-public-blank/doctors/$doctorId/details'
     | '/_layout-dashboard/app/appointments/'
@@ -407,18 +408,10 @@ export interface RootRouteChildren {
   FutureAppointmentSuccesRoute: typeof FutureAppointmentSuccesRoute
   MyBookingRoute: typeof MyBookingRoute
   PaymentDetailsRoute: typeof PaymentDetailsRoute
-  SuccessPageRoute: typeof SuccessPageRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/success-page': {
-      id: '/success-page'
-      path: '/success-page'
-      fullPath: '/success-page'
-      preLoaderRoute: typeof SuccessPageRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/payment-details': {
       id: '/payment-details'
       path: '/payment-details'
@@ -573,6 +566,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPublicBlankDoctorsDoctorIdBookingRouteImport
       parentRoute: typeof LayoutPublicBlankRoute
     }
+    '/_layout-public-blank/appointments/$appointmentId/success': {
+      id: '/_layout-public-blank/appointments/$appointmentId/success'
+      path: '/appointments/$appointmentId/success'
+      fullPath: '/appointments/$appointmentId/success'
+      preLoaderRoute: typeof LayoutPublicBlankAppointmentsAppointmentIdSuccessRouteImport
+      parentRoute: typeof LayoutPublicBlankRoute
+    }
     '/_layout-dashboard/settings/doctors/schedule': {
       id: '/_layout-dashboard/settings/doctors/schedule'
       path: '/settings/doctors/schedule'
@@ -706,12 +706,15 @@ const LayoutDashboardRouteWithChildren = LayoutDashboardRoute._addFileChildren(
 
 interface LayoutPublicBlankRouteChildren {
   LayoutPublicBlankDoctorsSearchRoute: typeof LayoutPublicBlankDoctorsSearchRoute
+  LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute: typeof LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute
   LayoutPublicBlankDoctorsDoctorIdBookingRoute: typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
   LayoutPublicBlankDoctorsDoctorIdDetailsRoute: typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
 }
 
 const LayoutPublicBlankRouteChildren: LayoutPublicBlankRouteChildren = {
   LayoutPublicBlankDoctorsSearchRoute: LayoutPublicBlankDoctorsSearchRoute,
+  LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute:
+    LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute,
   LayoutPublicBlankDoctorsDoctorIdBookingRoute:
     LayoutPublicBlankDoctorsDoctorIdBookingRoute,
   LayoutPublicBlankDoctorsDoctorIdDetailsRoute:
@@ -744,7 +747,6 @@ const rootRouteChildren: RootRouteChildren = {
   FutureAppointmentSuccesRoute: FutureAppointmentSuccesRoute,
   MyBookingRoute: MyBookingRoute,
   PaymentDetailsRoute: PaymentDetailsRoute,
-  SuccessPageRoute: SuccessPageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
