@@ -3,7 +3,7 @@ import z, { ZodError } from 'zod';
 
 import { ApiError } from '../common/api-error';
 import { formatZodError } from '../common/format-zod-error';
-import { deleteUploadFile } from '../utils/delete-upload-file';
+import { cleanupUploadedFilesFromRequest } from '../utils/uploaded-file-request';
 
 interface ValidationSchemas {
   body?: z.ZodObject;
@@ -13,6 +13,10 @@ interface ValidationSchemas {
 
 export const validateRequest = (schemas: ValidationSchemas) => {
   return (req: Request, _res: Response, next: NextFunction): void => {
+    const cleanupUploadedFields = () => {
+      void cleanupUploadedFilesFromRequest(req, ['icon', 'image', 'profilePhoto']);
+    };
+
     try {
       if (schemas.body) {
         req.body = schemas.body.parse(req.body);
@@ -29,6 +33,8 @@ export const validateRequest = (schemas: ValidationSchemas) => {
       next();
     } catch (error) {
       if (error instanceof ZodError) {
+        cleanupUploadedFields();
+
         next(
           new ApiError(400, 'Validation error', {
             code: 'VALIDATION_ERROR',
@@ -38,8 +44,7 @@ export const validateRequest = (schemas: ValidationSchemas) => {
         return;
       }
 
-      if (req.body.icon) deleteUploadFile(req.body.icon);
-      if (req.body.image) deleteUploadFile(req.body.image);
+      cleanupUploadedFields();
 
       next(error);
     }
