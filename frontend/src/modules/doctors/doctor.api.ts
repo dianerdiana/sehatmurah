@@ -64,7 +64,11 @@ export const doctorApi = {
 
   create: async (payload: CreateDoctorDto) => {
     try {
-      const response = await api.post<CreateDoctorDto, ApiResponse<Doctor>>('/doctors', payload);
+      const response = await api.post<CreateDoctorDto, ApiResponse<Doctor>>('/doctors', payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       return unwrapApiResponse(response.data);
     } catch (error) {
@@ -74,7 +78,11 @@ export const doctorApi = {
 
   update: async (id: string, payload: UpdateDoctorDto) => {
     try {
-      const response = await api.patch<UpdateDoctorDto, ApiResponse<Doctor>>(`/doctors/${id}`, payload);
+      const response = await api.patch<UpdateDoctorDto, ApiResponse<Doctor>>(`/doctors/${id}`, payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       return unwrapApiResponse(response.data);
     } catch (error) {
