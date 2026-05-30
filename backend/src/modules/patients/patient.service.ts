@@ -3,7 +3,7 @@ import { normalizePagination } from '../../common/pagination';
 import { PatientProfileModel } from '../../models/patient-profile.model';
 import { escapeRegex } from '../../utils/escape-regex';
 
-import { ListPatientsDto, UpdateMyProfileDto } from './patient.schema';
+import { ListPatientsDto, UpdateMyProfileDto, UpdatePatientDto } from './patient.schema';
 
 export const getMyProfile = async (userId: string) => {
   const profile = await PatientProfileModel.findOne({ user: userId }).populate(
@@ -56,6 +56,35 @@ export const getPatientById = async (patientId: string) => {
   if (!profile) {
     throw new ApiError(404, 'Patient profile not found');
   }
+
+  return profile;
+};
+
+export const updatePatientById = async (patientId: string, payload: UpdatePatientDto) => {
+  const profile = await PatientProfileModel.findById(patientId);
+
+  if (!profile) {
+    throw new ApiError(404, 'Patient profile not found');
+  }
+
+  const allowedFields: (keyof UpdatePatientDto)[] = [
+    'fullName',
+    'dateOfBirth',
+    'gender',
+    'phoneNumber',
+    'address',
+  ];
+
+  for (const field of allowedFields) {
+    const value = payload[field];
+
+    if (value !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (profile as any)[field] = value;
+    }
+  }
+
+  await profile.save();
 
   return profile;
 };
