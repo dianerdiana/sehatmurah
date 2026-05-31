@@ -1,23 +1,16 @@
 import { Link } from '@tanstack/react-router';
 import type { ColumnDef } from '@tanstack/react-table';
-import { format } from 'date-fns';
 import { ArrowDown, ArrowUp, ArrowUpDown, Pencil } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
+import { formatDateTime } from '@/utils/utils';
+
 import type { Specialist } from '../specialist.type';
 
 import { SpecialistDeletePopover } from './specialist-delete-popover';
 import { SpecialistDetailDialog } from './specialist-detail-dialog';
-
-const formatDateTime = (dateTime: string) => {
-  try {
-    return format(new Date(dateTime), 'dd MMM yyyy');
-  } catch {
-    return dateTime;
-  }
-};
 
 function SortableHeader({
   label,
