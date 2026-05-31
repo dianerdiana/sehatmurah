@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as MyBookingRouteImport } from './routes/my-booking'
 import { Route as LayoutPublicNavRouteImport } from './routes/_layout-public-nav'
 import { Route as LayoutPublicBlankRouteImport } from './routes/_layout-public-blank'
 import { Route as LayoutDashboardRouteImport } from './routes/_layout-dashboard'
@@ -42,11 +41,6 @@ import { Route as LayoutDashboardAppSpecialistsSpecialistIdEditRouteImport } fro
 import { Route as LayoutDashboardAppPatientsPatientIdEditRouteImport } from './routes/_layout-dashboard/app.patients/$patientId.edit'
 import { Route as LayoutDashboardAppDoctorsDoctorIdEditRouteImport } from './routes/_layout-dashboard/app.doctors/$doctorId.edit'
 
-const MyBookingRoute = MyBookingRouteImport.update({
-  id: '/my-booking',
-  path: '/my-booking',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LayoutPublicNavRoute = LayoutPublicNavRouteImport.update({
   id: '/_layout-public-nav',
   getParentRoute: () => rootRouteImport,
@@ -224,7 +218,6 @@ const LayoutDashboardAppDoctorsDoctorIdEditRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof LayoutPublicNavIndexRoute
-  '/my-booking': typeof MyBookingRoute
   '/auth': typeof LayoutBlankAuthRouteWithChildren
   '/dashboard': typeof LayoutDashboardDashboardRoute
   '/appointments': typeof LayoutPublicNavAppointmentsRoute
@@ -254,7 +247,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof LayoutPublicNavIndexRoute
-  '/my-booking': typeof MyBookingRoute
   '/auth': typeof LayoutBlankAuthRouteWithChildren
   '/dashboard': typeof LayoutDashboardDashboardRoute
   '/appointments': typeof LayoutPublicNavAppointmentsRoute
@@ -288,7 +280,6 @@ export interface FileRoutesById {
   '/_layout-dashboard': typeof LayoutDashboardRouteWithChildren
   '/_layout-public-blank': typeof LayoutPublicBlankRouteWithChildren
   '/_layout-public-nav': typeof LayoutPublicNavRouteWithChildren
-  '/my-booking': typeof MyBookingRoute
   '/_layout-blank/auth': typeof LayoutBlankAuthRouteWithChildren
   '/_layout-dashboard/dashboard': typeof LayoutDashboardDashboardRoute
   '/_layout-public-nav/appointments': typeof LayoutPublicNavAppointmentsRoute
@@ -321,7 +312,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/my-booking'
     | '/auth'
     | '/dashboard'
     | '/appointments'
@@ -351,7 +341,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/my-booking'
     | '/auth'
     | '/dashboard'
     | '/appointments'
@@ -384,7 +373,6 @@ export interface FileRouteTypes {
     | '/_layout-dashboard'
     | '/_layout-public-blank'
     | '/_layout-public-nav'
-    | '/my-booking'
     | '/_layout-blank/auth'
     | '/_layout-dashboard/dashboard'
     | '/_layout-public-nav/appointments'
@@ -419,18 +407,10 @@ export interface RootRouteChildren {
   LayoutDashboardRoute: typeof LayoutDashboardRouteWithChildren
   LayoutPublicBlankRoute: typeof LayoutPublicBlankRouteWithChildren
   LayoutPublicNavRoute: typeof LayoutPublicNavRouteWithChildren
-  MyBookingRoute: typeof MyBookingRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/my-booking': {
-      id: '/my-booking'
-      path: '/my-booking'
-      fullPath: '/my-booking'
-      preLoaderRoute: typeof MyBookingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_layout-public-nav': {
       id: '/_layout-public-nav'
       path: ''
@@ -771,7 +751,6 @@ const rootRouteChildren: RootRouteChildren = {
   LayoutDashboardRoute: LayoutDashboardRouteWithChildren,
   LayoutPublicBlankRoute: LayoutPublicBlankRouteWithChildren,
   LayoutPublicNavRoute: LayoutPublicNavRouteWithChildren,
-  MyBookingRoute: MyBookingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
