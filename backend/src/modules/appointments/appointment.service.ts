@@ -5,6 +5,7 @@ import { normalizePagination } from '../../common/pagination';
 import { AppointmentModel } from '../../models/appointment.model';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
 import { PatientProfileModel } from '../../models/patient-profile.model';
+import { SpecialistModel } from '../../models/specialist.model';
 import { AuthUser } from '../../types/auth-user.type';
 import { escapeRegex } from '../../utils/escape-regex';
 import { generateBookingCode } from '../../utils/generate-booking-code';
@@ -127,15 +128,31 @@ export const listAppointments = async (user: AuthUser, payload: ListAppointments
   if (searchText) {
     const regex = new RegExp(escapeRegex(searchText), 'i');
 
-    const [patients, doctors] = await Promise.all([
+    const [patients, doctors, specialists] = await Promise.all([
       PatientProfileModel.find({ fullName: regex }).select('_id').lean(),
       DoctorProfileModel.find({ fullName: regex }).select('_id').lean(),
+      SpecialistModel.find({ name: regex }).select('_id').lean(),
     ]);
+
+    const specialistIds = specialists.map((specialist) => specialist._id);
+    const specialistDoctors =
+      specialistIds.length > 0
+        ? await DoctorProfileModel.find({ specialist: { $in: specialistIds } })
+            .select('_id')
+            .lean()
+        : [];
+
+    const doctorIds = Array.from(
+      new Set([
+        ...doctors.map((doctor) => doctor._id.toString()),
+        ...specialistDoctors.map((doctor) => doctor._id.toString()),
+      ]),
+    );
 
     filter.$or = [
       { bookingCode: regex },
       { patient: { $in: patients.map((patient) => patient._id) } },
-      { doctor: { $in: doctors.map((doctor) => doctor._id) } },
+      { doctor: { $in: doctorIds } },
     ];
   }
 
@@ -146,7 +163,14 @@ export const listAppointments = async (user: AuthUser, payload: ListAppointments
 
   const items = await AppointmentModel.find(filter)
     .populate('patient', 'fullName')
-    .populate('doctor', 'fullName consultationFee')
+    .populate({
+      path: 'doctor',
+      select: 'fullName consultationFee profilePhoto specialist',
+      populate: {
+        path: 'specialist',
+        select: 'name slug',
+      },
+    })
     .sort({ [payload.column]: sortDirection })
     .skip(skip)
     .limit(limit);
