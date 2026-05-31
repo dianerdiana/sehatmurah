@@ -3,6 +3,7 @@ import { UserRole } from './enums/user-role.enum';
 export type PermissionAction = 'create' | 'read' | 'update' | 'delete';
 export type PermissionSubject =
   | 'Auth'
+  | 'User'
   | 'Appointment'
   | 'DoctorProfile'
   | 'PatientProfile'
@@ -23,6 +24,10 @@ export const permissionsByRole: Record<UserRole, PermissionTuple[]> = {
   [UserRole.ADMIN]: [
     ['create', 'Auth'],
     ['read', 'Auth'],
+    ['create', 'User'],
+    ['read', 'User'],
+    ['update', 'User'],
+    ['delete', 'User'],
     ['read', 'Appointment'],
     ['update', 'Appointment'],
     ['delete', 'Appointment'],
