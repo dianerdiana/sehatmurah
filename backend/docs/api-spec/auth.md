@@ -1,10 +1,10 @@
-# Auth API
+# Authentication API
 
-Base URL: `/api/auth`
+Base path: `/api/auth`
 
-## Response Format
+## Standard Response Envelope
 
-### Success
+### Success Envelope
 
 ```json
 {
@@ -14,7 +14,190 @@ Base URL: `/api/auth`
 }
 ```
 
-### Error
+### Error Envelope
+
+```json
+{
+  "status": "error",
+  "message": "Validation error",
+  "code": "VALIDATION_ERROR",
+  "details": [
+    {
+      "field": "email",
+      "message": "invalid email"
+    }
+  ]
+}
+```
+
+## Endpoint: Register
+
+### Description
+
+Create a new patient account and return an access token.
+
+### HTTP Method and URL
+
+```http
+POST /api/auth/register
+```
+
+### Headers Required
+
+- `Content-Type: application/json`
+
+### Request Parameters
+
+| Location | Field      | Type           | Required | Notes          |
+| -------- | ---------- | -------------- | -------- | -------------- |
+| Body     | `name`     | string         | Yes      | Min 1, max 120 |
+| Body     | `email`    | string (email) | Yes      | Max 255        |
+| Body     | `password` | string         | Yes      | Min 8, max 128 |
+
+### Request Example
+
+```json
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "StrongPass123"
+}
+```
+
+### Response Examples
+
+#### 201 Created
+
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "data": {
+      "token": "<JWT_ACCESS_TOKEN>",
+      "user": {
+        "id": "68321ac367b4c6e7d7a01111",
+        "name": "John Doe",
+        "email": "john.doe@example.com",
+        "role": "PATIENT"
+      }
+    }
+  }
+}
+```
+
+#### 400 Bad Request (Zod validation failed)
+
+```json
+{
+  "status": "error",
+  "message": "Validation error",
+  "code": "VALIDATION_ERROR",
+  "details": [
+    {
+      "field": "password",
+      "message": "password must be at least 8 characters"
+    }
+  ]
+}
+```
+
+#### 409 Conflict (email already registered)
+
+```json
+{
+  "status": "error",
+  "message": "Email is already registered"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: Login
+
+### Description
+
+Authenticate a user and return an access token with permissions.
+
+### HTTP Method and URL
+
+```http
+POST /api/auth/login
+```
+
+### Headers Required
+
+- `Content-Type: application/json`
+
+### Request Parameters
+
+| Location | Field      | Type           | Required | Notes          |
+| -------- | ---------- | -------------- | -------- | -------------- |
+| Body     | `email`    | string (email) | Yes      | Max 255        |
+| Body     | `password` | string         | Yes      | Min 1, max 128 |
+
+### Request Example
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "StrongPass123"
+}
+```
+
+### Response Examples
+
+#### 200 OK
+
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "data": {
+      "token": "<JWT_ACCESS_TOKEN>",
+      "user": {
+        "id": "68321ac367b4c6e7d7a01111",
+        "name": "John Doe",
+        "email": "john.doe@example.com",
+        "role": "PATIENT",
+        "permissions": [
+          {
+            "resource": "appointments",
+            "actions": ["create", "read", "delete"]
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+#### 400 Bad Request (Zod validation failed)
+
+```json
+{
+  "status": "error",
+  "message": "Validation error",
+  "code": "VALIDATION_ERROR",
+  "details": [
+    {
+      "field": "email",
+      "message": "invalid email"
+    }
+  ]
+}
+```
+
+#### 401 Unauthorized (invalid credential)
 
 ```json
 {
@@ -23,90 +206,123 @@ Base URL: `/api/auth`
 }
 ```
 
-## Data Model Summary
-
-- `UserRole`: `PATIENT | DOCTOR | ADMIN`
-
-## Endpoints
-
-## 1) Register
-
-- Method: `POST`
-- Path: `/register`
-- Auth: no token required
-
-Request body:
+#### 401 Unauthorized (inactive account security rule)
 
 ```json
 {
-  "name": "Budi",
-  "email": "budi@mail.com",
-  "password": "secret123",
-  "role": "PATIENT"
+  "status": "error",
+  "message": "Your account has been disabled"
 }
 ```
 
-Validation:
+#### Optional policy mapping for inactive account (gateway/business policy)
 
-- `name`: required string, max 120
-- `email`: required valid email, max 255
-- `password`: required string, min 8, max 128
-- `role`: optional enum `PATIENT | DOCTOR | ADMIN` (default `PATIENT`)
-
-Success:
-
-- Status code: `201`
-- `data.token`: JWT access token
-- `data.user`: `{ id, name, email, role }`
-
-Common errors:
-
-- `409` Email is already registered
-- `400` Validation error
-
-## 2) Login
-
-- Method: `POST`
-- Path: `/login`
-- Auth: no token required
-
-Request body:
+Current backend implementation returns `401 Unauthorized` for inactive account login attempts.
+If your API gateway or policy layer maps account-status denial to `403 Forbidden` (or `400 Bad Request`), the payload can follow this shape:
 
 ```json
 {
-  "email": "budi@mail.com",
-  "password": "secret123"
+  "status": "error",
+  "message": "Your account has been disabled"
 }
 ```
 
-Validation:
+#### 500 Internal Server Error
 
-- `email`: required valid email
-- `password`: required string
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
 
-Success:
+## Endpoint: Get Current User (Me)
 
-- Status code: `200`
-- `data.token`: JWT access token
-- `data.user`: `{ id, name, email, role }`
+### Description
 
-Common errors:
+Return the current authenticated user profile.
 
-- `401` Invalid email or password
-- `400` Validation error
+### HTTP Method and URL
 
-## 3) Me
+```http
+GET /api/auth/me
+```
 
-- Method: `GET`
-- Path: `/me`
-- Auth: requires `Authorization: Bearer <access_token>`
+### Headers Required
 
-Success:
+- `Authorization: Bearer <token>`
 
-- Status code: `200`
-- `data`: `{ id, name, email, role, isActive }`
+### Request Parameters
 
-Common errors:
+No path/query/body parameters.
 
-- `401` Unauthorized / Invalid token
-- `404` User not found
+### Request Example
+
+```http
+GET /api/auth/me HTTP/1.1
+Authorization: Bearer <JWT_ACCESS_TOKEN>
+```
+
+### Response Examples
+
+#### 200 OK
+
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "data": {
+      "id": "68321ac367b4c6e7d7a01111",
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "role": "PATIENT",
+      "isActive": true,
+      "permissions": [
+        {
+          "resource": "appointments",
+          "actions": ["create", "read", "delete"]
+        }
+      ]
+    }
+  }
+}
+```
+
+#### 401 Unauthorized (missing bearer token)
+
+```json
+{
+  "status": "error",
+  "message": "Unauthorized"
+}
+```
+
+#### 401 Unauthorized (invalid/expired token or inactive account token)
+
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "status": "error",
+  "message": "User not found"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
