@@ -83,7 +83,7 @@ function RouteComponent() {
   return (
     <main className='space-y-4 px-4 py-6'>
       <section aria-label='Profile head'>
-        <Card className='rounded-3xl'>
+        <Card className='rounded-3xl shadow-none border-none'>
           <CardContent className='flex flex-col items-center gap-4 text-center'>
             <Avatar size='lg' className='size-24 ring-2 ring-primary/10'>
               <AvatarFallback className='text-2xl font-semibold text-primary'>{avatarInitial}</AvatarFallback>
@@ -97,7 +97,7 @@ function RouteComponent() {
       </section>
 
       <section aria-label='Profile details'>
-        <Card className='rounded-3xl'>
+        <Card className='rounded-3xl shadow-none border-none'>
           <CardContent className='space-y-4'>
             {details.map((detail, index) => (
               <div key={detail.label} className={index < details.length - 1 ? 'border-b border-gray-100 pb-4' : ''}>
@@ -110,7 +110,7 @@ function RouteComponent() {
       </section>
 
       <section aria-label='Profile footer'>
-        <Card className='rounded-3xl'>
+        <Card className='rounded-3xl shadow-none border-none'>
           <CardContent>
             <Button
               variant='outline'

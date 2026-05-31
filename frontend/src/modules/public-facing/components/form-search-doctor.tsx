@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Search } from 'lucide-react';
 
-import { ImageServer } from '@/components/ui/image-server';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -16,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { ImageServer } from '@/components/ui/image-server';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 import { themeConfig } from '@/configs/theme-config';
