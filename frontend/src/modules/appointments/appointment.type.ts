@@ -7,10 +7,21 @@ export type AppointmentParty = {
   user?: string;
 };
 
+export type AppointmentSpecialistParty = {
+  _id: string;
+  name: string;
+  slug: string;
+};
+
+export type AppointmentDoctorParty = AppointmentParty & {
+  profilePhoto?: string;
+  specialist?: string | AppointmentSpecialistParty;
+};
+
 export type Appointment = {
   _id: string;
   patient: string | AppointmentParty;
-  doctor: string | AppointmentParty;
+  doctor: string | AppointmentDoctorParty;
   appointmentDate: string;
   startTime: string;
   endTime: string;
