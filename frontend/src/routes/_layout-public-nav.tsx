@@ -44,7 +44,7 @@ function PublicNavLayout() {
   setTheme('light');
 
   return (
-    <main className='mx-auto max-w-170 overflow-hidden pb-24.5 min-h-screen'>
+    <div className='mx-auto max-w-170 overflow-hidden pb-24.5 min-h-screen'>
       <Outlet />
       <nav className='navigate fixed bottom-0 left-0 right-0 z-30 mx-auto'>
         <div className='mx-auto max-w-170'>
@@ -64,6 +64,6 @@ function PublicNavLayout() {
           </div>
         </div>
       </nav>
-    </main>
+    </div>
   );
 }
