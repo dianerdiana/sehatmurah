@@ -2,13 +2,12 @@ import { ApiError } from '../../common/api-error';
 import { normalizePagination } from '../../common/pagination';
 import { UserModel } from '../../models/user.model';
 import { escapeRegex } from '../../utils/escape-regex';
+import { normalizeEmail } from '../../utils/normalize-email';
 import { hashPassword } from '../../utils/password';
 
 import { CreateUserDto, ListUsersDto, UpdateUserDto } from './user.schema';
 
 const USER_SELECT_FIELDS = 'name email role isActive createdAt updatedAt';
-
-const toNormalizedEmail = (email: string) => email.trim().toLowerCase();
 
 export const getUserById = async (userId: string) => {
   const user = await UserModel.findById(userId).select(USER_SELECT_FIELDS);
@@ -63,7 +62,7 @@ export const listUsers = async (query: ListUsersDto) => {
 };
 
 export const createUser = async (payload: CreateUserDto) => {
-  const normalizedEmail = toNormalizedEmail(payload.email);
+  const normalizedEmail = normalizeEmail(payload.email);
 
   const existingUser = await UserModel.findOne({
     email: normalizedEmail,
@@ -112,7 +111,7 @@ export const updateUser = async (userId: string, payload: UpdateUserDto, actorUs
   }
 
   if (typeof payload.email === 'string') {
-    const normalizedEmail = toNormalizedEmail(payload.email);
+    const normalizedEmail = normalizeEmail(payload.email);
 
     if (normalizedEmail !== existingUser.email) {
       const duplicateUser = await UserModel.findOne({
