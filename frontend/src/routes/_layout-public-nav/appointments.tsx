@@ -6,12 +6,19 @@ import { SearchX } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 
 import { appointmentQueryOptions } from '@/modules/appointments/appointment.query';
 import { listAppointmentsSchema } from '@/modules/appointments/appointment.schema';
 import type { Appointment } from '@/modules/appointments/appointment.type';
-import { type AppointmentStatusFilter, appointmentStatusLabels } from '@/modules/appointments/appointment-status';
-import { AppointmentsTablePagination } from '@/modules/appointments/components/appointments-table-pagination';
+import { type AppointmentStatusFilter } from '@/modules/appointments/appointment-status';
 import { AppointmentsTableToolbar } from '@/modules/appointments/components/appointments-table-toolbar';
 import {
   CardAppointment,
@@ -48,7 +55,7 @@ function UserAppointmentList() {
   const appointments = appointmentsQuery.data?.items ?? [];
   const meta = appointmentsQuery.data?.meta ?? {};
   const totalItems = meta.totalItems ?? appointments.length;
-  const totalPages = meta.totalPages;
+  const totalPages = Math.max(meta.totalPages ?? 0, totalItems > 0 ? Math.ceil(totalItems / search.limit) : 0);
 
   const updateSearch = (patch: Partial<typeof search>, resetPage = false) => {
     navigate({
@@ -93,9 +100,7 @@ function UserAppointmentList() {
     updateSearch({ page });
   };
 
-  const handleLimitChange = (limit: number) => {
-    updateSearch({ limit, page: 1 });
-  };
+  const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
 
   return (
     <main className='space-y-4 px-4 py-6'>
@@ -137,26 +142,37 @@ function UserAppointmentList() {
             )}
           </section>
 
-          <AppointmentsTablePagination
-            page={search.page}
-            limit={search.limit}
-            totalItems={totalItems}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-            onLimitChange={handleLimitChange}
-          />
+          {totalPages > 1 ? (
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() => handlePageChange(search.page - 1)}
+                    disabled={search.page <= 1}
+                    aria-disabled={search.page <= 1}
+                  />
+                </PaginationItem>
+
+                {pageNumbers.map((pageNumber) => (
+                  <PaginationItem key={pageNumber}>
+                    <PaginationLink isActive={search.page === pageNumber} onClick={() => handlePageChange(pageNumber)}>
+                      {pageNumber}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() => handlePageChange(search.page + 1)}
+                    disabled={search.page >= totalPages}
+                    aria-disabled={search.page >= totalPages}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          ) : null}
         </>
       )}
-
-      {search.search || search.status !== 'all' || search.startDate || search.endDate ? (
-        <p className='text-sm text-muted-foreground'>
-          Showing {totalItems} appointment{totalItems === 1 ? '' : 's'}
-          {search.search ? ` for “${search.search}”` : ''}
-          {search.status !== 'all' ? ` with status ${appointmentStatusLabels[search.status]}` : ''}
-          {search.startDate ? ` from ${search.startDate}` : ''}
-          {search.endDate ? ` to ${search.endDate}` : ''}.
-        </p>
-      ) : null}
     </main>
   );
 }
