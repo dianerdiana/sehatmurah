@@ -1,3 +1,5 @@
+import type { DateRange } from 'react-day-picker';
+
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { SearchX } from 'lucide-react';
@@ -18,7 +20,6 @@ import {
 } from '@/modules/appointments/components/card-appointment';
 
 import { requireAuthenticated } from '@/utils/auth/route-guard';
-import { useAuth } from '@/utils/hooks/use-auth';
 
 import { UserRole } from '@/types/enums/user-role.enum';
 
@@ -37,7 +38,6 @@ export const Route = createFileRoute('/_layout-public-nav/appointments')({
 });
 
 function UserAppointmentList() {
-  const { userData } = useAuth();
   const navigate = useNavigate({ from: '/appointments' });
   const search = Route.useSearch();
 
@@ -70,12 +70,10 @@ function UserAppointmentList() {
     updateSearch({ status: value }, true);
   };
 
-  const handleStartDateChange = (value: string) => {
-    updateSearch({ startDate: value }, true);
-  };
-
-  const handleEndDateChange = (value: string) => {
-    updateSearch({ endDate: value }, true);
+  const handleSelectDateChange = (value: DateRange | undefined) => {
+    if (value && value?.from && value?.to) {
+      updateSearch({ startDate: value.from.toISOString(), endDate: value.to.toISOString() });
+    }
   };
 
   const handleClearFilters = () => {
@@ -101,21 +99,6 @@ function UserAppointmentList() {
 
   return (
     <main className='space-y-4 px-4 py-6'>
-      <Card className='rounded-3xl'>
-        <CardContent className='space-y-2'>
-          <p className='text-sm font-medium text-muted-foreground'>Appointments</p>
-          <h1 className='text-2xl font-bold tracking-tight text-gray-900'>My Appointment List</h1>
-          <p className='max-w-2xl text-sm text-muted-foreground'>
-            Browse your appointments, search by booking code, doctor, or specialist, and filter by appointment date and
-            status.
-          </p>
-          <div className='rounded-full border bg-muted/40 px-4 py-2 text-sm text-muted-foreground'>
-            <span className='font-semibold text-foreground'>{totalItems}</span> appointment{totalItems === 1 ? '' : 's'}
-            for {userData.name || 'you'}
-          </div>
-        </CardContent>
-      </Card>
-
       <AppointmentsTableToolbar
         search={search.search}
         status={search.status}
@@ -123,13 +106,12 @@ function UserAppointmentList() {
         endDate={search.endDate}
         onSearchChange={handleSearchChange}
         onStatusChange={handleStatusChange}
-        onStartDateChange={handleStartDateChange}
-        onEndDateChange={handleEndDateChange}
+        handleSelectDateChange={handleSelectDateChange}
         onClearFilters={handleClearFilters}
       />
 
       {appointmentsQuery.isError ? (
-        <Card className='rounded-3xl'>
+        <Card className='rounded-3xl shadow-none border-none'>
           <CardContent className='flex min-h-80 flex-col items-center justify-center gap-3 text-center'>
             <SearchX className='size-8 text-muted-foreground' />
             <h2 className='text-lg font-semibold text-gray-900'>Unable to load appointments</h2>
