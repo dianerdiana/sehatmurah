@@ -8,7 +8,12 @@ import { upload } from '../../middlewares/upload.middleware';
 import { validateRequest } from '../../middlewares/validate-request.middleware';
 
 import * as specialistController from './specialist.controller';
-import { listSpecialistsSchema, specialistIdSchema } from './specialist.schema';
+import {
+  createSpecialistSchema,
+  listSpecialistsSchema,
+  specialistIdSchema,
+  updateSpecialistSchema,
+} from './specialist.schema';
 
 export const specialistRouter = Router();
 
@@ -34,6 +39,7 @@ specialistRouter.post(
     { name: 'icon', maxCount: 1 },
   ]),
   mapFilesToBody,
+  validateRequest({ body: createSpecialistSchema }),
   specialistController.createSpecialist,
 );
 
@@ -48,6 +54,7 @@ specialistRouter.put(
   mapFilesToBody,
   validateRequest({
     params: specialistIdSchema,
+    body: updateSpecialistSchema,
   }),
   specialistController.updateSpecialist,
 );
