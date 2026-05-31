@@ -1,10 +1,11 @@
 import { Link } from '@tanstack/react-router';
 import type { ColumnDef } from '@tanstack/react-table';
-import { format } from 'date-fns';
 import { ArrowDown, ArrowUp, ArrowUpDown, Pencil } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+
+import { formatDate } from '@/utils/utils';
 
 import type { UserRole } from '@/types/enums/user-role.enum';
 
@@ -12,14 +13,6 @@ import type { UserListItem } from '../user.type';
 
 import { UserDeletePopover } from './user-delete-popover';
 import { UserDetailDialog } from './user-detail-dialog';
-
-const formatDate = (value: string) => {
-  try {
-    return format(new Date(value), 'dd MMM yyyy');
-  } catch {
-    return value;
-  }
-};
 
 const roleVariant: Record<UserRole, 'default' | 'primary' | 'warning'> = {
   ADMIN: 'warning',

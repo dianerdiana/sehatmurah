@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import { Eye } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +11,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
+import { formatDateTime } from '@/utils/utils';
+
 import type { UserRole } from '@/types/enums/user-role.enum';
 
 import type { UserListItem } from '../user.type';
@@ -24,14 +25,6 @@ const roleVariant: Record<UserRole, 'default' | 'primary' | 'warning'> = {
   ADMIN: 'warning',
   DOCTOR: 'primary',
   PATIENT: 'default',
-};
-
-const formatDateTime = (value: string) => {
-  try {
-    return format(new Date(value), 'dd MMM yyyy, HH:mm');
-  } catch {
-    return value;
-  }
 };
 
 export function UserDetailDialog({ user }: UserDetailDialogProps) {
