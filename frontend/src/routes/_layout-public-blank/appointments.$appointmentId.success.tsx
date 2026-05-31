@@ -6,15 +6,19 @@ import { Button } from '@/components/ui/button';
 
 import { appointmentQueryOptions } from '@/modules/appointments/appointment.query';
 
+import { getPartyId } from '@/utils/appointment-party';
+
 export const Route = createFileRoute('/_layout-public-blank/appointments/$appointmentId/success')({
   component: BookingAppointmentSuccess,
 });
 
 function BookingAppointmentSuccess() {
   const { appointmentId } = Route.useParams();
-  const appointmentQuery = useQuery(appointmentQueryOptions.getById(appointmentId));
+  const queryAppointment = useQuery(appointmentQueryOptions.getById(appointmentId));
+  const appointment = queryAppointment.data ? queryAppointment.data : null;
+  const doctorId = getPartyId(appointment?.doctor);
 
-  if (appointmentQuery.isPending) {
+  if (queryAppointment.isPending) {
     return (
       <div className='flex min-h-60 items-center justify-center'>
         <Loader2 className='size-6 animate-spin text-muted-foreground' />
@@ -39,9 +43,7 @@ function BookingAppointmentSuccess() {
               <div className='mb-4 flex h-14 w-full items-center gap-x-1 rounded-3xl bg-background p-4'>
                 <img src='/assets/icons/succespage-booking-id.svg' alt='Icon' loading='lazy' />
                 <h2 className='font-semibold leading-[20.16px] text-gray-500'>Booking ID:</h2>
-                <strong className='font-extrabold leading-[20.16px] text-primary'>
-                  {appointmentQuery.data?.bookingCode}
-                </strong>
+                <strong className='font-extrabold leading-[20.16px] text-primary'>{appointment?.bookingCode}</strong>
               </div>
             </div>
             <p className='px-4 text-center font-bold leading-[25.6px] text-white'>Your appointment is set.</p>
@@ -60,7 +62,7 @@ function BookingAppointmentSuccess() {
             className='text-base text-primary hover:text-primary bg-primary-light/30 rounded-full leading-[20.16px] font-semibold py-7'
             asChild
           >
-            <Link id='CtaNewBooking' to='/appointments'>
+            <Link id='CtaNewBooking' to='/doctors/$doctorId/booking' params={{ doctorId: doctorId || '' }}>
               Make Another Appointment
             </Link>
           </Button>
