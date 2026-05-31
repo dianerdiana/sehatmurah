@@ -6,6 +6,7 @@ import { getPermissionObjectsByRole } from '../../common/permissions';
 import { PatientProfileModel } from '../../models/patient-profile.model';
 import { UserModel } from '../../models/user.model';
 import { signAccessToken } from '../../utils/jwt';
+import { normalizeEmail } from '../../utils/normalize-email';
 import { comparePassword, hashPassword } from '../../utils/password';
 
 import { LoginDto, RegisterDto } from './auth.schema';
@@ -16,7 +17,7 @@ export const register = async (payload: RegisterDto) => {
   const role = UserRole.PATIENT;
 
   const existingUser = await UserModel.findOne({
-    email: payload.email.toLowerCase(),
+    email: normalizeEmail(payload.email),
   });
 
   if (existingUser) {
@@ -76,7 +77,7 @@ export const register = async (payload: RegisterDto) => {
 
 export const login = async (payload: LoginDto) => {
   const user = await UserModel.findOne({
-    email: payload.email.toLowerCase(),
+    email: normalizeEmail(payload.email),
   }).select('+password');
 
   if (!user) {
@@ -86,6 +87,10 @@ export const login = async (payload: LoginDto) => {
   const isPasswordValid = await comparePassword(payload.password, user.password);
   if (!isPasswordValid) {
     throw new ApiError(401, 'Invalid email or password');
+  }
+
+  if (!user.isActive) {
+    throw new ApiError(401, 'Your account has been disabled');
   }
 
   const token = signAccessToken({
