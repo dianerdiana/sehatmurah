@@ -13,7 +13,7 @@ const searchParamsSchema = z.object({
   city: z.string().optional(),
 });
 
-export const Route = createFileRoute('/_layout-public-blank/doctors/search')({
+export const Route = createFileRoute('/_layout-public-blank/doctors/results')({
   component: DoctorsSearchPage,
   validateSearch: searchParamsSchema,
 });

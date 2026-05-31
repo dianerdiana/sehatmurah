@@ -27,7 +27,7 @@ export function SpecialistCategories() {
       <div className='flex items-center justify-between'>
         <h2 className='font-jakarta text-[20px] font-bold leading-[25.2px] text-gray-900'>Specialist Categories</h2>
         <Link
-          to='/doctors/search'
+          to='/doctors/results'
           search={{ specialist: '', city: '' }}
           className='font-jakarta text-sm font-bold leading-[17.64px] text-gray-500'
         >
@@ -39,7 +39,7 @@ export function SpecialistCategories() {
           specialists.map((specialist) => (
             <Link
               key={specialist._id}
-              to='/doctors/search'
+              to='/doctors/results'
               search={{ specialist: specialist.name }}
               className='categori-1 h-25.5 w-27.75'
             >

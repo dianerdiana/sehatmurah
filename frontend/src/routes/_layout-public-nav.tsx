@@ -20,7 +20,7 @@ const navigation = [
     title: 'Appointment',
     activeIcon: '/assets/icons/homepage-nav-appointment-active.svg',
     nonActiveIcon: '/assets/icons/homepage-nav-appointment-nonactive.svg',
-    href: '/appointments',
+    href: '/doctors/search',
   },
   {
     id: 3,

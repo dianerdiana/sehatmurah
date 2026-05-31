@@ -59,12 +59,12 @@ export function FormSearchDoctor() {
               </SelectContent>
             </Select>
             <img
-              src='assets/icons/doctorsearch-location-nonactive.svg'
+              src='/assets/icons/doctorsearch-location-nonactive.svg'
               alt='Icon'
               className='absolute left-4 top-1/2 -translate-y-1/2 transition-all duration-300 peer-invalid:opacity-100'
             />
             <img
-              src='assets/icons/doctorsearch-location-active.svg'
+              src='/assets/icons/doctorsearch-location-active.svg'
               alt='Icon'
               className='absolute left-4 top-1/2 -translate-y-1/2 opacity-0 transition-all duration-300 peer-valid:opacity-100'
             />
@@ -80,20 +80,20 @@ export function FormSearchDoctor() {
               >
                 <span id='selectedValue'>{selectedSpecialist ? selectedSpecialist : 'Choose a specialist'}</span>
                 <img
-                  src='assets/icons/doctorsearch-input-choose-a-specialist-nonactive.svg'
+                  src='/assets/icons/doctorsearch-input-choose-a-specialist-nonactive.svg'
                   alt='Icon'
                   id='chooseGrey'
                   className='absolute left-4 top-1/2 -translate-y-1/2'
                 />
                 <img
-                  src='assets/icons/doctorsearch-input-choose-a-specialist-active.svg'
+                  src='/assets/icons/doctorsearch-input-choose-a-specialist-active.svg'
                   alt='Icon'
                   id='chooseBlack'
                   className='absolute left-4 top-1/2 -translate-y-1/2 opacity-0'
                 />
                 <img
                   id='arrow'
-                  src='assets/icons/doctorsearch-arrow-right.svg'
+                  src='/assets/icons/doctorsearch-arrow-right.svg'
                   alt='Icon'
                   className='absolute right-4 top-1/2 -translate-y-1/2'
                 />
@@ -162,7 +162,7 @@ export function FormSearchDoctor() {
           </Dialog>
         </div>
         <Link
-          from='/doctors/search'
+          from='/doctors/results'
           to='.'
           search={{
             specialist: selectedSpecialist,
