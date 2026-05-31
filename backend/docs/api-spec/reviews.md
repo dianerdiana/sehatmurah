@@ -1,88 +1,200 @@
 # Reviews API
 
-Base URL: `/api/reviews`
+Base path: `/api/reviews`
 
-## Data Model Summary
+## Endpoint: Create Review
 
-- Review fields: `patient`, `doctor`, `appointment`, `rating`, `comment`, `createdAt`, `updatedAt`
+### Description
 
-## Endpoints
+Create a review as a patient. The doctor rating summary is recalculated automatically.
 
-## 1) Create Review
+### HTTP Method and URL
 
-- Method: `POST`
-- Path: `/`
-- Role: `PATIENT`
-- Auth: requires `Authorization: Bearer <access_token>`
+```http
+POST /api/reviews
+```
 
-Request body:
+### Headers Required
+
+- `Authorization: Bearer <token>`
+- `Content-Type: application/json`
+
+### Request Parameters
+
+| Location | Field         | Type   | Required | Notes                   |
+| -------- | ------------- | ------ | -------- | ----------------------- |
+| Body     | `doctor`      | string | Yes      | Doctor profile id       |
+| Body     | `appointment` | string | No       | Optional appointment id |
+| Body     | `rating`      | number | Yes      | Integer from 1 to 5     |
+| Body     | `comment`     | string | No       | Max 1000                |
+
+Business rules when `appointment` is provided:
+
+- Appointment must exist.
+- Appointment must belong to logged-in patient.
+- Appointment doctor must match `doctor` in payload.
+- Appointment status must be `completed`.
+
+### Request Example
 
 ```json
 {
-  "doctor": "doctorProfileId",
-  "appointment": "appointmentId",
+  "doctor": "68321ac367b4c6e7d7a02221",
+  "appointment": "68321ac367b4c6e7d7a06661",
   "rating": 5,
-  "comment": "Excellent service"
+  "comment": "Excellent explanation and service"
 }
 ```
 
-Validation:
+### Response Examples
 
-- `doctor`: required string
-- `appointment`: optional string
-- `rating`: integer, min 1, max 5
-- `comment`: optional string, max 1000 characters
+#### 201 Created
 
-Important business rules:
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "_id": "68321ac367b4c6e7d7a04441",
+    "patient": "68321ac367b4c6e7d7a05551",
+    "doctor": "68321ac367b4c6e7d7a02221",
+    "appointment": "68321ac367b4c6e7d7a06661",
+    "rating": 5,
+    "comment": "Excellent explanation and service"
+  }
+}
+```
 
-- If `appointment` is provided:
-  - appointment must exist
-  - appointment must belong to the logged-in patient
-  - appointment doctor must match the payload `doctor`
-  - appointment status must be `completed`
+#### 400 Bad Request
 
-Success:
+```json
+{
+  "status": "error",
+  "message": "Review is only allowed for completed appointment"
+}
+```
 
-- Status code: `201`
-- `data`: created review object
+#### 401 Unauthorized
 
-Common errors:
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
 
-- `400` Appointment doctor does not match / Review is only allowed for completed appointment
-- `403` Only PATIENT can create review / Forbidden
-- `404` Doctor not found / Appointment not found / Patient profile not found
-- `409` Duplicate resource (duplicate patient-doctor-appointment combination)
+#### 403 Forbidden
 
-## 2) Delete Review
+```json
+{
+  "status": "error",
+  "message": "Forbidden"
+}
+```
 
-- Method: `DELETE`
-- Path: `/:id`
-- Role: `ADMIN`
-- Auth: token required
+#### 404 Not Found
 
-Path parameters:
+```json
+{
+  "status": "error",
+  "message": "Doctor not found"
+}
+```
 
-- `id`: required string
+#### 500 Internal Server Error
 
-Success:
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
 
-- Status code: `200`
+## Endpoint: Delete Review
+
+### Description
+
+Delete a review by id (admin only). Doctor rating summary is recalculated.
+
+### HTTP Method and URL
+
+```http
+DELETE /api/reviews/:id
+```
+
+### Headers Required
+
+- `Authorization: Bearer <token>`
+
+### Request Parameters
+
+| Location | Field | Type   | Required | Notes     |
+| -------- | ----- | ------ | -------- | --------- |
+| Path     | `id`  | string | Yes      | Review id |
+
+### Request Example
+
+```http
+DELETE /api/reviews/68321ac367b4c6e7d7a04441
+Authorization: Bearer <JWT_ACCESS_TOKEN>
+```
+
+### Response Examples
+
+#### 200 OK
 
 ```json
 {
   "status": "success",
   "message": "Review deleted",
-  "data": {}
+  "data": {
+    "_id": "68321ac367b4c6e7d7a04441"
+  }
 }
 ```
 
-Common errors:
+#### 401 Unauthorized
 
-- `404` Review not found
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
 
-## Related Endpoint Note
+#### 403 Forbidden
 
-To list reviews by doctor, use the endpoint in the doctors module:
+```json
+{
+  "status": "error",
+  "message": "Forbidden"
+}
+```
 
-- `GET /api/doctors/:doctorId/reviews`
-- Query: `page`, `limit`
+#### 404 Not Found
+
+```json
+{
+  "status": "error",
+  "message": "Review not found"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Related Endpoint
+
+The review list endpoint is located in the doctors module:
+
+```http
+GET /api/doctors/:doctorId/reviews?page=1&limit=10
+```
