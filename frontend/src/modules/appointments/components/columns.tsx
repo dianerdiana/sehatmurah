@@ -1,29 +1,15 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import { format } from 'date-fns';
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
-import type { Appointment, AppointmentParty } from '../appointment.type';
+import { getPartyName } from '@/utils/appointment-party';
+import { formatAppointmentDate } from '@/utils/utils';
+
+import type { Appointment } from '../appointment.type';
 import { appointmentStatusBadgeVariants, appointmentStatusLabels } from '../appointment-status';
 
 import { AppointmentStatusPopover } from './appointment-status-popover';
-
-const getPartyName = (party: string | AppointmentParty) => {
-  if (typeof party === 'string') {
-    return party;
-  }
-
-  return party.fullName;
-};
-
-const formatAppointmentDate = (date: string) => {
-  try {
-    return format(date, 'dd MMM yyyy');
-  } catch {
-    return date;
-  }
-};
 
 export const appointmentsColumns: ColumnDef<Appointment>[] = [
   {
