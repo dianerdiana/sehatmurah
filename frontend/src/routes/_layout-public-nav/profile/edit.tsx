@@ -11,14 +11,8 @@ import { patientKeys } from '@/modules/patients/patient.key';
 import { patientMutationOptions } from '@/modules/patients/patient.mutation';
 import { patientQueryOptions } from '@/modules/patients/patient.query';
 
-import { requireAuthenticated } from '@/utils/auth/route-guard';
-
 export const Route = createFileRoute('/_layout-public-nav/profile/edit')({
   component: RouteComponent,
-  beforeLoad: ({ context, location }) => {
-    const redirectTarget = location.href;
-    requireAuthenticated(context.auth, redirectTarget);
-  },
 });
 
 function RouteComponent() {

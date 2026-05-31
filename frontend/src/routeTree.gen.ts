@@ -14,6 +14,7 @@ import { Route as LayoutPublicBlankRouteImport } from './routes/_layout-public-b
 import { Route as LayoutDashboardRouteImport } from './routes/_layout-dashboard'
 import { Route as LayoutBlankRouteImport } from './routes/_layout-blank'
 import { Route as LayoutPublicNavIndexRouteImport } from './routes/_layout-public-nav/index'
+import { Route as LayoutPublicNavProfileRouteImport } from './routes/_layout-public-nav/profile'
 import { Route as LayoutPublicNavAppointmentsRouteImport } from './routes/_layout-public-nav/appointments'
 import { Route as LayoutDashboardDashboardRouteImport } from './routes/_layout-dashboard/dashboard'
 import { Route as LayoutBlankAuthRouteImport } from './routes/_layout-blank/auth'
@@ -62,6 +63,11 @@ const LayoutPublicNavIndexRoute = LayoutPublicNavIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LayoutPublicNavRoute,
 } as any)
+const LayoutPublicNavProfileRoute = LayoutPublicNavProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => LayoutPublicNavRoute,
+} as any)
 const LayoutPublicNavAppointmentsRoute =
   LayoutPublicNavAppointmentsRouteImport.update({
     id: '/appointments',
@@ -81,15 +87,15 @@ const LayoutBlankAuthRoute = LayoutBlankAuthRouteImport.update({
 } as any)
 const LayoutPublicNavProfileIndexRoute =
   LayoutPublicNavProfileIndexRouteImport.update({
-    id: '/profile/',
-    path: '/profile/',
-    getParentRoute: () => LayoutPublicNavRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => LayoutPublicNavProfileRoute,
   } as any)
 const LayoutPublicNavProfileEditRoute =
   LayoutPublicNavProfileEditRouteImport.update({
-    id: '/profile/edit',
-    path: '/profile/edit',
-    getParentRoute: () => LayoutPublicNavRoute,
+    id: '/edit',
+    path: '/edit',
+    getParentRoute: () => LayoutPublicNavProfileRoute,
   } as any)
 const LayoutPublicNavDoctorsSearchRoute =
   LayoutPublicNavDoctorsSearchRouteImport.update({
@@ -221,6 +227,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof LayoutBlankAuthRouteWithChildren
   '/dashboard': typeof LayoutDashboardDashboardRoute
   '/appointments': typeof LayoutPublicNavAppointmentsRoute
+  '/profile': typeof LayoutPublicNavProfileRouteWithChildren
   '/auth/login': typeof LayoutBlankAuthLoginRoute
   '/auth/register': typeof LayoutBlankAuthRegisterRoute
   '/doctors/results': typeof LayoutPublicBlankDoctorsResultsRoute
@@ -283,6 +290,7 @@ export interface FileRoutesById {
   '/_layout-blank/auth': typeof LayoutBlankAuthRouteWithChildren
   '/_layout-dashboard/dashboard': typeof LayoutDashboardDashboardRoute
   '/_layout-public-nav/appointments': typeof LayoutPublicNavAppointmentsRoute
+  '/_layout-public-nav/profile': typeof LayoutPublicNavProfileRouteWithChildren
   '/_layout-public-nav/': typeof LayoutPublicNavIndexRoute
   '/_layout-blank/auth/login': typeof LayoutBlankAuthLoginRoute
   '/_layout-blank/auth/register': typeof LayoutBlankAuthRegisterRoute
@@ -315,6 +323,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/appointments'
+    | '/profile'
     | '/auth/login'
     | '/auth/register'
     | '/doctors/results'
@@ -376,6 +385,7 @@ export interface FileRouteTypes {
     | '/_layout-blank/auth'
     | '/_layout-dashboard/dashboard'
     | '/_layout-public-nav/appointments'
+    | '/_layout-public-nav/profile'
     | '/_layout-public-nav/'
     | '/_layout-blank/auth/login'
     | '/_layout-blank/auth/register'
@@ -446,6 +456,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPublicNavIndexRouteImport
       parentRoute: typeof LayoutPublicNavRoute
     }
+    '/_layout-public-nav/profile': {
+      id: '/_layout-public-nav/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof LayoutPublicNavProfileRouteImport
+      parentRoute: typeof LayoutPublicNavRoute
+    }
     '/_layout-public-nav/appointments': {
       id: '/_layout-public-nav/appointments'
       path: '/appointments'
@@ -469,17 +486,17 @@ declare module '@tanstack/react-router' {
     }
     '/_layout-public-nav/profile/': {
       id: '/_layout-public-nav/profile/'
-      path: '/profile'
+      path: '/'
       fullPath: '/profile/'
       preLoaderRoute: typeof LayoutPublicNavProfileIndexRouteImport
-      parentRoute: typeof LayoutPublicNavRoute
+      parentRoute: typeof LayoutPublicNavProfileRoute
     }
     '/_layout-public-nav/profile/edit': {
       id: '/_layout-public-nav/profile/edit'
-      path: '/profile/edit'
+      path: '/edit'
       fullPath: '/profile/edit'
       preLoaderRoute: typeof LayoutPublicNavProfileEditRouteImport
-      parentRoute: typeof LayoutPublicNavRoute
+      parentRoute: typeof LayoutPublicNavProfileRoute
     }
     '/_layout-public-nav/doctors/search': {
       id: '/_layout-public-nav/doctors/search'
@@ -726,20 +743,34 @@ const LayoutPublicBlankRouteChildren: LayoutPublicBlankRouteChildren = {
 const LayoutPublicBlankRouteWithChildren =
   LayoutPublicBlankRoute._addFileChildren(LayoutPublicBlankRouteChildren)
 
-interface LayoutPublicNavRouteChildren {
-  LayoutPublicNavAppointmentsRoute: typeof LayoutPublicNavAppointmentsRoute
-  LayoutPublicNavIndexRoute: typeof LayoutPublicNavIndexRoute
-  LayoutPublicNavDoctorsSearchRoute: typeof LayoutPublicNavDoctorsSearchRoute
+interface LayoutPublicNavProfileRouteChildren {
   LayoutPublicNavProfileEditRoute: typeof LayoutPublicNavProfileEditRoute
   LayoutPublicNavProfileIndexRoute: typeof LayoutPublicNavProfileIndexRoute
 }
 
+const LayoutPublicNavProfileRouteChildren: LayoutPublicNavProfileRouteChildren =
+  {
+    LayoutPublicNavProfileEditRoute: LayoutPublicNavProfileEditRoute,
+    LayoutPublicNavProfileIndexRoute: LayoutPublicNavProfileIndexRoute,
+  }
+
+const LayoutPublicNavProfileRouteWithChildren =
+  LayoutPublicNavProfileRoute._addFileChildren(
+    LayoutPublicNavProfileRouteChildren,
+  )
+
+interface LayoutPublicNavRouteChildren {
+  LayoutPublicNavAppointmentsRoute: typeof LayoutPublicNavAppointmentsRoute
+  LayoutPublicNavProfileRoute: typeof LayoutPublicNavProfileRouteWithChildren
+  LayoutPublicNavIndexRoute: typeof LayoutPublicNavIndexRoute
+  LayoutPublicNavDoctorsSearchRoute: typeof LayoutPublicNavDoctorsSearchRoute
+}
+
 const LayoutPublicNavRouteChildren: LayoutPublicNavRouteChildren = {
   LayoutPublicNavAppointmentsRoute: LayoutPublicNavAppointmentsRoute,
+  LayoutPublicNavProfileRoute: LayoutPublicNavProfileRouteWithChildren,
   LayoutPublicNavIndexRoute: LayoutPublicNavIndexRoute,
   LayoutPublicNavDoctorsSearchRoute: LayoutPublicNavDoctorsSearchRoute,
-  LayoutPublicNavProfileEditRoute: LayoutPublicNavProfileEditRoute,
-  LayoutPublicNavProfileIndexRoute: LayoutPublicNavProfileIndexRoute,
 }
 
 const LayoutPublicNavRouteWithChildren = LayoutPublicNavRoute._addFileChildren(

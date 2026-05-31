@@ -9,7 +9,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import { patientQueryOptions } from '@/modules/patients/patient.query';
 
-import { requireAuthenticated } from '@/utils/auth/route-guard';
 import { useAuth } from '@/utils/hooks/use-auth';
 import { formatDate } from '@/utils/utils';
 
@@ -17,10 +16,6 @@ import { Gender } from '@/types/enums/gender.enum';
 
 export const Route = createFileRoute('/_layout-public-nav/profile/')({
   component: RouteComponent,
-  beforeLoad: ({ context, location }) => {
-    const redirectTarget = location.href;
-    requireAuthenticated(context.auth, redirectTarget);
-  },
 });
 
 function RouteComponent() {
