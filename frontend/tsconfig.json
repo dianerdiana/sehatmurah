@@ -19,5 +19,5 @@
       "@/integrations/*": ["./src/integrations/*"]
     }
   },
-  "ignoredModules": ["@radix-ui/*", "@base-ui/*"]
+  "ignoredModules": ["radix-ui/*", "@base-ui/*"]
 }

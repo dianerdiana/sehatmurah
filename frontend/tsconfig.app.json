@@ -44,5 +44,5 @@
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "cypress/**/*.ts", "cypress/**/*.tsx", ".storybook/**/*.ts"],
   // Tuliskan perintah di bawah ini
-  "ignoredModules": ["@radix-ui/*", "@base-ui/*"]
+  "ignoredModules": ["radix-ui/*", "@base-ui/*"]
 }
