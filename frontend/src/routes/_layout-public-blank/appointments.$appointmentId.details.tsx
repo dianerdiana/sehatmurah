@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
 import { Loader2, SearchX } from 'lucide-react';
 
-import { ImageServer } from '@/components/ui/image-server';
 import { Button } from '@/components/ui/button';
+import { ImageServer } from '@/components/ui/image-server';
 
 import { appointmentQueryOptions } from '@/modules/appointments/appointment.query';
 import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
@@ -56,6 +56,7 @@ function AppointmentNotFound() {
 }
 
 function BookingAppointmentSuccess() {
+  const router = useRouter();
   const { appointmentId } = Route.useParams();
   const appointmentQuery = useQuery(appointmentQueryOptions.getById(appointmentId));
   const doctorId = getPartyId(appointmentQuery.data?.doctor);
@@ -82,13 +83,18 @@ function BookingAppointmentSuccess() {
 
   return (
     <div className='pb-24'>
-      <header className='h-69.25 w-full rounded-b-2xl bg-primary px-4 pt-12'>
-        <h1 className='mb-0.75 whitespace-nowrap text-center text-xl font-bold leading-[25.2px] text-white'>
-          Booking Details
-        </h1>
-        <p className='whitespace-nowrap text-center font-semibol text-base leading-[20.16px] text-primary-light'>
-          {appointmentStatusDescriptions[appointment?.status || AppointmentStatus.PENDING]}
-        </p>
+      <header className='h-67 w-full rounded-b-2xl bg-primary px-4 pt-12'>
+        <Button onClick={() => router.history.back()}>
+          <img src='/assets/icons/arrow-left-blue.svg' alt='Image' />
+        </Button>
+        <div className='absolute left-1/2 top-12 -translate-x-1/2'>
+          <h1 className='mb-0.75 whitespace-nowrap text-center text-xl font-bold leading-[25.2px] text-white'>
+            Appointment Details
+          </h1>
+          <h2 className='whitespace-nowrap text-center font-semibold leading-[20.16px] text-primary-light'>
+            {appointmentStatusDescriptions[appointment?.status || AppointmentStatus.PENDING]}
+          </h2>
+        </div>
       </header>
       <section id='ContainertDetails' className='-mt-37.25 w-full space-y-4 pb-4'>
         <section id='DetailsAppointment' className='mx-4 overflow-hidden rounded-3xl'>
