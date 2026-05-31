@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
 import { CompanyBrand } from '@/components/layouts/company-brand';
 import { NavMain } from '@/components/layouts/nav-main';
@@ -20,10 +20,23 @@ import { requireAuthenticated } from '@/utils/auth/route-guard';
 import { useAuth } from '@/utils/hooks/use-auth';
 import { navigation } from '@/utils/navigation';
 
+import { UserRole } from '@/types/enums/user-role.enum';
+
 export const Route = createFileRoute('/_layout-dashboard')({
   beforeLoad: ({ context, location }) => {
-    const redirectTarget = location.href;
-    requireAuthenticated(context.auth, redirectTarget);
+    const canAccessDashboard = [UserRole.ADMIN, UserRole.DOCTOR].includes(context.auth.userData.role);
+
+    let redirectTarget = location.href;
+
+    if (!canAccessDashboard) {
+      redirectTarget = '/profile';
+    }
+
+    if (context.auth.isAuthenticated && !canAccessDashboard) {
+      throw redirect({ to: redirectTarget, replace: true });
+    } else {
+      requireAuthenticated(context.auth, redirectTarget);
+    }
   },
   component: DashboardLayout,
 });
