@@ -41,7 +41,7 @@ export const patientApi = {
 
   updateMyProfile: async (payload: UpdateMyProfileDto) => {
     try {
-      const response = await api.patch<UpdateMyProfileDto, ApiResponse<PatientProfile>>('/patients/me', payload);
+      const response = await api.put<UpdateMyProfileDto, ApiResponse<PatientProfile>>('/patients/me', payload);
 
       return unwrapApiResponse(response.data);
     } catch (error) {
@@ -51,7 +51,7 @@ export const patientApi = {
 
   update: async (id: string, payload: UpdatePatientDto) => {
     try {
-      const response = await api.patch<UpdatePatientDto, ApiResponse<PatientProfile>>(`/patients/${id}`, payload);
+      const response = await api.put<UpdatePatientDto, ApiResponse<PatientProfile>>(`/patients/${id}`, payload);
 
       return unwrapApiResponse(response.data);
     } catch (error) {

@@ -18,7 +18,7 @@ export const patientRouter = Router();
 patientRouter.use(authMiddleware);
 
 patientRouter.get('/me', roleMiddleware(UserRole.PATIENT), patientController.getMyProfile);
-patientRouter.patch(
+patientRouter.put(
   '/me',
   roleMiddleware(UserRole.PATIENT),
   validateRequest({ body: updateMyProfileSchema }),
@@ -39,7 +39,7 @@ patientRouter.get(
   patientController.getPatientById,
 );
 
-patientRouter.patch(
+patientRouter.put(
   '/:id',
   roleMiddleware(UserRole.ADMIN),
   validateRequest({
