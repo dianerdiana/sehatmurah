@@ -19,10 +19,10 @@ export const Route = createFileRoute('/_layout-public-blank/appointments/$appoin
 });
 
 const appointmentColors = {
-  [AppointmentStatus.PENDING]: 'bg-accent-cream',
-  [AppointmentStatus.CONFIRMED]: 'bg-emerald-400',
-  [AppointmentStatus.COMPLETED]: 'bg-primary',
-  [AppointmentStatus.CANCELLED]: 'bg-accent-red',
+  [AppointmentStatus.PENDING]: 'bg-accent-cream text-accent-gold',
+  [AppointmentStatus.CONFIRMED]: 'bg-emerald-500 text-white',
+  [AppointmentStatus.COMPLETED]: 'bg-primary-light text-white',
+  [AppointmentStatus.CANCELLED]: 'bg-accent-red text-white',
 };
 
 const appointmentStatusDescriptions = {
@@ -112,7 +112,7 @@ function BookingAppointmentSuccess() {
               <h2 className='mb-1 text-xl font-bold capitalize leading-[25.2px] text-gray-900'>
                 Your Appointment Is {appointment?.status}
               </h2>
-              <p className='font-semibold leading-[20.16px] text-accent-gold'>
+              <p className='font-semibold leading-[20.16px]'>
                 {appointment?.status === AppointmentStatus.PENDING
                   ? 'We’re verifying your appointment'
                   : `Your appointment is ${appointment?.status}`}

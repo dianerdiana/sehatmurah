@@ -7,13 +7,18 @@ import { UserRole } from '@/types/enums/user-role.enum';
 export const Route = createFileRoute('/_layout-public-nav/profile')({
   component: Outlet,
   beforeLoad: ({ context, location }) => {
-    const redirectTarget = location.pathname + location.search + location.hash;
+    const canAccessProfile = context.auth.userData.role === UserRole.PATIENT;
 
-    requireAuthenticated(context.auth, redirectTarget);
+    let redirectTarget = location.href;
 
-    const canAccessProfile = context.auth.userData?.role === UserRole.PATIENT;
     if (!canAccessProfile) {
-      throw redirect({ to: '/dashboard', replace: true });
+      redirectTarget = '/dashboard';
+    }
+
+    if (context.auth.isAuthenticated && !canAccessProfile) {
+      throw redirect({ to: redirectTarget, replace: true });
+    } else {
+      requireAuthenticated(context.auth, redirectTarget);
     }
   },
 });
