@@ -4,25 +4,19 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Star, User } from 'lucide-react';
 
-import { ImageServer } from '@/components/ui/image-server';
 import { Badge } from '@/components/ui/badge';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import { ImageServer } from '@/components/ui/image-server';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
-import { specialistQueryOptions } from '@/modules/specialists/specialist.query';
+import type { Specialist } from '@/modules/specialists/specialist.type';
 
 import { formatCurrency } from '@/utils/utils';
 
-export function RecommendedDoctors() {
+export function RecommendedDoctors({ specialists }: { specialists: Specialist[] }) {
   const [currentTab, setCurrentTab] = React.useState<string>('all');
 
-  const querySpecialists = useQuery(
-    specialistQueryOptions.list({
-      column: 'sortOrder',
-      sort: 'asc',
-    }),
-  );
   const queryDoctors = useQuery(
     doctorQueryOptions.list({
       specialist: currentTab === 'all' ? undefined : currentTab,
@@ -33,7 +27,6 @@ export function RecommendedDoctors() {
     }),
   );
 
-  const specialists = querySpecialists.data && querySpecialists.data.items;
   const doctors = queryDoctors.data && queryDoctors.data.items;
 
   const onTabChange = (tab: string) => {

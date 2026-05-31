@@ -67,7 +67,7 @@ function HomePage() {
                 .map((specialist) => <SpecialistCategoryItem specialist={specialist} key={specialist._id} />)}
         </div>
       </section>
-      <RecommendedDoctors />
+      <RecommendedDoctors specialists={specialists} />
     </React.Fragment>
   );
 }
