@@ -1,139 +1,458 @@
 # Specialists API
 
-Base URL: `/api/specialists`
+Base path: `/api/specialists`
 
-## Data Model Summary
+## HTTP Method Convention in This Module
 
-- Specialist fields: `name`, `slug`, `description`, `icon`, `image`, `isActive`, `sortOrder`, `createdAt`, `updatedAt`
+- `PUT /api/specialists/:id` is used for update operations.
 
-## Endpoints
+## Endpoint: List Specialists
 
-## 1) List Specialists
+### Description
 
-- Method: `GET`
-- Path: `/`
-- Auth: public
+Return paginated specialist list with filtering and sorting.
 
-Query parameters:
+### HTTP Method and URL
 
-- `isActive`: `true | false` (optional)
-- `page` (number, default `1`)
-- `limit` (number, default `10`, max `100`)
+```http
+GET /api/specialists
+```
 
-Success:
+### Headers Required
 
-- Status code: `200`
-- `data`: specialist array
-- `meta`: pagination
+No authentication header is required.
 
-## 2) Get Specialist By ID
+### Request Parameters
 
-- Method: `GET`
-- Path: `/:id`
-- Auth: public
+| Location | Field      | Type                                 | Required | Default     | Notes                         |
+| -------- | ---------- | ------------------------------------ | -------- | ----------- | ----------------------------- |
+| Query    | `isActive` | `all` \| `true` \| `false`           | No       | `all`       | Active filter                 |
+| Query    | `page`     | number                               | No       | `1`         | Min 1                         |
+| Query    | `limit`    | number                               | No       | `10`        | Min 1, max 100                |
+| Query    | `search`   | string                               | No       | `""`        | Name/slug/description keyword |
+| Query    | `category` | string                               | No       | `""`        | Name/slug keyword             |
+| Query    | `column`   | `name` \| `createdAt` \| `sortOrder` | No       | `createdAt` | Sort column                   |
+| Query    | `sort`     | `asc` \| `desc`                      | No       | `desc`      | Sort direction                |
 
-Path parameters:
+### Request Example
 
-- `id`: required string
+```http
+GET /api/specialists?isActive=true&search=cardio&column=sortOrder&sort=asc&page=1&limit=10
+```
 
-Success:
+### Response Examples
 
-- Status code: `200`
-- `data`: specialist object
-
-Common errors:
-
-- `404` Specialist not found
-
-## 3) Create Specialist
-
-- Method: `POST`
-- Path: `/`
-- Role: `ADMIN`
-- Auth: requires `Authorization: Bearer <access_token>`
-
-Request body:
+#### 200 OK
 
 ```json
 {
-  "name": "Internal Medicine",
-  "slug": "penyakit-dalam",
-  "description": "Internal medicine specialist",
-  "icon": "stethoscope",
-  "image": "https://example.com/specialist.jpg",
-  "isActive": true,
-  "sortOrder": 1
+  "status": "success",
+  "message": "ok",
+  "data": [
+    {
+      "_id": "68321ac367b4c6e7d7a03331",
+      "name": "Cardiology",
+      "slug": "cardiology",
+      "isActive": true,
+      "sortOrder": 1
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "limit": 10,
+    "column": "sortOrder",
+    "sort": "asc",
+    "totalItems": 1,
+    "totalPages": 1
+  }
 }
 ```
 
-Validation:
+#### 400 Bad Request
 
-- `name`: required string
-- `slug`: optional string (generated from `name` when omitted)
-- `description`: optional string, max 500
-- `icon`: optional string, max 255
-- `image`: optional string, max 255
-- `isActive`: optional boolean
-- `sortOrder`: optional integer
+```json
+{
+  "status": "error",
+  "message": "Validation error",
+  "code": "VALIDATION_ERROR"
+}
+```
 
-Success:
+#### 500 Internal Server Error
 
-- Status code: `201`
-- `data`: specialist object
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
 
-Common errors:
+## Endpoint: Get Specialist By ID
 
-- `400` name is required
-- `409` Duplicate resource (duplicate slug)
+### Description
 
-## 4) Update Specialist
+Return one specialist by id.
 
-- Method: `PATCH`
-- Path: `/:id`
-- Role: `ADMIN`
-- Auth: token required
+### HTTP Method and URL
 
-Path parameters:
+```http
+GET /api/specialists/:id
+```
 
-- `id`: required string
+### Headers Required
 
-Request body:
+No authentication header is required.
 
-- Partial payload from the create endpoint
-- If `name` changes and `slug` is not sent, slug is regenerated from `name`
+### Request Parameters
 
-Success:
+| Location | Field | Type   | Required | Notes         |
+| -------- | ----- | ------ | -------- | ------------- |
+| Path     | `id`  | string | Yes      | Specialist id |
 
-- Status code: `200`
-- `data`: specialist object after update
+### Request Example
 
-Common errors:
+```http
+GET /api/specialists/68321ac367b4c6e7d7a03331
+```
 
-- `404` Specialist not found
+### Response Examples
 
-## 5) Delete Specialist
+#### 200 OK
 
-- Method: `DELETE`
-- Path: `/:id`
-- Role: `ADMIN`
-- Auth: token required
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "_id": "68321ac367b4c6e7d7a03331",
+    "name": "Cardiology",
+    "slug": "cardiology"
+  }
+}
+```
 
-Path parameters:
+#### 404 Not Found
 
-- `id`: required string
+```json
+{
+  "status": "error",
+  "message": "Specialist not found"
+}
+```
 
-Success:
+#### 500 Internal Server Error
 
-- Status code: `200`
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: Create Specialist
+
+### Description
+
+Create a specialist entry. Supports multipart form-data for icon/image upload.
+
+### HTTP Method and URL
+
+```http
+POST /api/specialists
+```
+
+### Headers Required
+
+- `Authorization: Bearer <token>`
+- `Content-Type: multipart/form-data`
+
+### Request Parameters
+
+| Location         | Field         | Type        | Required | Notes                                 |
+| ---------------- | ------------- | ----------- | -------- | ------------------------------------- |
+| Body (form-data) | `name`        | string      | Yes      | Specialist name                       |
+| Body (form-data) | `slug`        | string      | No       | Auto-generated if omitted             |
+| Body (form-data) | `description` | string      | No       | Max 500                               |
+| Body (form-data) | `icon`        | file/string | No       | Max 255 chars when mapped path string |
+| Body (form-data) | `image`       | file/string | No       | Max 255 chars when mapped path string |
+| Body (form-data) | `isActive`    | boolean     | No       | Active status                         |
+| Body (form-data) | `sortOrder`   | number      | No       | Integer                               |
+
+### Request Example
+
+```http
+POST /api/specialists HTTP/1.1
+Authorization: Bearer <JWT_ACCESS_TOKEN>
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+
+Internal Medicine
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="description"
+
+Internal medicine specialist
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="sortOrder"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="icon"; filename="icon.svg"
+Content-Type: image/svg+xml
+
+<binary>
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+```
+
+### Response Examples
+
+#### 201 Created
+
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "_id": "68321ac367b4c6e7d7a03331",
+    "name": "Internal Medicine",
+    "slug": "internal-medicine",
+    "isActive": true,
+    "sortOrder": 1
+  }
+}
+```
+
+#### 400 Bad Request
+
+```json
+{
+  "status": "error",
+  "message": "name is required"
+}
+```
+
+#### 401 Unauthorized
+
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
+
+#### 403 Forbidden
+
+```json
+{
+  "status": "error",
+  "message": "Forbidden"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: Update Specialist
+
+### Description
+
+Update specialist using `PUT` semantics. Accepts multipart form-data.
+
+### HTTP Method and URL
+
+```http
+PUT /api/specialists/:id
+```
+
+### Headers Required
+
+- `Authorization: Bearer <token>`
+- `Content-Type: multipart/form-data`
+
+### Request Parameters
+
+| Location         | Field         | Type        | Required | Notes                                                |
+| ---------------- | ------------- | ----------- | -------- | ---------------------------------------------------- |
+| Path             | `id`          | string      | Yes      | Specialist id                                        |
+| Body (form-data) | `name`        | string      | No       | If changed and `slug` missing, slug auto-regenerated |
+| Body (form-data) | `slug`        | string      | No       | Optional override                                    |
+| Body (form-data) | `description` | string      | No       | Max 500                                              |
+| Body (form-data) | `icon`        | file/string | No       | Optional new icon                                    |
+| Body (form-data) | `image`       | file/string | No       | Optional new image                                   |
+| Body (form-data) | `isActive`    | boolean     | No       | Optional update                                      |
+| Body (form-data) | `sortOrder`   | number      | No       | Optional integer                                     |
+
+Validation note:
+
+- At least one field must be present.
+
+### Request Example
+
+```http
+PUT /api/specialists/68321ac367b4c6e7d7a03331 HTTP/1.1
+Authorization: Bearer <JWT_ACCESS_TOKEN>
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="name"
+
+Cardiology and Vascular
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="isActive"
+
+true
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+```
+
+### Response Examples
+
+#### 200 OK
+
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "_id": "68321ac367b4c6e7d7a03331",
+    "name": "Cardiology and Vascular",
+    "slug": "cardiology-and-vascular"
+  }
+}
+```
+
+#### 400 Bad Request
+
+```json
+{
+  "status": "error",
+  "message": "Validation error",
+  "code": "VALIDATION_ERROR"
+}
+```
+
+#### 401 Unauthorized
+
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
+
+#### 403 Forbidden
+
+```json
+{
+  "status": "error",
+  "message": "Forbidden"
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "status": "error",
+  "message": "Specialist not found"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: Delete Specialist
+
+### Description
+
+Delete specialist by id.
+
+### HTTP Method and URL
+
+```http
+DELETE /api/specialists/:id
+```
+
+### Headers Required
+
+- `Authorization: Bearer <token>`
+
+### Request Parameters
+
+| Location | Field | Type   | Required | Notes         |
+| -------- | ----- | ------ | -------- | ------------- |
+| Path     | `id`  | string | Yes      | Specialist id |
+
+### Request Example
+
+```http
+DELETE /api/specialists/68321ac367b4c6e7d7a03331
+Authorization: Bearer <JWT_ACCESS_TOKEN>
+```
+
+### Response Examples
+
+#### 200 OK
 
 ```json
 {
   "status": "success",
   "message": "Specialist deleted",
-  "data": {}
+  "data": {
+    "_id": "68321ac367b4c6e7d7a03331"
+  }
 }
 ```
 
-Common errors:
+#### 401 Unauthorized
 
-- `404` Specialist not found
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
+
+#### 403 Forbidden
+
+```json
+{
+  "status": "error",
+  "message": "Forbidden"
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "status": "error",
+  "message": "Specialist not found"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
