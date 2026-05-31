@@ -34,10 +34,10 @@ interface AvatarImageProps extends React.ComponentProps<typeof AvatarPrimitive.I
 function AvatarImage({ className, serverImage, ...props }: AvatarImageProps) {
   return (
     <AvatarPrimitive.Image
-      data-slot='avatar-image'
-      src={serverImage ? `${env.baseImageUrl}/${props.src}` : props.src}
-      className={cn('aspect-square size-full', className)}
       {...props}
+      data-slot='avatar-image'
+      src={serverImage ? `${env.baseImageUrl}${props.src}` : props.src}
+      className={cn('aspect-square size-full', className)}
     />
   );
 }
