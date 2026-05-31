@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import { Eye, Star } from 'lucide-react';
 
 import { ImageServer } from '@/components/image-server';
@@ -13,20 +12,12 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-import { formatCurrency } from '@/utils/utils';
+import { formatCurrency, formatDateTime } from '@/utils/utils';
 
 import type { Doctor } from '../doctor.type';
 
 type DoctorDetailDialogProps = {
   doctor: Doctor;
-};
-
-const formatDateTime = (dateTime: string) => {
-  try {
-    return format(new Date(dateTime), 'dd MMM yyyy, HH:mm');
-  } catch {
-    return dateTime;
-  }
 };
 
 export function DoctorDetailDialog({ doctor }: DoctorDetailDialogProps) {

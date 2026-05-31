@@ -1,25 +1,16 @@
 import { Link } from '@tanstack/react-router';
 import type { ColumnDef } from '@tanstack/react-table';
-import { format } from 'date-fns';
 import { ArrowDown, ArrowUp, ArrowUpDown, Pencil } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
-import { formatCurrency } from '@/utils/utils';
+import { formatCurrency, formatDate } from '@/utils/utils';
 
 import type { Doctor } from '../doctor.type';
 
 import { DoctorDeletePopover } from './doctor-delete-popover';
 import { DoctorDetailDialog } from './doctor-detail-dialog';
-
-const formatDate = (dateTime: string) => {
-  try {
-    return format(new Date(dateTime), 'dd MMM yyyy');
-  } catch {
-    return dateTime;
-  }
-};
 
 function SortableHeader({
   label,
