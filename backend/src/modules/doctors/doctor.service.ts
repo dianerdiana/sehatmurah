@@ -127,33 +127,52 @@ export const getMyDoctorProfile = async (userId: string) => {
 };
 
 export const createDoctor = async (payload: CreateDoctorDto) => {
-  const userId = payload.userId;
+  const { userId, ...doctorPayload } = payload;
 
-  const user = await UserModel.findById(userId);
-
-  if (!user) {
-    throw new ApiError(404, 'User not found');
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    throw new ApiError(400, 'Invalid userId');
   }
 
-  const existingProfile = await DoctorProfileModel.findOne({ user: userId });
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-  if (existingProfile) {
-    throw new ApiError(409, 'Doctor profile already exists for this user');
-  }
+  try {
+    const user = await UserModel.findById(userId).session(session);
 
-  const doctorProfile = await DoctorProfileModel.create(payload);
-
-  if (user.role !== UserRole.DOCTOR) {
-    try {
-      user.role = UserRole.DOCTOR;
-      await user.save();
-    } catch (error) {
-      await DoctorProfileModel.findByIdAndDelete(doctorProfile._id);
-      throw error;
+    if (!user) {
+      throw new ApiError(404, 'User not found');
     }
-  }
 
-  return doctorProfile;
+    const existingProfile = await DoctorProfileModel.findOne({ user: userId }).session(session);
+
+    if (existingProfile) {
+      throw new ApiError(409, 'Doctor profile already exists for this user');
+    }
+
+    const [doctorProfile] = await DoctorProfileModel.create(
+      [
+        {
+          ...doctorPayload,
+          user: userId,
+        },
+      ],
+      { session },
+    );
+
+    if (user.role !== UserRole.DOCTOR) {
+      user.role = UserRole.DOCTOR;
+      await user.save({ session });
+    }
+
+    await session.commitTransaction();
+
+    return doctorProfile;
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
+  }
 };
 
 export const updateDoctor = async (doctorId: string, payload: UpdateDoctorDto, user: AuthUser) => {
