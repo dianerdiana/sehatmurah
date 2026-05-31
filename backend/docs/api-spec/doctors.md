@@ -1,26 +1,489 @@
 # Doctors API
 
-Base URL: `/api/doctors`
+Base path: `/api/doctors`
 
-## Response Format
+## HTTP Method Convention in This Module
 
-### Success
+- `PUT /api/doctors/:id` is used for full-resource update semantics.
+- `PATCH /api/doctors/:id/schedule` is used for targeted field updates.
+
+## Endpoint: List Doctors
+
+### Description
+
+Return paginated doctor profiles with filter and sorting support.
+
+### HTTP Method and URL
+
+```http
+GET /api/doctors
+```
+
+### Headers Required
+
+No authentication header is required.
+
+### Request Parameters
+
+| Location | Field         | Type                       | Required | Default     | Notes                              |
+| -------- | ------------- | -------------------------- | -------- | ----------- | ---------------------------------- |
+| Query    | `isAvailable` | `all` \| `true` \| `false` | No       | `all`       | Availability filter                |
+| Query    | `specialist`  | string                     | No       | -           | Specialist id, slug, or name       |
+| Query    | `city`        | string                     | No       | -           | Filters by `practiceLocation.city` |
+| Query    | `search`      | string                     | No       | -           | Filters by doctor full name        |
+| Query    | `column`      | `fullName` \| `createdAt`  | No       | `createdAt` | Sort column                        |
+| Query    | `sort`        | `asc` \| `desc`            | No       | `desc`      | Sort direction                     |
+| Query    | `page`        | number                     | No       | `1`         | Min 1                              |
+| Query    | `limit`       | number                     | No       | `10`        | Min 1, max 100                     |
+
+### Request Example
+
+```http
+GET /api/doctors?isAvailable=true&city=Jakarta&column=createdAt&sort=desc&page=1&limit=10
+```
+
+### Response Examples
+
+#### 200 OK
 
 ```json
 {
   "status": "success",
   "message": "ok",
-  "data": {},
+  "data": [
+    {
+      "_id": "68321ac367b4c6e7d7a02221",
+      "fullName": "Dr. Alice Hart",
+      "specialist": {
+        "_id": "68321ac367b4c6e7d7a03331",
+        "name": "Cardiology",
+        "slug": "cardiology",
+        "icon": "/uploads/default/specialists/cardio.svg"
+      },
+      "consultationFee": 250000,
+      "isAvailable": true
+    }
+  ],
   "meta": {
     "page": 1,
     "limit": 10,
-    "totalItems": 0,
-    "totalPages": 0
+    "column": "createdAt",
+    "sort": "desc",
+    "totalItems": 1,
+    "totalPages": 1
   }
 }
 ```
 
-### Error
+#### 400 Bad Request
+
+```json
+{
+  "status": "error",
+  "message": "Validation error",
+  "code": "VALIDATION_ERROR",
+  "details": [
+    {
+      "field": "limit",
+      "message": "Too big: expected number to be <=100"
+    }
+  ]
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: List Doctor Cities
+
+### Description
+
+Return paginated list of distinct city names from doctor practice locations.
+
+### HTTP Method and URL
+
+```http
+GET /api/doctors/cities
+```
+
+### Headers Required
+
+No authentication header is required.
+
+### Request Parameters
+
+| Location | Field    | Type   | Required | Default | Notes          |
+| -------- | -------- | ------ | -------- | ------- | -------------- |
+| Query    | `search` | string | No       | -       | City keyword   |
+| Query    | `page`   | number | No       | `1`     | Min 1          |
+| Query    | `limit`  | number | No       | `10`    | Min 1, max 100 |
+
+### Request Example
+
+```http
+GET /api/doctors/cities?search=jak&page=1&limit=10
+```
+
+### Response Examples
+
+#### 200 OK
+
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": ["Jakarta", "Bandung"],
+  "meta": {
+    "page": 1,
+    "limit": 10,
+    "totalItems": 2,
+    "totalPages": 1
+  }
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: Get My Doctor Profile
+
+### Description
+
+Return doctor profile for the currently authenticated user.
+
+### HTTP Method and URL
+
+```http
+GET /api/doctors/me
+```
+
+### Headers Required
+
+- `Authorization: Bearer <token>`
+
+### Request Parameters
+
+No path/query/body parameters.
+
+### Request Example
+
+```http
+GET /api/doctors/me HTTP/1.1
+Authorization: Bearer <JWT_ACCESS_TOKEN>
+```
+
+### Response Examples
+
+#### 200 OK
+
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "_id": "68321ac367b4c6e7d7a02221",
+    "fullName": "Dr. Alice Hart",
+    "specialist": {
+      "_id": "68321ac367b4c6e7d7a03331",
+      "name": "Cardiology",
+      "slug": "cardiology",
+      "icon": "/uploads/default/specialists/cardio.svg"
+    }
+  }
+}
+```
+
+#### 401 Unauthorized
+
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "status": "error",
+  "message": "Doctor not found"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: Get Doctor By ID
+
+### Description
+
+Return a single doctor profile by id.
+
+### HTTP Method and URL
+
+```http
+GET /api/doctors/:id
+```
+
+### Headers Required
+
+No authentication header is required.
+
+### Request Parameters
+
+| Location | Field | Type   | Required | Notes             |
+| -------- | ----- | ------ | -------- | ----------------- |
+| Path     | `id`  | string | Yes      | Doctor profile id |
+
+### Request Example
+
+```http
+GET /api/doctors/68321ac367b4c6e7d7a02221
+```
+
+### Response Examples
+
+#### 200 OK
+
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "_id": "68321ac367b4c6e7d7a02221",
+    "fullName": "Dr. Alice Hart",
+    "consultationFee": 250000,
+    "isAvailable": true
+  }
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "status": "error",
+  "message": "Doctor not found"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: List Doctor Reviews
+
+### Description
+
+Return paginated reviews for a specific doctor.
+
+### HTTP Method and URL
+
+```http
+GET /api/doctors/:doctorId/reviews
+```
+
+### Headers Required
+
+No authentication header is required.
+
+### Request Parameters
+
+| Location | Field      | Type   | Required | Default | Notes             |
+| -------- | ---------- | ------ | -------- | ------- | ----------------- |
+| Path     | `doctorId` | string | Yes      | -       | Doctor profile id |
+| Query    | `page`     | number | No       | `1`     | Min 1             |
+| Query    | `limit`    | number | No       | `10`    | Min 1, max 100    |
+
+### Request Example
+
+```http
+GET /api/doctors/68321ac367b4c6e7d7a02221/reviews?page=1&limit=10
+```
+
+### Response Examples
+
+#### 200 OK
+
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": [
+    {
+      "_id": "68321ac367b4c6e7d7a04441",
+      "rating": 5,
+      "comment": "Very clear explanation",
+      "patient": {
+        "_id": "68321ac367b4c6e7d7a05551",
+        "fullName": "John Doe"
+      }
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "limit": 10,
+    "totalItems": 1,
+    "totalPages": 1
+  }
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "status": "error",
+  "message": "Doctor not found"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: Create Doctor
+
+### Description
+
+Create a doctor profile for an existing user account. This endpoint supports multipart file upload.
+
+### HTTP Method and URL
+
+```http
+POST /api/doctors
+```
+
+### Headers Required
+
+- `Authorization: Bearer <token>`
+- `Content-Type: multipart/form-data`
+
+### Request Parameters
+
+| Location         | Field              | Type                    | Required | Notes                                |
+| ---------------- | ------------------ | ----------------------- | -------- | ------------------------------------ |
+| Body (form-data) | `userId`           | string                  | Yes      | Must be a valid and existing user id |
+| Body (form-data) | `fullName`         | string                  | Yes      | Doctor full name                     |
+| Body (form-data) | `specialist`       | string                  | Yes      | Specialist id                        |
+| Body (form-data) | `profilePhoto`     | file/string             | No       | Uploaded file path mapped to body    |
+| Body (form-data) | `experienceYears`  | number                  | No       | Integer, min 0                       |
+| Body (form-data) | `description`      | string                  | No       | Optional description                 |
+| Body (form-data) | `practiceLocation` | object/stringified JSON | Yes      | `clinicName`, `address`, `city`      |
+| Body (form-data) | `schedule`         | array/stringified JSON  | No       | Day/time blocks                      |
+| Body (form-data) | `consultationFee`  | number                  | Yes      | Min 0                                |
+| Body (form-data) | `isAvailable`      | boolean                 | No       | Availability flag                    |
+
+### Request Example
+
+```http
+POST /api/doctors HTTP/1.1
+Authorization: Bearer <JWT_ACCESS_TOKEN>
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="userId"
+
+68321ac367b4c6e7d7a09999
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="fullName"
+
+Dr. Alice Hart
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="specialist"
+
+68321ac367b4c6e7d7a03331
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="practiceLocation"
+
+{"clinicName":"Sehat Clinic","address":"Jl. Sudirman No.1","city":"Jakarta"}
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="schedule"
+
+[{"day":"MONDAY","startTime":"09:00","endTime":"12:00","isAvailable":true}]
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="consultationFee"
+
+250000
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="profilePhoto"; filename="doctor.jpg"
+Content-Type: image/jpeg
+
+<binary>
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+```
+
+### Response Examples
+
+#### 201 Created
+
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "_id": "68321ac367b4c6e7d7a02221",
+    "user": "68321ac367b4c6e7d7a09999",
+    "fullName": "Dr. Alice Hart",
+    "consultationFee": 250000,
+    "isAvailable": true
+  }
+}
+```
+
+#### 400 Bad Request (validation or invalid userId format)
+
+```json
+{
+  "status": "error",
+  "message": "Invalid userId"
+}
+```
+
+#### 401 Unauthorized
+
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
+
+#### 403 Forbidden
 
 ```json
 {
@@ -29,174 +492,176 @@ Base URL: `/api/doctors`
 }
 ```
 
-## Data Model Summary
-
-- `DoctorProfile`: `user`, `fullName`, `specialist`, `profilePhoto`, `experienceYears`, `description`, `practiceLocation`, `schedule`, `consultationFee`, `ratingAverage`, `ratingCount`, `isAvailable`
-- `schedule.day`: `MONDAY | TUESDAY | WEDNESDAY | THURSDAY | FRIDAY | SATURDAY | SUNDAY`
-
-## Endpoints
-
-## 1) List Doctors
-
-- Method: `GET`
-- Path: `/`
-- Auth: public
-
-Query parameters:
-
-- `isAvailable` (optional enum: `all` | `true` | `false`, default `all`)
-- `specialist` (optional string)
-- `city` (optional string)
-- `search` (optional string, searches `fullName`)
-- `column` (optional enum: `fullName` | `createdAt`, default `createdAt`)
-- `sort` (optional enum: `asc` | `desc`, default `desc`)
-- `page` (number, default `1`)
-- `limit` (number, default `10`, max `100`)
-
-Success:
-
-- Status code: `200`
-- `data`: doctor profile array (with specialist populated: `name`, `slug`, `icon`)
-- `meta`: pagination
-
-## 2) Get Doctor By ID
-
-- Method: `GET`
-- Path: `/:id`
-- Auth: public
-
-Path parameters:
-
-- `id`: required string
-
-Success:
-
-- Status code: `200`
-- `data`: doctor profile object
-
-Common errors:
-
-- `404` Doctor not found
-
-## 3) List Reviews By Doctor
-
-- Method: `GET`
-- Path: `/:doctorId/reviews`
-- Auth: public
-
-Path parameters:
-
-- `doctorId`: required string
-
-Query parameters:
-
-- `page` (number, default `1`)
-- `limit` (number, default `10`, max `100`)
-
-Success:
-
-- Status code: `200`
-- `data`: review array (patient populated with `fullName`)
-- `meta`: pagination
-
-Common errors:
-
-- `404` Doctor not found
-
-## 4) Create Doctor
-
-- Method: `POST`
-- Path: `/`
-- Role: `ADMIN`
-- Auth: requires `Authorization: Bearer <access_token>`
-
-Request body:
+#### 404 Not Found (user does not exist)
 
 ```json
 {
-  "userId": "userIdDoctor",
-  "fullName": "dr. Aulia",
-  "specialist": "specialistId",
-  "profilePhoto": "https://example.com/photo.jpg",
-  "experienceYears": 5,
-  "description": "Internal medicine specialist",
-  "practiceLocation": {
-    "clinicName": "Sehat Clinic",
-    "address": "Jl. Sudirman No. 1",
-    "city": "Jakarta"
-  },
-  "schedule": [
-    {
-      "day": "MONDAY",
-      "startTime": "09:00",
-      "endTime": "12:00",
-      "isAvailable": true
-    }
-  ],
-  "consultationFee": 150000,
-  "isAvailable": true
+  "status": "error",
+  "message": "User not found"
 }
 ```
 
-Key validation:
+#### 500 Internal Server Error
 
-- `consultationFee` >= 0
-- `startTime` and `endTime` must use `HH:mm` format
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
 
-Success:
+## Endpoint: Update Doctor (Full Update Semantics)
 
-- Status code: `201`
-- `data`: doctor profile object
+### Description
 
-Common errors:
+Update doctor profile fields using `PUT` semantics. Body accepts partial data by validation rule, but this endpoint is treated as full-resource update by API convention.
 
-- `400` User role must be DOCTOR
-- `404` User not found
-- `409` Doctor profile already exists for this user
+### HTTP Method and URL
 
-## 5) Update Doctor
+```http
+PUT /api/doctors/:id
+```
 
-- Method: `PATCH`
-- Path: `/:id`
-- Role: `ADMIN | DOCTOR`
-- Auth: token required
+### Headers Required
 
-Path parameters:
+- `Authorization: Bearer <token>`
+- `Content-Type: multipart/form-data`
 
-- `id`: required string
+### Request Parameters
 
-Request body:
+| Location         | Field              | Type                    | Required | Notes                             |
+| ---------------- | ------------------ | ----------------------- | -------- | --------------------------------- |
+| Path             | `id`               | string                  | Yes      | Doctor profile id                 |
+| Body (form-data) | `fullName`         | string                  | No       | Optional update field             |
+| Body (form-data) | `specialist`       | string                  | No       | Specialist id                     |
+| Body (form-data) | `profilePhoto`     | file/string             | No       | Uploaded file path mapped to body |
+| Body (form-data) | `experienceYears`  | number                  | No       | Integer, min 0                    |
+| Body (form-data) | `description`      | string                  | No       | Optional update field             |
+| Body (form-data) | `practiceLocation` | object/stringified JSON | No       | `clinicName`, `address`, `city`   |
+| Body (form-data) | `schedule`         | array/stringified JSON  | No       | Schedule list                     |
+| Body (form-data) | `consultationFee`  | number                  | No       | Min 0                             |
+| Body (form-data) | `isAvailable`      | boolean                 | No       | Optional update field             |
 
-- Partial payload from create endpoint (except `userId`)
-- At least 1 field is required
+### Request Example
 
-Access rules:
+```http
+PUT /api/doctors/68321ac367b4c6e7d7a02221 HTTP/1.1
+Authorization: Bearer <JWT_ACCESS_TOKEN>
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
-- `ADMIN`: can update any doctor profile
-- `DOCTOR`: can only update their own profile
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="fullName"
 
-Success:
+Dr. Alice Hart, Sp.JP
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="consultationFee"
 
-- Status code: `200`
-- `data`: doctor profile object after update
+300000
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+```
 
-Common errors:
+### Response Examples
 
-- `403` Forbidden
-- `404` Doctor not found
+#### 200 OK
 
-## 6) Update Doctor Schedule
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "_id": "68321ac367b4c6e7d7a02221",
+    "fullName": "Dr. Alice Hart, Sp.JP",
+    "consultationFee": 300000
+  }
+}
+```
 
-- Method: `PATCH`
-- Path: `/:id/schedule`
-- Role: `ADMIN | DOCTOR`
-- Auth: token required
+#### 400 Bad Request
 
-Path parameters:
+```json
+{
+  "status": "error",
+  "message": "Validation error",
+  "code": "VALIDATION_ERROR",
+  "details": [
+    {
+      "field": "consultationFee",
+      "message": "consultationFee must be >= 0"
+    }
+  ]
+}
+```
 
-- `id`: required string
+#### 401 Unauthorized
 
-Request body:
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
+
+#### 403 Forbidden
+
+```json
+{
+  "status": "error",
+  "message": "Forbidden"
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "status": "error",
+  "message": "Doctor not found"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: Update Doctor Schedule (Partial Update)
+
+### Description
+
+Update only the `schedule` field using `PATCH` semantics.
+
+### HTTP Method and URL
+
+```http
+PATCH /api/doctors/:id/schedule
+```
+
+### Headers Required
+
+- `Authorization: Bearer <token>`
+- `Content-Type: application/json`
+
+### Request Parameters
+
+| Location | Field      | Type   | Required | Notes                     |
+| -------- | ---------- | ------ | -------- | ------------------------- |
+| Path     | `id`       | string | Yes      | Doctor profile id         |
+| Body     | `schedule` | array  | Yes      | Array of day/time objects |
+
+Schedule item schema:
+
+- `day`: `MONDAY | TUESDAY | WEDNESDAY | THURSDAY | FRIDAY | SATURDAY | SUNDAY` (required)
+- `startTime`: `HH:mm` (required)
+- `endTime`: `HH:mm` (required)
+- `isAvailable`: boolean (optional, defaults to `true`)
+
+### Request Example
 
 ```json
 {
@@ -211,40 +676,157 @@ Request body:
 }
 ```
 
-Success:
+### Response Examples
 
-- Status code: `200`
-- `data`: doctor profile object after schedule update
+#### 200 OK
 
-Common errors:
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "_id": "68321ac367b4c6e7d7a02221",
+    "schedule": [
+      {
+        "day": "TUESDAY",
+        "startTime": "13:00",
+        "endTime": "16:00",
+        "isAvailable": true
+      }
+    ]
+  }
+}
+```
 
-- `400` schedule must be an array / validation error
-- `403` Forbidden
-- `404` Doctor not found
+#### 400 Bad Request
 
-## 7) Delete Doctor
+```json
+{
+  "status": "error",
+  "message": "Validation error",
+  "code": "VALIDATION_ERROR",
+  "details": [
+    {
+      "field": "schedule.0.startTime",
+      "message": "invalid startTime HH:mm"
+    }
+  ]
+}
+```
 
-- Method: `DELETE`
-- Path: `/:id`
-- Role: `ADMIN`
-- Auth: token required
+#### 401 Unauthorized
 
-Path parameters:
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
 
-- `id`: required string
+#### 403 Forbidden
 
-Success:
+```json
+{
+  "status": "error",
+  "message": "Forbidden"
+}
+```
 
-- Status code: `200`
+#### 404 Not Found
+
+```json
+{
+  "status": "error",
+  "message": "Doctor not found"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: Delete Doctor
+
+### Description
+
+Delete a doctor profile.
+
+### HTTP Method and URL
+
+```http
+DELETE /api/doctors/:id
+```
+
+### Headers Required
+
+- `Authorization: Bearer <token>`
+
+### Request Parameters
+
+| Location | Field | Type   | Required | Notes             |
+| -------- | ----- | ------ | -------- | ----------------- |
+| Path     | `id`  | string | Yes      | Doctor profile id |
+
+### Request Example
+
+```http
+DELETE /api/doctors/68321ac367b4c6e7d7a02221 HTTP/1.1
+Authorization: Bearer <JWT_ACCESS_TOKEN>
+```
+
+### Response Examples
+
+#### 200 OK
 
 ```json
 {
   "status": "success",
   "message": "Doctor deleted",
-  "data": {}
+  "data": {
+    "_id": "68321ac367b4c6e7d7a02221"
+  }
 }
 ```
 
-Common errors:
+#### 401 Unauthorized
 
-- `404` Doctor not found
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
+
+#### 403 Forbidden
+
+```json
+{
+  "status": "error",
+  "message": "Forbidden"
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "status": "error",
+  "message": "Doctor not found"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
