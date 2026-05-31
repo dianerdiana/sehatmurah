@@ -1,27 +1,34 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { ApiError } from '../common/api-error';
+import { UserModel } from '../models/user.model';
 import { verifyAccessToken } from '../utils/jwt';
 
-export const authMiddleware = (
+export const authMiddleware = async (
   req: Request,
   _res: Response,
   next: NextFunction,
-): void => {
+): Promise<void> => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    next(new ApiError(401, 'Unauthorized'));
-    return;
+    throw new ApiError(401, 'Unauthorized');
   }
 
   const token = authHeader.replace('Bearer ', '').trim();
 
   try {
     const payload = verifyAccessToken(token);
-    req.user = { id: payload.sub, role: payload.role };
+
+    const user = await UserModel.findById(payload.sub).select('role isActive');
+
+    if (!user || !user.isActive) {
+      throw new ApiError(401, 'Your account has been disabled');
+    }
+
+    req.user = { id: payload.sub, role: user.role };
     next();
   } catch {
-    next(new ApiError(401, 'Invalid token'));
+    throw new ApiError(401, 'Invalid token');
   }
 };
