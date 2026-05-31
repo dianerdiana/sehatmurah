@@ -32,6 +32,7 @@ import { Route as LayoutDashboardAppAppointmentsIndexRouteImport } from './route
 import { Route as LayoutPublicBlankDoctorsDoctorIdDetailsRouteImport } from './routes/_layout-public-blank/doctors.$doctorId.details'
 import { Route as LayoutPublicBlankDoctorsDoctorIdBookingRouteImport } from './routes/_layout-public-blank/doctors.$doctorId.booking'
 import { Route as LayoutPublicBlankAppointmentsAppointmentIdSuccessRouteImport } from './routes/_layout-public-blank/appointments.$appointmentId.success'
+import { Route as LayoutPublicBlankAppointmentsAppointmentIdDetailsRouteImport } from './routes/_layout-public-blank/appointments.$appointmentId.details'
 import { Route as LayoutDashboardSettingsDoctorsScheduleRouteImport } from './routes/_layout-dashboard/settings.doctors/schedule'
 import { Route as LayoutDashboardAppUsersCreateRouteImport } from './routes/_layout-dashboard/app.users/create'
 import { Route as LayoutDashboardAppSpecialistsCreateRouteImport } from './routes/_layout-dashboard/app.specialists/create'
@@ -164,6 +165,12 @@ const LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute =
     path: '/appointments/$appointmentId/success',
     getParentRoute: () => LayoutPublicBlankRoute,
   } as any)
+const LayoutPublicBlankAppointmentsAppointmentIdDetailsRoute =
+  LayoutPublicBlankAppointmentsAppointmentIdDetailsRouteImport.update({
+    id: '/appointments/$appointmentId/details',
+    path: '/appointments/$appointmentId/details',
+    getParentRoute: () => LayoutPublicBlankRoute,
+  } as any)
 const LayoutDashboardSettingsDoctorsScheduleRoute =
   LayoutDashboardSettingsDoctorsScheduleRouteImport.update({
     id: '/settings/doctors/schedule',
@@ -229,6 +236,7 @@ export interface FileRoutesByFullPath {
   '/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
   '/app/users/create': typeof LayoutDashboardAppUsersCreateRoute
   '/settings/doctors/schedule': typeof LayoutDashboardSettingsDoctorsScheduleRoute
+  '/appointments/$appointmentId/details': typeof LayoutPublicBlankAppointmentsAppointmentIdDetailsRoute
   '/appointments/$appointmentId/success': typeof LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute
   '/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
   '/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
@@ -258,6 +266,7 @@ export interface FileRoutesByTo {
   '/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
   '/app/users/create': typeof LayoutDashboardAppUsersCreateRoute
   '/settings/doctors/schedule': typeof LayoutDashboardSettingsDoctorsScheduleRoute
+  '/appointments/$appointmentId/details': typeof LayoutPublicBlankAppointmentsAppointmentIdDetailsRoute
   '/appointments/$appointmentId/success': typeof LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute
   '/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
   '/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
@@ -292,6 +301,7 @@ export interface FileRoutesById {
   '/_layout-dashboard/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
   '/_layout-dashboard/app/users/create': typeof LayoutDashboardAppUsersCreateRoute
   '/_layout-dashboard/settings/doctors/schedule': typeof LayoutDashboardSettingsDoctorsScheduleRoute
+  '/_layout-public-blank/appointments/$appointmentId/details': typeof LayoutPublicBlankAppointmentsAppointmentIdDetailsRoute
   '/_layout-public-blank/appointments/$appointmentId/success': typeof LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute
   '/_layout-public-blank/doctors/$doctorId/booking': typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
   '/_layout-public-blank/doctors/$doctorId/details': typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
@@ -323,6 +333,7 @@ export interface FileRouteTypes {
     | '/app/specialists/create'
     | '/app/users/create'
     | '/settings/doctors/schedule'
+    | '/appointments/$appointmentId/details'
     | '/appointments/$appointmentId/success'
     | '/doctors/$doctorId/booking'
     | '/doctors/$doctorId/details'
@@ -352,6 +363,7 @@ export interface FileRouteTypes {
     | '/app/specialists/create'
     | '/app/users/create'
     | '/settings/doctors/schedule'
+    | '/appointments/$appointmentId/details'
     | '/appointments/$appointmentId/success'
     | '/doctors/$doctorId/booking'
     | '/doctors/$doctorId/details'
@@ -385,6 +397,7 @@ export interface FileRouteTypes {
     | '/_layout-dashboard/app/specialists/create'
     | '/_layout-dashboard/app/users/create'
     | '/_layout-dashboard/settings/doctors/schedule'
+    | '/_layout-public-blank/appointments/$appointmentId/details'
     | '/_layout-public-blank/appointments/$appointmentId/success'
     | '/_layout-public-blank/doctors/$doctorId/booking'
     | '/_layout-public-blank/doctors/$doctorId/details'
@@ -573,6 +586,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPublicBlankAppointmentsAppointmentIdSuccessRouteImport
       parentRoute: typeof LayoutPublicBlankRoute
     }
+    '/_layout-public-blank/appointments/$appointmentId/details': {
+      id: '/_layout-public-blank/appointments/$appointmentId/details'
+      path: '/appointments/$appointmentId/details'
+      fullPath: '/appointments/$appointmentId/details'
+      preLoaderRoute: typeof LayoutPublicBlankAppointmentsAppointmentIdDetailsRouteImport
+      parentRoute: typeof LayoutPublicBlankRoute
+    }
     '/_layout-dashboard/settings/doctors/schedule': {
       id: '/_layout-dashboard/settings/doctors/schedule'
       path: '/settings/doctors/schedule'
@@ -706,6 +726,7 @@ const LayoutDashboardRouteWithChildren = LayoutDashboardRoute._addFileChildren(
 
 interface LayoutPublicBlankRouteChildren {
   LayoutPublicBlankDoctorsSearchRoute: typeof LayoutPublicBlankDoctorsSearchRoute
+  LayoutPublicBlankAppointmentsAppointmentIdDetailsRoute: typeof LayoutPublicBlankAppointmentsAppointmentIdDetailsRoute
   LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute: typeof LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute
   LayoutPublicBlankDoctorsDoctorIdBookingRoute: typeof LayoutPublicBlankDoctorsDoctorIdBookingRoute
   LayoutPublicBlankDoctorsDoctorIdDetailsRoute: typeof LayoutPublicBlankDoctorsDoctorIdDetailsRoute
@@ -713,6 +734,8 @@ interface LayoutPublicBlankRouteChildren {
 
 const LayoutPublicBlankRouteChildren: LayoutPublicBlankRouteChildren = {
   LayoutPublicBlankDoctorsSearchRoute: LayoutPublicBlankDoctorsSearchRoute,
+  LayoutPublicBlankAppointmentsAppointmentIdDetailsRoute:
+    LayoutPublicBlankAppointmentsAppointmentIdDetailsRoute,
   LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute:
     LayoutPublicBlankAppointmentsAppointmentIdSuccessRoute,
   LayoutPublicBlankDoctorsDoctorIdBookingRoute:
