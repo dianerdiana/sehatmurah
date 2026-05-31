@@ -2,11 +2,25 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const resolveJwtSecret = (): string => {
+  const configuredSecret = process.env.JWT_SECRET?.trim();
+
+  if (configuredSecret) {
+    return configuredSecret;
+  }
+
+  if ((process.env.NODE_ENV ?? 'development') === 'production') {
+    throw new Error('JWT_SECRET environment variable is required in production');
+  }
+
+  return 'development-only-jwt-secret';
+};
+
 export const env = {
   nodeEnv: process.env.NODE_ENV ?? 'development',
   port: Number(process.env.PORT ?? 5000),
   mongoUri: process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017/sehatmurah',
-  jwtSecret: process.env.JWT_SECRET ?? 'change-me-in-production',
+  jwtSecret: resolveJwtSecret(),
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '1d',
   uploadDir: process.env.UPLOAD_DIR ?? 'uploads',
   uploadBaseUrl: process.env.UPLOAD_BASE_URL ?? '/uploads',
