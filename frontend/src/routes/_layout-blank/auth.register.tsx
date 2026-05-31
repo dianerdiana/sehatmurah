@@ -25,7 +25,7 @@ function RegisterPage() {
           </div>
         </div>
       </div>
-      <div className='hidden bg-primary-light lg:block'>
+      <div className='hidden bg-primary/60 lg:block'>
         <div className='w-full h-full flex flex-wrap items-center justify-center'>
           <div className='flex flex-wrap justify-center'>
             <img src='/assets/image/login-image.png' alt='Image' className='inset-0 h-full w-full object-cover' />
