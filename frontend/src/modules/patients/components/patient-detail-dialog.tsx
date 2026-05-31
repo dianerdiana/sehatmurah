@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import { Eye } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -12,26 +11,12 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
+import { formatDate, formatDateTime } from '@/utils/utils';
+
 import type { PatientListItem } from '../patient.type';
 
 type PatientDetailDialogProps = {
   patient: PatientListItem;
-};
-
-const formatDate = (value: string) => {
-  try {
-    return format(new Date(value), 'dd MMM yyyy');
-  } catch {
-    return value;
-  }
-};
-
-const formatDateTime = (value: string) => {
-  try {
-    return format(new Date(value), 'dd MMM yyyy, HH:mm');
-  } catch {
-    return value;
-  }
 };
 
 export function PatientDetailDialog({ patient }: PatientDetailDialogProps) {
