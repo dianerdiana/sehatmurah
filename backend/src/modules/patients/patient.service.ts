@@ -1,9 +1,33 @@
 import { ApiError } from '../../common/api-error';
 import { normalizePagination } from '../../common/pagination';
+import { IPatientProfile } from '../../models/patient-profile.model';
 import { PatientProfileModel } from '../../models/patient-profile.model';
 import { escapeRegex } from '../../utils/escape-regex';
 
 import { ListPatientsDto, UpdateMyProfileDto, UpdatePatientDto } from './patient.schema';
+
+const EDITABLE_PROFILE_FIELDS = [
+  'fullName',
+  'dateOfBirth',
+  'gender',
+  'phoneNumber',
+  'address',
+] as const;
+
+type EditableProfileField = (typeof EDITABLE_PROFILE_FIELDS)[number];
+type ProfilePatchPayload = Partial<Record<EditableProfileField, unknown>>;
+
+const applyPatientProfilePatch = (profile: IPatientProfile, payload: ProfilePatchPayload): void => {
+  const mutableProfile = profile as unknown as Record<EditableProfileField, unknown>;
+
+  for (const field of EDITABLE_PROFILE_FIELDS) {
+    const value = payload[field];
+
+    if (value !== undefined) {
+      mutableProfile[field] = value;
+    }
+  }
+};
 
 export const getMyProfile = async (userId: string) => {
   const profile = await PatientProfileModel.findOne({ user: userId }).populate(
@@ -25,22 +49,7 @@ export const updateMyProfile = async (userId: string, payload: UpdateMyProfileDt
     throw new ApiError(404, 'Patient profile not found');
   }
 
-  const allowedFields: (keyof UpdateMyProfileDto)[] = [
-    'fullName',
-    'dateOfBirth',
-    'gender',
-    'phoneNumber',
-    'address',
-  ];
-
-  for (const field of allowedFields) {
-    const value = payload[field];
-
-    if (value !== undefined) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (profile as any)[field] = value;
-    }
-  }
+  applyPatientProfilePatch(profile, payload);
 
   await profile.save();
 
@@ -67,22 +76,7 @@ export const updatePatientById = async (patientId: string, payload: UpdatePatien
     throw new ApiError(404, 'Patient profile not found');
   }
 
-  const allowedFields: (keyof UpdatePatientDto)[] = [
-    'fullName',
-    'dateOfBirth',
-    'gender',
-    'phoneNumber',
-    'address',
-  ];
-
-  for (const field of allowedFields) {
-    const value = payload[field];
-
-    if (value !== undefined) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (profile as any)[field] = value;
-    }
-  }
+  applyPatientProfilePatch(profile, payload);
 
   await profile.save();
 
