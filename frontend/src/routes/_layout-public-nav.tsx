@@ -11,23 +11,30 @@ const navigation = [
   {
     id: 1,
     title: 'Home',
-    activeIcon: 'assets/icons/homepage-nav-home-active.svg',
-    nonActiveIcon: 'assets/icons/homepage-nav-home-nonactive.svg',
+    activeIcon: '/assets/icons/homepage-nav-home-active.svg',
+    nonActiveIcon: '/assets/icons/homepage-nav-home-nonactive.svg',
     href: '/',
   },
   {
     id: 2,
     title: 'Appointment',
-    activeIcon: 'assets/icons/homepage-nav-appointment-active.svg',
-    nonActiveIcon: 'assets/icons/homepage-nav-appointment-nonactive.svg',
+    activeIcon: '/assets/icons/homepage-nav-appointment-active.svg',
+    nonActiveIcon: '/assets/icons/homepage-nav-appointment-nonactive.svg',
     href: '/appointments',
   },
   {
     id: 3,
     title: 'My Booking',
-    activeIcon: 'assets/icons/homepage-nav-booking-active.svg',
-    nonActiveIcon: 'assets/icons/homepage-nav-booking-nonactive.svg',
+    activeIcon: '/assets/icons/homepage-nav-booking-active.svg',
+    nonActiveIcon: '/assets/icons/homepage-nav-booking-nonactive.svg',
     href: '/my-booking',
+  },
+  {
+    id: 4,
+    title: 'Profile',
+    activeIcon: '/assets/icons/homepage-nav-profile-active.svg',
+    nonActiveIcon: '/assets/icons/homepage-nav-profile-nonactive.svg',
+    href: '/profile',
   },
 ];
 
