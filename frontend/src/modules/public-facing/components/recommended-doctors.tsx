@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Star, User } from 'lucide-react';
 
-import { ImageServer } from '@/components/image-server';
+import { ImageServer } from '@/components/ui/image-server';
 import { Badge } from '@/components/ui/badge';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

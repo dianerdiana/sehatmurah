@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { ImageServer } from '@/components/image-server';
+import { ImageServer } from '@/components/ui/image-server';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {

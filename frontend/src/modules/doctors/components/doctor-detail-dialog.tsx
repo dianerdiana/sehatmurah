@@ -1,6 +1,6 @@
 import { Eye, Star } from 'lucide-react';
 
-import { ImageServer } from '@/components/image-server';
+import { ImageServer } from '@/components/ui/image-server';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {

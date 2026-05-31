@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { Loader2, SearchX } from 'lucide-react';
 
-import { ImageServer } from '@/components/image-server';
+import { ImageServer } from '@/components/ui/image-server';
 import { Button } from '@/components/ui/button';
 
 import { appointmentQueryOptions } from '@/modules/appointments/appointment.query';

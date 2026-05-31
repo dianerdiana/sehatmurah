@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { SearchX } from 'lucide-react';
 
-import { ImageServer } from '@/components/image-server';
+import { ImageServer } from '@/components/ui/image-server';
 
 import type { Doctor } from '@/modules/doctors/doctor.type';
 
