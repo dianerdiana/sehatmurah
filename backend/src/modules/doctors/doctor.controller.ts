@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 
 import { HttpResponse } from '../../common/http-response';
 import { buildResponseMeta } from '../../common/pagination';
@@ -11,6 +11,7 @@ import {
 
 import {
   CreateDoctorDto,
+  DoctorIdDto,
   ListDoctorsCitiesDto,
   ListDoctorsDto,
   UpdateDoctorDto,
@@ -18,67 +19,52 @@ import {
 } from './doctor.schema';
 import * as doctorService from './doctor.service';
 
-export const listDoctors = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const query = req.sanitizedQuery as ListDoctorsDto;
-    const result = await doctorService.listDoctors(query);
+export const listDoctors = async (req: Request, res: Response) => {
+  const query = req.sanitizedQuery as ListDoctorsDto;
+  const result = await doctorService.listDoctors(query);
 
-    res.json(
-      HttpResponse.success({
-        data: result.items,
-        meta: buildResponseMeta({
-          ...query,
-          totalItems: result.totalItems,
-        }),
+  res.json(
+    HttpResponse.success({
+      data: result.items,
+      meta: buildResponseMeta({
+        ...query,
+        totalItems: result.totalItems,
       }),
-    );
-  } catch (error) {
-    next(error);
-  }
+    }),
+  );
 };
 
-export const listDoctorsCities = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const query = req.sanitizedQuery as ListDoctorsCitiesDto;
-    const result = await doctorService.listDoctorsCities(query);
+export const listDoctorsCities = async (req: Request, res: Response) => {
+  const query = req.sanitizedQuery as ListDoctorsCitiesDto;
+  const result = await doctorService.listDoctorsCities(query);
 
-    res.json(
-      HttpResponse.success({
-        data: result.items,
-        meta: buildResponseMeta({
-          ...query,
-          totalItems: result.totalItems,
-        }),
+  res.json(
+    HttpResponse.success({
+      data: result.items,
+      meta: buildResponseMeta({
+        ...query,
+        totalItems: result.totalItems,
       }),
-    );
-  } catch (error) {
-    next(error);
-  }
+    }),
+  );
 };
 
-export const getDoctorById = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const doctorId = String(req.params.id);
+export const getDoctorById = async (req: Request, res: Response) => {
+  const params = req.sanitizedParams as DoctorIdDto;
+  const doctorId = params.id;
 
-    const data = await doctorService.getDoctorById(doctorId);
-    res.json(HttpResponse.success({ data }));
-  } catch (error) {
-    next(error);
-  }
+  const data = await doctorService.getDoctorById(doctorId);
+  res.json(HttpResponse.success({ data }));
 };
 
-export const getMyDoctorProfile = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const authUser = req.user as AuthUser;
+export const getMyDoctorProfile = async (req: Request, res: Response) => {
+  const authUser = req.user as AuthUser;
 
-    const data = await doctorService.getMyDoctorProfile(authUser.id);
-    res.json(HttpResponse.success({ data }));
-  } catch (error) {
-    next(error);
-  }
+  const data = await doctorService.getMyDoctorProfile(authUser.id);
+  res.json(HttpResponse.success({ data }));
 };
 
-export const createDoctor = async (req: Request, res: Response, next: NextFunction) => {
+export const createDoctor = async (req: Request, res: Response) => {
   const uploadedProfilePhoto = getFirstUploadedFileByField(req, 'profilePhoto');
 
   try {
@@ -91,16 +77,17 @@ export const createDoctor = async (req: Request, res: Response, next: NextFuncti
       await cleanupUploadedFilesFromRequest(req, ['profilePhoto']);
     }
 
-    next(error);
+    throw error;
   }
 };
 
-export const updateDoctor = async (req: Request, res: Response, next: NextFunction) => {
+export const updateDoctor = async (req: Request, res: Response) => {
   const uploadedProfilePhoto = getFirstUploadedFileByField(req, 'profilePhoto');
   let isUpdated = false;
 
   try {
-    const doctorId = String(req.params.id);
+    const params = req.sanitizedParams as DoctorIdDto;
+    const doctorId = params.id;
     const payload = req.body as UpdateDoctorDto;
     const authUser = req.user as AuthUser;
     const existingDoctor = uploadedProfilePhoto
@@ -128,31 +115,25 @@ export const updateDoctor = async (req: Request, res: Response, next: NextFuncti
       await cleanupUploadedFilesFromRequest(req, ['profilePhoto']);
     }
 
-    next(error);
+    throw error;
   }
 };
 
-export const updateDoctorSchedule = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const doctorId = String(req.params.id);
-    const payload = req.body as UpdateDoctorScheduleDto;
-    const schedule = payload.schedule;
-    const authUser = req.user as AuthUser;
+export const updateDoctorSchedule = async (req: Request, res: Response) => {
+  const params = req.sanitizedParams as DoctorIdDto;
+  const doctorId = params.id;
+  const payload = req.body as UpdateDoctorScheduleDto;
+  const schedule = payload.schedule;
+  const authUser = req.user as AuthUser;
 
-    const data = await doctorService.updateDoctorSchedule(doctorId, schedule, authUser);
-    res.json(HttpResponse.success({ data }));
-  } catch (error) {
-    next(error);
-  }
+  const data = await doctorService.updateDoctorSchedule(doctorId, schedule, authUser);
+  res.json(HttpResponse.success({ data }));
 };
 
-export const deleteDoctor = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const doctorId = String(req.params.id);
+export const deleteDoctor = async (req: Request, res: Response) => {
+  const params = req.sanitizedParams as DoctorIdDto;
+  const doctorId = params.id;
 
-    const data = await doctorService.deleteDoctor(doctorId);
-    res.json(HttpResponse.success({ data, message: 'Doctor deleted' }));
-  } catch (error) {
-    next(error);
-  }
+  const data = await doctorService.deleteDoctor(doctorId);
+  res.json(HttpResponse.success({ data, message: 'Doctor deleted' }));
 };
