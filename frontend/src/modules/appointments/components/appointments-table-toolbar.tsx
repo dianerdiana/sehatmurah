@@ -55,7 +55,7 @@ export function AppointmentsTableToolbar({
           <Input
             id='appointment-search'
             value={searchInput}
-            placeholder='Search by booking code, patient, or doctor'
+            placeholder='Search by booking code, doctor, or specialist'
             onChange={(event) => setSearchInput(event.target.value)}
           />
         </div>
