@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { toast } from 'sonner';
 
@@ -16,6 +16,8 @@ export function FormLogin() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const search = useSearch({ from: '/_layout-blank/auth/login' });
+  const queryClient = useQueryClient();
+
   const showBookingLoginAlert = search.reason === 'booking-auth';
   const mutation = useMutation({
     mutationFn: login,
@@ -34,6 +36,8 @@ export function FormLogin() {
       mutation.mutate(value, {
         onSuccess: (props) => {
           if (props.status === 'success') {
+            queryClient.removeQueries();
+
             toast.success(`Welcome to dashboard, ${props.data.user.name}`);
             navigate({ to: getSafeRedirectTarget(search.redirect) });
           } else {
