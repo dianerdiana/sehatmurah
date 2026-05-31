@@ -1,43 +1,47 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 
 import { HttpResponse } from '../../common/http-response';
 import { buildResponseMeta } from '../../common/pagination';
-import { deleteUploadFile } from '../../utils/delete-upload-file';
+import {
+  cleanupUploadedFilesFromRequest,
+  getFirstUploadedFileByField,
+} from '../../utils/uploaded-file-request';
 
-import { CreateSpecialistDto, ListSpecialistsDto, UpdateSpecialistDto } from './specialist.schema';
+import {
+  CreateSpecialistDto,
+  ListSpecialistsDto,
+  SpecialistIdDto,
+  UpdateSpecialistDto,
+} from './specialist.schema';
 import * as specialistService from './specialist.service';
 
-export const listSpecialists = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const payload = req.sanitizedQuery as ListSpecialistsDto;
-    const result = await specialistService.listSpecialists(payload);
+export const listSpecialists = async (req: Request, res: Response) => {
+  const payload = req.sanitizedQuery as ListSpecialistsDto;
+  const result = await specialistService.listSpecialists(payload);
 
-    res.json(
-      HttpResponse.success({
-        data: result.items,
-        meta: buildResponseMeta({
-          ...payload,
-          totalItems: result.totalItems,
-        }),
+  res.json(
+    HttpResponse.success({
+      data: result.items,
+      meta: buildResponseMeta({
+        ...payload,
+        totalItems: result.totalItems,
       }),
-    );
-  } catch (error) {
-    next(error);
-  }
+    }),
+  );
 };
 
-export const getSpecialistById = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const specialistId = String(req.params.id);
+export const getSpecialistById = async (req: Request, res: Response) => {
+  const params = req.sanitizedParams as SpecialistIdDto;
+  const specialistId = params.id;
 
-    const data = await specialistService.getSpecialistById(specialistId);
-    res.json(HttpResponse.success({ data }));
-  } catch (error) {
-    next(error);
-  }
+  const data = await specialistService.getSpecialistById(specialistId);
+  res.json(HttpResponse.success({ data }));
 };
 
-export const createSpecialist = async (req: Request, res: Response, next: NextFunction) => {
+export const createSpecialist = async (req: Request, res: Response) => {
+  const uploadedImage = getFirstUploadedFileByField(req, 'image');
+  const uploadedIcon = getFirstUploadedFileByField(req, 'icon');
+
   try {
     const payload = req.body as CreateSpecialistDto;
 
@@ -45,39 +49,39 @@ export const createSpecialist = async (req: Request, res: Response, next: NextFu
 
     res.status(201).json(HttpResponse.success({ data }));
   } catch (error) {
-    next(error);
+    if (uploadedImage || uploadedIcon) {
+      await cleanupUploadedFilesFromRequest(req, ['image', 'icon']);
+    }
+
+    throw error;
   }
 };
 
-export const updateSpecialist = async (req: Request, res: Response, next: NextFunction) => {
+export const updateSpecialist = async (req: Request, res: Response) => {
+  const uploadedImage = getFirstUploadedFileByField(req, 'image');
+  const uploadedIcon = getFirstUploadedFileByField(req, 'icon');
+
   try {
-    const specialistId = String(req.params.id);
+    const params = req.sanitizedParams as SpecialistIdDto;
+    const specialistId = params.id;
     const payload = req.body as UpdateSpecialistDto;
-    const existingSpecialist = await specialistService.getSpecialistById(specialistId);
-
-    if (payload.image !== existingSpecialist.image) {
-      await deleteUploadFile(existingSpecialist.image);
-    }
-
-    if (payload.icon && existingSpecialist.icon) {
-      await deleteUploadFile(existingSpecialist.icon);
-    }
 
     const data = await specialistService.updateSpecialist(specialistId, payload);
 
     res.json(HttpResponse.success({ data }));
   } catch (error) {
-    next(error);
+    if (uploadedImage || uploadedIcon) {
+      await cleanupUploadedFilesFromRequest(req, ['image', 'icon']);
+    }
+
+    throw error;
   }
 };
 
-export const deleteSpecialist = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const specialistId = String(req.params.id);
+export const deleteSpecialist = async (req: Request, res: Response) => {
+  const params = req.sanitizedParams as SpecialistIdDto;
+  const specialistId = params.id;
 
-    const data = await specialistService.deleteSpecialist(specialistId);
-    res.json(HttpResponse.success({ data, message: 'Specialist deleted' }));
-  } catch (error) {
-    next(error);
-  }
+  const data = await specialistService.deleteSpecialist(specialistId);
+  res.json(HttpResponse.success({ data, message: 'Specialist deleted' }));
 };
