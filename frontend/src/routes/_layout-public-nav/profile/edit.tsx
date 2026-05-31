@@ -42,7 +42,7 @@ function RouteComponent() {
   if (patientQuery.isError) {
     return (
       <main className='space-y-4 px-4 py-6'>
-        <Card className='rounded-3xl'>
+        <Card className='rounded-3xl shadow-none border-none'>
           <CardContent className='flex min-h-64 flex-col items-center justify-center gap-3 text-center'>
             <SearchX className='size-7 text-muted-foreground' />
             <p className='font-semibold'>Unable to load profile details.</p>
@@ -68,7 +68,7 @@ function RouteComponent() {
 
   return (
     <main className='space-y-4 px-4 py-6'>
-      <Card className='rounded-3xl'>
+      <Card className='rounded-3xl shadow-none border-none'>
         <CardContent className='space-y-3'>
           <h1 className='text-xl font-bold text-gray-900'>Edit Profile</h1>
           <p className='text-sm font-medium text-gray-500'>Update your personal and contact information.</p>
