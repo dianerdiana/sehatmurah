@@ -1,6 +1,7 @@
 import { ApiError } from '../../common/api-error';
 import { normalizePagination } from '../../common/pagination';
 import { SpecialistModel } from '../../models/specialist.model';
+import { deleteUploadFile } from '../../utils/delete-upload-file';
 import { escapeRegex } from '../../utils/escape-regex';
 
 import { CreateSpecialistDto, ListSpecialistsDto, UpdateSpecialistDto } from './specialist.schema';
@@ -100,6 +101,9 @@ export const updateSpecialist = async (specialistId: string, payload: UpdateSpec
     throw new ApiError(404, 'Specialist not found');
   }
 
+  const previousImage = specialist.image;
+  const previousIcon = specialist.icon;
+
   Object.assign(specialist, payload);
 
   if (payload.name && !payload.slug) {
@@ -107,6 +111,27 @@ export const updateSpecialist = async (specialistId: string, payload: UpdateSpec
   }
 
   await specialist.save();
+
+  const removableFiles: string[] = [];
+
+  if (payload.image && previousImage && payload.image !== previousImage) {
+    removableFiles.push(previousImage);
+  }
+
+  if (payload.icon && previousIcon && payload.icon !== previousIcon) {
+    removableFiles.push(previousIcon);
+  }
+
+  await Promise.all(
+    removableFiles.map(async (filePath) => {
+      try {
+        await deleteUploadFile(filePath);
+      } catch {
+        // Ignore old-file cleanup failure so update response is not blocked.
+      }
+    }),
+  );
+
   return specialist;
 };
 
