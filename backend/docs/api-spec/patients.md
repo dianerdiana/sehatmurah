@@ -1,88 +1,593 @@
 # Patients API
 
-Base URL: `/api/patients`
+Base path: `/api/patients`
+
+## HTTP Method Convention in This Module
+
+- `PUT /api/patients/me` and `PUT /api/patients/:id` are used for profile update operations.
+- There is no dedicated `PATCH` endpoint in this module right now.
+
+## Security
 
 All endpoints require:
 
-`Authorization: Bearer <access_token>`
+- `Authorization: Bearer <token>`
 
-## Data Model Summary
+## Endpoint: Get My Profile
 
-- `Gender`: `MALE | FEMALE`
-- `PatientProfile`: `user`, `fullName`, `dateOfBirth`, `gender`, `phoneNumber`, `address`, `createdAt`, `updatedAt`
+### Description
 
-## Endpoints
+Return the patient profile for the currently authenticated patient user.
 
-## 1) Get My Profile
+### HTTP Method and URL
 
-- Method: `GET`
-- Path: `/me`
-- Role: `PATIENT`
+```http
+GET /api/patients/me
+```
 
-Success:
+### Headers Required
 
-- Status code: `200`
-- `data`: patient profile (with user populated: `name`, `email`, `role`)
+- `Authorization: Bearer <token>`
 
-Common errors:
+### Request Parameters
 
-- `401` Unauthorized / Invalid token
-- `403` Only PATIENT can access this endpoint / Forbidden
-- `404` Patient profile not found
+No path/query/body parameters.
 
-## 2) Update My Profile
+### Request Example
 
-- Method: `PATCH`
-- Path: `/me`
-- Role: `PATIENT`
+```http
+GET /api/patients/me HTTP/1.1
+Authorization: Bearer <JWT_ACCESS_TOKEN>
+```
 
-Request body (at least 1 field):
+### Response Examples
+
+#### 200 OK
 
 ```json
 {
-  "fullName": "Budi Santoso",
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "_id": "68321ac367b4c6e7d7a05551",
+    "fullName": "John Doe",
+    "gender": "MALE",
+    "phoneNumber": "08123456789",
+    "user": {
+      "_id": "68321ac367b4c6e7d7a01111",
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "role": "PATIENT"
+    }
+  }
+}
+```
+
+#### 401 Unauthorized
+
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
+
+#### 403 Forbidden
+
+```json
+{
+  "status": "error",
+  "message": "Forbidden"
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "status": "error",
+  "message": "Patient profile not found"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: Update My Profile
+
+### Description
+
+Update current patient profile using `PUT` semantics.
+
+### HTTP Method and URL
+
+```http
+PUT /api/patients/me
+```
+
+### Headers Required
+
+- `Authorization: Bearer <token>`
+- `Content-Type: application/json`
+
+### Request Parameters
+
+| Location | Field         | Type               | Required | Notes                              |
+| -------- | ------------- | ------------------ | -------- | ---------------------------------- |
+| Body     | `fullName`    | string             | No       | Min 1                              |
+| Body     | `dateOfBirth` | date string        | No       | Parsed to date (`z.coerce.date()`) |
+| Body     | `gender`      | `MALE` \| `FEMALE` | No       | Enum                               |
+| Body     | `phoneNumber` | string             | No       | Min 5, max 30                      |
+| Body     | `address`     | string             | No       | Min 1, max 500                     |
+
+Validation note:
+
+- At least one field must be present.
+
+### Request Example
+
+```json
+{
+  "fullName": "John Doe Updated",
   "dateOfBirth": "1998-01-20",
   "gender": "MALE",
-  "phoneNumber": "08123456789",
+  "phoneNumber": "08129876543",
   "address": "Jl. Melati No. 10"
 }
 ```
 
-Validation:
+### Response Examples
 
-- `fullName`: optional string
-- `dateOfBirth`: date (coerce)
-- `gender`: `MALE | FEMALE`
-- `phoneNumber`: string, min 5, max 30
-- `address`: string, min 1, max 500
+#### 200 OK
 
-Success:
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "_id": "68321ac367b4c6e7d7a05551",
+    "fullName": "John Doe Updated",
+    "phoneNumber": "08129876543",
+    "address": "Jl. Melati No. 10"
+  }
+}
+```
 
-- Status code: `200`
-- `data`: patient profile after update
+#### 400 Bad Request
 
-Common errors:
+```json
+{
+  "status": "error",
+  "message": "Validation error",
+  "code": "VALIDATION_ERROR",
+  "details": [
+    {
+      "field": "root",
+      "message": "at least one field must be provided"
+    }
+  ]
+}
+```
 
-- `400` Validation error (including empty body)
-- `403` Only PATIENT can access this endpoint / Forbidden
-- `404` Patient profile not found
+#### 401 Unauthorized
 
-## 3) Get Patient By ID
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
 
-- Method: `GET`
-- Path: `/:id`
-- Role: `ADMIN`
+#### 403 Forbidden
 
-Path parameters:
+```json
+{
+  "status": "error",
+  "message": "Forbidden"
+}
+```
 
-- `id`: required string
+#### 404 Not Found
 
-Success:
+```json
+{
+  "status": "error",
+  "message": "Patient profile not found"
+}
+```
 
-- Status code: `200`
-- `data`: patient profile (with user populated: `name`, `email`, `role`, `isActive`)
+#### 500 Internal Server Error
 
-Common errors:
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
 
-- `403` Forbidden
-- `404` Patient profile not found
+## Endpoint: List Patients (Admin)
+
+### Description
+
+Return paginated patient profiles for admin.
+
+### HTTP Method and URL
+
+```http
+GET /api/patients
+```
+
+### Headers Required
+
+- `Authorization: Bearer <token>`
+
+### Request Parameters
+
+| Location | Field    | Type                        | Required | Default     | Notes                    |
+| -------- | -------- | --------------------------- | -------- | ----------- | ------------------------ |
+| Query    | `page`   | number                      | No       | `1`         | Min 1                    |
+| Query    | `limit`  | number                      | No       | `10`        | Min 1, max 100           |
+| Query    | `search` | string                      | No       | `""`        | Full name / phone search |
+| Query    | `gender` | `all` \| `MALE` \| `FEMALE` | No       | `all`       | Gender filter            |
+| Query    | `column` | `fullName` \| `createdAt`   | No       | `createdAt` | Sort column              |
+| Query    | `sort`   | `asc` \| `desc`             | No       | `desc`      | Sort direction           |
+
+### Request Example
+
+```http
+GET /api/patients?search=john&gender=MALE&page=1&limit=10
+Authorization: Bearer <JWT_ACCESS_TOKEN>
+```
+
+### Response Examples
+
+#### 200 OK
+
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": [
+    {
+      "_id": "68321ac367b4c6e7d7a05551",
+      "fullName": "John Doe",
+      "gender": "MALE",
+      "user": {
+        "name": "John Doe",
+        "email": "john.doe@example.com",
+        "role": "PATIENT",
+        "isActive": true
+      }
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "limit": 10,
+    "column": "createdAt",
+    "sort": "desc",
+    "totalItems": 1,
+    "totalPages": 1
+  }
+}
+```
+
+#### 400 Bad Request
+
+```json
+{
+  "status": "error",
+  "message": "Validation error",
+  "code": "VALIDATION_ERROR",
+  "details": [
+    {
+      "field": "limit",
+      "message": "Too big: expected number to be <=100"
+    }
+  ]
+}
+```
+
+#### 401 Unauthorized
+
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
+
+#### 403 Forbidden
+
+```json
+{
+  "status": "error",
+  "message": "Forbidden"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: Get Patient By ID (Admin)
+
+### Description
+
+Return one patient profile by id for admin.
+
+### HTTP Method and URL
+
+```http
+GET /api/patients/:id
+```
+
+### Headers Required
+
+- `Authorization: Bearer <token>`
+
+### Request Parameters
+
+| Location | Field | Type   | Required | Notes              |
+| -------- | ----- | ------ | -------- | ------------------ |
+| Path     | `id`  | string | Yes      | Patient profile id |
+
+### Request Example
+
+```http
+GET /api/patients/68321ac367b4c6e7d7a05551
+Authorization: Bearer <JWT_ACCESS_TOKEN>
+```
+
+### Response Examples
+
+#### 200 OK
+
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "_id": "68321ac367b4c6e7d7a05551",
+    "fullName": "John Doe",
+    "user": {
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "role": "PATIENT",
+      "isActive": true
+    }
+  }
+}
+```
+
+#### 401 Unauthorized
+
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
+
+#### 403 Forbidden
+
+```json
+{
+  "status": "error",
+  "message": "Forbidden"
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "status": "error",
+  "message": "Patient profile not found"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: Update Patient By ID (Admin)
+
+### Description
+
+Update any patient profile by id using `PUT` semantics.
+
+### HTTP Method and URL
+
+```http
+PUT /api/patients/:id
+```
+
+### Headers Required
+
+- `Authorization: Bearer <token>`
+- `Content-Type: application/json`
+
+### Request Parameters
+
+| Location | Field         | Type               | Required | Notes              |
+| -------- | ------------- | ------------------ | -------- | ------------------ |
+| Path     | `id`          | string             | Yes      | Patient profile id |
+| Body     | `fullName`    | string             | No       | Min 1              |
+| Body     | `dateOfBirth` | date string        | No       | Parsed to date     |
+| Body     | `gender`      | `MALE` \| `FEMALE` | No       | Enum               |
+| Body     | `phoneNumber` | string             | No       | Min 5, max 30      |
+| Body     | `address`     | string             | No       | Min 1, max 500     |
+
+Validation note:
+
+- At least one field must be present.
+
+### Request Example
+
+```json
+{
+  "phoneNumber": "081255500011",
+  "address": "Updated admin address"
+}
+```
+
+### Response Examples
+
+#### 200 OK
+
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {
+    "_id": "68321ac367b4c6e7d7a05551",
+    "phoneNumber": "081255500011",
+    "address": "Updated admin address"
+  }
+}
+```
+
+#### 400 Bad Request
+
+```json
+{
+  "status": "error",
+  "message": "Validation error",
+  "code": "VALIDATION_ERROR"
+}
+```
+
+#### 401 Unauthorized
+
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
+
+#### 403 Forbidden
+
+```json
+{
+  "status": "error",
+  "message": "Forbidden"
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "status": "error",
+  "message": "Patient profile not found"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
+
+## Endpoint: Delete Patient (Admin)
+
+### Description
+
+Delete a patient profile.
+
+### HTTP Method and URL
+
+```http
+DELETE /api/patients/:id
+```
+
+### Headers Required
+
+- `Authorization: Bearer <token>`
+
+### Request Parameters
+
+| Location | Field | Type   | Required | Notes              |
+| -------- | ----- | ------ | -------- | ------------------ |
+| Path     | `id`  | string | Yes      | Patient profile id |
+
+### Request Example
+
+```http
+DELETE /api/patients/68321ac367b4c6e7d7a05551
+Authorization: Bearer <JWT_ACCESS_TOKEN>
+```
+
+### Response Examples
+
+#### 200 OK
+
+```json
+{
+  "status": "success",
+  "message": "Patient deleted",
+  "data": {}
+}
+```
+
+#### 401 Unauthorized
+
+```json
+{
+  "status": "error",
+  "message": "Invalid token"
+}
+```
+
+#### 403 Forbidden
+
+```json
+{
+  "status": "error",
+  "message": "Forbidden"
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "status": "error",
+  "message": "Patient not found"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error",
+  "code": "INTERNAL_SERVER_ERROR"
+}
+```
