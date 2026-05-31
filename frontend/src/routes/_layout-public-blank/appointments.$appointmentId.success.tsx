@@ -51,7 +51,7 @@ function BookingAppointmentSuccess() {
       <footer className='fixed bottom-0 left-0 right-0 mx-auto max-w-170 p-4 bg-white rounded-3xl'>
         <div className='flex flex-col gap-3'>
           <Button className='text-base rounded-full leading-[20.16px] font-semibold py-7' asChild>
-            <Link id='CtaViewBooking' to='/future-appointment-pending'>
+            <Link id='CtaViewBooking' to='/appointments/$appointmentId/details' params={{ appointmentId }}>
               View My Booking
             </Link>
           </Button>
@@ -60,7 +60,7 @@ function BookingAppointmentSuccess() {
             className='text-base text-primary hover:text-primary bg-primary-light/30 rounded-full leading-[20.16px] font-semibold py-7'
             asChild
           >
-            <Link id='CtaViewBooking' to='/appointments'>
+            <Link id='CtaNewBooking' to='/appointments'>
               Make Another Appointment
             </Link>
           </Button>
