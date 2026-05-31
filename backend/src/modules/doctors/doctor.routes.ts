@@ -55,7 +55,7 @@ doctorRouter.post(
   doctorController.createDoctor,
 );
 
-doctorRouter.patch(
+doctorRouter.put(
   '/:id',
   authMiddleware,
   roleMiddleware(UserRole.ADMIN, UserRole.DOCTOR),

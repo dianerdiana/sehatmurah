@@ -88,7 +88,7 @@ export const doctorApi = {
 
   update: async (id: string, payload: UpdateDoctorDto) => {
     try {
-      const response = await api.patch<UpdateDoctorDto, ApiResponse<Doctor>>(`/doctors/${id}`, payload, {
+      const response = await api.put<UpdateDoctorDto, ApiResponse<Doctor>>(`/doctors/${id}`, payload, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
