@@ -57,13 +57,17 @@ export const formatAppointmentDate = (date: string | undefined) => {
     return '-';
   }
 
-  const parsedDate = new Date(`${date}T00:00:00`);
+  try {
+    return format(date, 'dd MMM yyyy');
+  } catch {
+    const parsedDate = new Date(`${date}T00:00:00`);
 
-  if (Number.isNaN(parsedDate.getTime())) {
-    return date;
+    if (Number.isNaN(parsedDate.getTime())) {
+      return format(parsedDate.toISOString(), 'dd MMM yyyy');
+    }
+
+    return format(date, 'dd MMM yyyy');
   }
-
-  return format(parsedDate, 'dd MMM yyyy');
 };
 
 export const formatAppointmentTime = (time: string | undefined) => {
