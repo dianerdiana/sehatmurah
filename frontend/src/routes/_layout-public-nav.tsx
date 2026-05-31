@@ -27,7 +27,7 @@ const navigation = [
     title: 'My Booking',
     activeIcon: '/assets/icons/homepage-nav-booking-active.svg',
     nonActiveIcon: '/assets/icons/homepage-nav-booking-nonactive.svg',
-    href: '/my-booking',
+    href: '/appointments',
   },
   {
     id: 4,
