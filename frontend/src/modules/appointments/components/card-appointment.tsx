@@ -1,12 +1,14 @@
+import { Link } from '@tanstack/react-router';
 import { SearchX } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { getPartyName } from '@/utils/appointment-party';
-import { formatAppointmentDate, formatAppointmentTime } from '@/utils/utils';
+import { formatAppointmentDate, formatAppointmentTime, formatCurrency } from '@/utils/utils';
 
 import type { Appointment, AppointmentDoctorParty, AppointmentSpecialistParty } from '../appointment.type';
 import { appointmentStatusBadgeVariants, appointmentStatusLabels } from '../appointment-status';
@@ -37,8 +39,8 @@ export function CardAppointment({ appointment }: CardAppointmentProps) {
   const specialistName = getSpecialistName(doctor?.specialist);
 
   return (
-    <Card className='rounded-3xl bg-white py-0 shadow-sm'>
-      <CardContent className='space-y-4 px-4 py-5'>
+    <Card className='rounded-3xl bg-white py-0 shadow-none border-none'>
+      <CardContent className='space-y-4 px-4 py-4'>
         <header className='flex items-start gap-3'>
           {doctor ? (
             <Avatar className='size-14 shrink-0 rounded-2xl bg-gray-200 p-1'>
@@ -59,23 +61,22 @@ export function CardAppointment({ appointment }: CardAppointmentProps) {
 
           <div className='min-w-0 flex-1'>
             <div className='flex flex-wrap items-start justify-between gap-2'>
-              <div className='min-w-0'>
-                <p className='text-xs font-semibold uppercase tracking-wide text-gray-500'>Booking Code</p>
-                <h2 className='truncate text-base font-bold text-gray-900'>{appointment.bookingCode}</h2>
+              <div className='py-1 space-y-1'>
+                <p className='truncate text-lg font-bold leading-tight text-gray-900'>{doctorName}</p>
+                <p className='truncate text-sm font-semibold text-gray-500'>{specialistName}</p>
               </div>
               <Badge variant={appointmentStatusBadgeVariants[appointment.status]} className='shrink-0'>
                 {appointmentStatusLabels[appointment.status]}
               </Badge>
             </div>
-
-            <div className='mt-2 space-y-1'>
-              <p className='truncate text-lg font-bold leading-tight text-gray-900'>{doctorName}</p>
-              <p className='truncate text-sm font-semibold text-gray-500'>{specialistName}</p>
-            </div>
           </div>
         </header>
 
         <div className='grid gap-3 rounded-2xl border border-gray-100 bg-gray-50 p-4'>
+          <div className='min-w-0'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-gray-500'>Booking Code</p>
+            <h2 className='truncate text-base font-bold text-gray-900'>{appointment.bookingCode}</h2>
+          </div>
           <div className='flex items-center justify-between gap-3'>
             <div>
               <p className='text-xs font-semibold uppercase tracking-wide text-gray-500'>Appointment Date</p>
@@ -94,17 +95,21 @@ export function CardAppointment({ appointment }: CardAppointmentProps) {
           {appointment.reason ? (
             <div>
               <p className='text-xs font-semibold uppercase tracking-wide text-gray-500'>Reason</p>
-              <p className='mt-1 text-sm font-medium leading-relaxed text-gray-700'>{appointment.reason}</p>
+              <p className='mt-1 text-sm font-medium leading-relaxed text-gray-700 line-clamp-2'>
+                {appointment.reason}
+              </p>
             </div>
           ) : null}
         </div>
       </CardContent>
 
       <CardFooter className='flex items-center justify-between gap-2 border-t border-gray-100 px-4 py-4'>
-        <p className='text-xs font-medium text-gray-500'>
-          {doctor?.consultationFee ? `Consultation fee available` : 'Consultation details on the doctor profile'}
-        </p>
-        <p className='text-xs font-semibold text-primary'>#{appointment._id.slice(-6).toUpperCase()}</p>
+        <p className='text-base font-bold text-accent-red'>{formatCurrency(doctor?.consultationFee || 0)}</p>
+        <Button asChild className='px-5 rounded-full'>
+          <Link to='/appointments/$appointmentId/details' params={{ appointmentId: appointment._id }}>
+            Details
+          </Link>
+        </Button>
       </CardFooter>
     </Card>
   );
