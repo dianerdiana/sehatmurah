@@ -1,6 +1,6 @@
 import { api } from '@/configs/api-config';
 
-import type { Review } from '@/modules/reviews/reviews.type';
+import type { Review } from '@/modules/reviews/review.type';
 
 import { toApiError } from '@/utils/api-error.util';
 import { unwrapApiResponse, unwrapPaginatedApiResponse } from '@/utils/api-response.util';
