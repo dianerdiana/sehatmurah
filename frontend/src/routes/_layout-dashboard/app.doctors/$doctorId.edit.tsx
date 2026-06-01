@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { Loader2, SearchX } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -16,10 +16,16 @@ import { doctorMutationOptions } from '@/modules/doctors/doctor.mutation';
 import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 import { specialistQueryOptions } from '@/modules/specialists/specialist.query';
 
+import { hasPermission } from '@/utils/auth/has-permission';
 import { useDebounce } from '@/utils/hooks/use-debounce';
 
 export const Route = createFileRoute('/_layout-dashboard/app/doctors/$doctorId/edit')({
   component: DoctorsEditPage,
+  beforeLoad: ({ context }) => {
+    if (!hasPermission(context.ability, 'update', 'DoctorProfile')) {
+      throw redirect({ to: '/not-found' });
+    }
+  },
 });
 
 function DoctorsEditPage() {
