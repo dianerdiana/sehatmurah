@@ -18,9 +18,19 @@ export const requireAuthenticated = (auth: GuardAuthContext, redirectTarget: str
 };
 
 export const getSafeRedirectTarget = (redirectTarget?: string) => {
-  if (!redirectTarget || !redirectTarget.startsWith('/')) {
+  if (!redirectTarget) {
     return '/dashboard';
   }
 
-  return redirectTarget;
+  const normalizedTarget = redirectTarget.trim();
+
+  if (!normalizedTarget.startsWith('/') || normalizedTarget.startsWith('//')) {
+    return '/dashboard';
+  }
+
+  if (/[^\x20-\x7E]/.test(normalizedTarget)) {
+    return '/dashboard';
+  }
+
+  return normalizedTarget;
 };
