@@ -14,7 +14,7 @@ import { useAppForm } from '@/utils/hooks/use-app-form';
 
 import { UserRole } from '@/types/enums/user-role.enum';
 
-import { type CreateUserDto, createUserSchema, type UpdateUserDto,updateUserSchema } from '../user.schema';
+import { type CreateUserDto, createUserSchema, type UpdateUserDto, updateUserSchema } from '../user.schema';
 import type { UserListItem } from '../user.type';
 
 type UserFormProps = {

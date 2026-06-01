@@ -1,4 +1,4 @@
-import { type SubmitEvent, useState } from 'react';
+import { useState } from 'react';
 
 import { Loader2, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+import { useAppForm } from '@/utils/hooks/use-app-form';
 
 import { DOCTOR_SCHEDULE_DAYS, type UpdateDoctorScheduleDto, updateDoctorScheduleSchema } from '../doctor.schema';
 import type { DoctorSchedule } from '../doctor.type';
@@ -53,6 +55,14 @@ const toMinutes = (time: string) => {
   return hour * 60 + minute;
 };
 
+const toSchedulePayload = (rows: ScheduleRow[]): UpdateDoctorScheduleDto['schedule'] =>
+  rows.map((row) => ({
+    day: row.day,
+    startTime: row.startTime,
+    endTime: row.endTime,
+    isAvailable: true,
+  }));
+
 export function DoctorScheduleForm({
   initialSchedule,
   isSubmitting,
@@ -67,12 +77,49 @@ export function DoctorScheduleForm({
   const [formError, setFormError] = useState('');
   const [rowErrors, setRowErrors] = useState<Record<number, string[]>>({});
 
+  const form = useAppForm({
+    defaultValues: {
+      schedule: toSchedulePayload(rows),
+    } satisfies UpdateDoctorScheduleDto,
+    validators: {
+      onSubmit: updateDoctorScheduleSchema,
+    },
+    onSubmit: ({ value }) => {
+      const checked = validateSchedule(value);
+      const hasRowErrors = Object.keys(checked.rowErrors).length > 0;
+
+      setRowErrors(checked.rowErrors);
+      setFormError(checked.formError);
+
+      if (checked.formError || hasRowErrors) {
+        toast.error(checked.formError || 'Please fix schedule errors before saving.');
+        return;
+      }
+
+      onSubmit(value);
+    },
+  });
+
+  const syncScheduleWithForm = (nextRows: ScheduleRow[]) => {
+    form.setFieldValue('schedule', toSchedulePayload(nextRows));
+  };
+
   const handleRowChange = (index: number, key: keyof Omit<ScheduleRow, 'id'>, value: string | DayValue) => {
-    setRows((prev) => prev.map((row, rowIndex) => (rowIndex === index ? { ...row, [key]: value } : row)));
+    setRows((prev) => {
+      const nextRows = prev.map((row, rowIndex) => (rowIndex === index ? { ...row, [key]: value } : row));
+
+      syncScheduleWithForm(nextRows);
+      return nextRows;
+    });
   };
 
   const handleAddRow = () => {
-    setRows((prev) => [...prev, createRow()]);
+    setRows((prev) => {
+      const nextRows = [...prev, createRow()];
+
+      syncScheduleWithForm(nextRows);
+      return nextRows;
+    });
   };
 
   const handleRemoveRow = (index: number) => {
@@ -80,7 +127,12 @@ export function DoctorScheduleForm({
       return;
     }
 
-    setRows((prev) => prev.filter((_, rowIndex) => rowIndex !== index));
+    setRows((prev) => {
+      const nextRows = prev.filter((_, rowIndex) => rowIndex !== index);
+
+      syncScheduleWithForm(nextRows);
+      return nextRows;
+    });
   };
 
   const validateSchedule = (payload: UpdateDoctorScheduleDto) => {
@@ -129,43 +181,6 @@ export function DoctorScheduleForm({
     };
   };
 
-  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const payload = {
-      schedule: rows.map((row) => ({
-        day: row.day,
-        startTime: row.startTime,
-        endTime: row.endTime,
-        isAvailable: true,
-      })),
-    } satisfies UpdateDoctorScheduleDto;
-
-    const parsed = updateDoctorScheduleSchema.safeParse(payload);
-
-    if (!parsed.success) {
-      const firstIssue = parsed.error.issues[0];
-
-      setFormError(firstIssue?.message ?? 'Validation error');
-      setRowErrors({});
-      toast.error(firstIssue?.message ?? 'Validation error');
-      return;
-    }
-
-    const checked = validateSchedule(parsed.data);
-    const hasRowErrors = Object.keys(checked.rowErrors).length > 0;
-
-    setRowErrors(checked.rowErrors);
-    setFormError(checked.formError);
-
-    if (checked.formError || hasRowErrors) {
-      toast.error(checked.formError || 'Please fix schedule errors before saving.');
-      return;
-    }
-
-    onSubmit(parsed.data);
-  };
-
   return (
     <Card className='rounded-2xl shadow-sm'>
       <CardHeader>
@@ -173,7 +188,14 @@ export function DoctorScheduleForm({
         <p className='text-sm text-muted-foreground'>{description}</p>
       </CardHeader>
       <CardContent>
-        <form className='space-y-5' onSubmit={handleSubmit}>
+        <form
+          className='space-y-5'
+          onSubmit={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            form.handleSubmit();
+          }}
+        >
           <FieldGroup>
             {rows.map((row, index) => (
               <div key={row.id} className='space-y-3 rounded-xl border p-4'>

@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { ImageServer } from '@/components/ui/image-server';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -16,6 +15,7 @@ import {
   ComboboxList,
 } from '@/components/ui/combobox';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { ImageServer } from '@/components/ui/image-server';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';

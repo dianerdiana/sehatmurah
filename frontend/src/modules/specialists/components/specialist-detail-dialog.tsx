@@ -1,6 +1,5 @@
 import { Eye } from 'lucide-react';
 
-import { ImageServer } from '@/components/ui/image-server';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { ImageServer } from '@/components/ui/image-server';
 
 import { formatDateTime } from '@/utils/utils';
 
