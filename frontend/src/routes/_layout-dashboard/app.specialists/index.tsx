@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router';
 import type { SortingState, Updater } from '@tanstack/react-table';
 import { SearchX } from 'lucide-react';
 
@@ -14,11 +14,17 @@ import type { ListSpecialistsSearchState } from '@/modules/specialists/specialis
 import { listSpecialistsSchema } from '@/modules/specialists/specialist.schema';
 import type { Specialist } from '@/modules/specialists/specialist.type';
 
+import { hasPermission } from '@/utils/auth/has-permission';
 import { Can } from '@/utils/context/ability-context';
 
 export const Route = createFileRoute('/_layout-dashboard/app/specialists/')({
   validateSearch: listSpecialistsSchema,
   component: SpecialistsListPage,
+  beforeLoad: ({ context }) => {
+    if (!hasPermission(context.ability, 'read', 'ListSpecialist')) {
+      throw redirect({ to: '/not-found' });
+    }
+  },
 });
 
 type SortableColumn = 'name' | 'createdAt' | 'sortOrder';
