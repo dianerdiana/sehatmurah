@@ -10,6 +10,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { getPartyName } from '@/utils/appointment-party';
 import { formatAppointmentDate, formatAppointmentTime, formatCurrency } from '@/utils/utils';
 
+import { AppointmentStatus } from '@/types/enums/appointment-status.enum';
+
 import type { Appointment, AppointmentDoctorParty, AppointmentSpecialistParty } from '../appointment.type';
 import { appointmentStatusBadgeVariants, appointmentStatusLabels } from '../appointment-status';
 
@@ -105,11 +107,22 @@ export function CardAppointment({ appointment }: CardAppointmentProps) {
 
       <CardFooter className='flex items-center justify-between gap-2 border-t border-gray-100 px-4 py-4'>
         <p className='text-base font-bold text-accent-red'>{formatCurrency(doctor?.consultationFee || 0)}</p>
-        <Button asChild className='px-5 rounded-full'>
-          <Link to='/appointments/$appointmentId/details' params={{ appointmentId: appointment._id }}>
-            Details
-          </Link>
-        </Button>
+        <div className='flex items-center gap-2'>
+          <Button
+            variant='outline'
+            className='px-5 rounded-full'
+            hidden={appointment.status !== AppointmentStatus.COMPLETED}
+          >
+            <Link to='/reviews/$appointmentId/create' params={{ appointmentId: appointment._id }}>
+              Review
+            </Link>
+          </Button>
+          <Button asChild className='px-5 rounded-full'>
+            <Link to='/appointments/$appointmentId/details' params={{ appointmentId: appointment._id }}>
+              Details
+            </Link>
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );
