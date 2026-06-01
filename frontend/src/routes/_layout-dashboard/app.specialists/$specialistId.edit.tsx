@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { Loader2, SearchX } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -11,8 +11,15 @@ import { specialistKeys } from '@/modules/specialists/specialist.key';
 import { specialistMutationOptions } from '@/modules/specialists/specialist.mutation';
 import { specialistQueryOptions } from '@/modules/specialists/specialist.query';
 
+import { hasPermission } from '@/utils/auth/has-permission';
+
 export const Route = createFileRoute('/_layout-dashboard/app/specialists/$specialistId/edit')({
   component: SpecialistsEditPage,
+  beforeLoad: ({ context }) => {
+    if (!hasPermission(context.ability, 'update', 'Specialist')) {
+      throw redirect({ to: '/not-found' });
+    }
+  },
 });
 
 function SpecialistsEditPage() {
