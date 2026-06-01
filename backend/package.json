@@ -17,7 +17,8 @@
     "test:coverage": "vitest --coverage",
     "docs": "docsify serve docs --port 4000",
     "seed": "ts-node src/seeders/index.ts",
-    "seed:reset": "ts-node src/seeders/index.ts --reset"
+    "seed:reset": "ts-node src/seeders/index.ts --reset",
+    "migrate:review-status": "ts-node src/seeders/migrations/review-status.migration.ts"
   },
   "repository": {
     "type": "git",
