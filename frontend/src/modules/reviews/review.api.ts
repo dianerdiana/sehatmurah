@@ -6,7 +6,7 @@ import { unwrapApiResponse, unwrapPaginatedApiResponse } from '@/utils/api-respo
 import type { ApiResponse } from '@/types/api-response.type';
 
 import type { CreateReviewDto, ListReviewsByDoctorDto } from './review.schema';
-import type { Review } from './reviews.type';
+import type { Review } from './review.type';
 
 export const reviewApi = {
   listByDoctor: async (doctorId: string, params?: ListReviewsByDoctorDto) => {
