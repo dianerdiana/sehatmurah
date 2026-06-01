@@ -39,7 +39,7 @@ const doctorScheduleItemSchema = z.object({
   day: z.enum(DOCTOR_SCHEDULE_DAYS),
   startTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'invalid startTime HH:mm'),
   endTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'invalid endTime HH:mm'),
-  isAvailable: z.boolean().default(true),
+  isAvailable: z.boolean(),
 });
 
 const practiceLocationSchema = z.object({
