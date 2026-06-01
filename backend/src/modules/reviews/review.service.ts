@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { PipelineStage, Types } from 'mongoose';
 
 import { ApiError } from '../../common/api-error';
 import { AppointmentStatus } from '../../common/enums/appointment-status.enum';
@@ -6,10 +6,17 @@ import { normalizePagination } from '../../common/pagination';
 import { AppointmentModel } from '../../models/appointment.model';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
 import { ReviewModel } from '../../models/review.model';
+import { SpecialistModel } from '../../models/specialist.model';
 import { AuthUser } from '../../types/auth-user.type';
+import { escapeRegex } from '../../utils/escape-regex';
 import { getPatientProfileId } from '../patients/patient.port';
 
-import { CreateReviewDto, ListReviewsByDoctorDto } from './review.schema';
+import {
+  CreateReviewDto,
+  ListReviewsByDoctorDto,
+  ListReviewsDto,
+  UpdateReviewDto,
+} from './review.schema';
 
 const recalculateDoctorRating = async (doctorId: string): Promise<void> => {
   const doctorObjectId = new Types.ObjectId(doctorId);
@@ -68,6 +75,7 @@ export const createReview = async (user: AuthUser, payload: CreateReviewDto) => 
     appointment: payload.appointment,
     rating: payload.rating,
     comment: payload.comment,
+    status: payload.status,
   });
 
   await recalculateDoctorRating(payload.doctor);
@@ -92,6 +100,255 @@ export const listReviewsByDoctor = async (doctorId: string, query: ListReviewsBy
     .limit(limit);
 
   return { items, totalItems, page, limit };
+};
+
+export const listReviews = async (query: ListReviewsDto) => {
+  const { page, limit, skip } = normalizePagination(query);
+
+  const reviewFilter: Record<string, unknown> = {};
+
+  if (query.rating !== 'all') {
+    reviewFilter.rating = Number(query.rating);
+  }
+
+  if (query.status !== 'all') {
+    reviewFilter.status = query.status;
+  }
+
+  if (query.startDate || query.endDate) {
+    const createdAtFilter: Record<string, Date> = {};
+
+    if (query.startDate) {
+      const startDate = new Date(query.startDate);
+
+      if (!Number.isNaN(startDate.getTime())) {
+        startDate.setHours(0, 0, 0, 0);
+        createdAtFilter.$gte = startDate;
+      }
+    }
+
+    if (query.endDate) {
+      const endDate = new Date(query.endDate);
+
+      if (!Number.isNaN(endDate.getTime())) {
+        endDate.setHours(23, 59, 59, 999);
+        createdAtFilter.$lte = endDate;
+      }
+    }
+
+    if (Object.keys(createdAtFilter).length > 0) {
+      reviewFilter.createdAt = createdAtFilter;
+    }
+  }
+
+  const matchStages: PipelineStage[] = [];
+
+  if (Object.keys(reviewFilter).length > 0) {
+    matchStages.push({ $match: reviewFilter });
+  }
+
+  if (query.specialist.trim()) {
+    const specialistKeyword = query.specialist.trim();
+    const specialistRegex = new RegExp(escapeRegex(specialistKeyword), 'i');
+    const specialistMatches = await SpecialistModel.find({
+      $or: [{ name: specialistRegex }, { slug: specialistRegex }],
+    })
+      .select('_id')
+      .lean();
+
+    const specialistIds = specialistMatches.map((specialist) => specialist._id);
+
+    if (specialistIds.length === 0) {
+      return { items: [], totalItems: 0, page, limit };
+    }
+
+    const doctors = await DoctorProfileModel.find({ specialist: { $in: specialistIds } })
+      .select('_id')
+      .lean();
+    const doctorIds = doctors.map((doctor) => doctor._id);
+
+    if (doctorIds.length === 0) {
+      return { items: [], totalItems: 0, page, limit };
+    }
+
+    matchStages.push({
+      $match: {
+        doctor: { $in: doctorIds },
+      },
+    });
+  }
+
+  const searchText = query.search.trim();
+
+  const searchMatch: PipelineStage.Match | null = searchText
+    ? {
+        $match: {
+          $or: [
+            { 'patient.fullName': new RegExp(escapeRegex(searchText), 'i') },
+            { 'doctor.fullName': new RegExp(escapeRegex(searchText), 'i') },
+            { 'doctor.specialist.name': new RegExp(escapeRegex(searchText), 'i') },
+            { comment: new RegExp(escapeRegex(searchText), 'i') },
+          ],
+        },
+      }
+    : null;
+
+  const lookupStages: PipelineStage[] = [
+    {
+      $lookup: {
+        from: 'patientprofiles',
+        localField: 'patient',
+        foreignField: '_id',
+        as: 'patient',
+      },
+    },
+    {
+      $unwind: {
+        path: '$patient',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'doctorprofiles',
+        localField: 'doctor',
+        foreignField: '_id',
+        as: 'doctor',
+      },
+    },
+    {
+      $unwind: {
+        path: '$doctor',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'specialists',
+        localField: 'doctor.specialist',
+        foreignField: '_id',
+        as: 'doctorSpecialist',
+      },
+    },
+    {
+      $unwind: {
+        path: '$doctorSpecialist',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $addFields: {
+        'doctor.specialist': '$doctorSpecialist',
+      },
+    },
+  ];
+
+  const sharedPipeline: PipelineStage[] = [...matchStages, ...lookupStages];
+
+  if (searchMatch) {
+    sharedPipeline.push(searchMatch);
+  }
+
+  const [{ totalItems = 0 } = { totalItems: 0 }] = await ReviewModel.aggregate<{
+    totalItems: number;
+  }>([...sharedPipeline, { $count: 'totalItems' }]);
+
+  if (totalItems === 0) {
+    return { items: [], totalItems, page, limit };
+  }
+
+  const sortDirection = query.sort === 'asc' ? 1 : -1;
+  const sortByColumn: Record<ListReviewsDto['column'], string> = {
+    patientName: 'patient.fullName',
+    doctorName: 'doctor.fullName',
+    rating: 'rating',
+    createdAt: 'createdAt',
+  };
+
+  const sortField = sortByColumn[query.column];
+
+  const items = await ReviewModel.aggregate([
+    ...sharedPipeline,
+    {
+      $sort: {
+        [sortField]: sortDirection,
+        _id: 1,
+      },
+    },
+    { $skip: skip },
+    { $limit: limit },
+    {
+      $project: {
+        _id: 1,
+        __v: 1,
+        appointment: 1,
+        rating: 1,
+        comment: 1,
+        status: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        patient: {
+          _id: '$patient._id',
+          fullName: '$patient.fullName',
+        },
+        doctor: {
+          _id: '$doctor._id',
+          fullName: '$doctor.fullName',
+          specialist: {
+            _id: '$doctor.specialist._id',
+            name: '$doctor.specialist.name',
+            slug: '$doctor.specialist.slug',
+          },
+        },
+      },
+    },
+  ]);
+
+  return { items, totalItems, page, limit };
+};
+
+export const getReviewById = async (reviewId: string) => {
+  const review = await ReviewModel.findById(reviewId)
+    .populate('patient', 'fullName')
+    .populate({
+      path: 'doctor',
+      select: 'fullName specialist',
+      populate: {
+        path: 'specialist',
+        select: 'name slug',
+      },
+    });
+
+  if (!review) {
+    throw new ApiError(404, 'Review not found');
+  }
+
+  return review;
+};
+
+export const updateReview = async (reviewId: string, payload: UpdateReviewDto) => {
+  const review = await ReviewModel.findById(reviewId);
+
+  if (!review) {
+    throw new ApiError(404, 'Review not found');
+  }
+
+  if (typeof payload.rating === 'number') {
+    review.rating = payload.rating;
+  }
+
+  if (typeof payload.comment === 'string') {
+    review.comment = payload.comment;
+  }
+
+  if (typeof payload.status === 'string') {
+    review.status = payload.status;
+  }
+
+  await review.save();
+  await recalculateDoctorRating(review.doctor.toString());
+
+  return getReviewById(reviewId);
 };
 
 export const deleteReview = async (reviewId: string) => {
