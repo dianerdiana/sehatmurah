@@ -41,6 +41,7 @@ import { Route as LayoutDashboardAppSpecialistsCreateRouteImport } from './route
 import { Route as LayoutDashboardAppDoctorsCreateRouteImport } from './routes/_layout-dashboard/app.doctors/create'
 import { Route as LayoutDashboardAppUsersUserIdEditRouteImport } from './routes/_layout-dashboard/app.users/$userId.edit'
 import { Route as LayoutDashboardAppSpecialistsSpecialistIdEditRouteImport } from './routes/_layout-dashboard/app.specialists/$specialistId.edit'
+import { Route as LayoutDashboardAppReviewsReviewIdEditRouteImport } from './routes/_layout-dashboard/app.reviews/$reviewId.edit'
 import { Route as LayoutDashboardAppPatientsPatientIdEditRouteImport } from './routes/_layout-dashboard/app.patients/$patientId.edit'
 import { Route as LayoutDashboardAppDoctorsDoctorIdEditRouteImport } from './routes/_layout-dashboard/app.doctors/$doctorId.edit'
 
@@ -222,6 +223,12 @@ const LayoutDashboardAppSpecialistsSpecialistIdEditRoute =
     path: '/app/specialists/$specialistId/edit',
     getParentRoute: () => LayoutDashboardRoute,
   } as any)
+const LayoutDashboardAppReviewsReviewIdEditRoute =
+  LayoutDashboardAppReviewsReviewIdEditRouteImport.update({
+    id: '/app/reviews/$reviewId/edit',
+    path: '/app/reviews/$reviewId/edit',
+    getParentRoute: () => LayoutDashboardRoute,
+  } as any)
 const LayoutDashboardAppPatientsPatientIdEditRoute =
   LayoutDashboardAppPatientsPatientIdEditRouteImport.update({
     id: '/app/patients/$patientId/edit',
@@ -264,6 +271,7 @@ export interface FileRoutesByFullPath {
   '/app/users/': typeof LayoutDashboardAppUsersIndexRoute
   '/app/doctors/$doctorId/edit': typeof LayoutDashboardAppDoctorsDoctorIdEditRoute
   '/app/patients/$patientId/edit': typeof LayoutDashboardAppPatientsPatientIdEditRoute
+  '/app/reviews/$reviewId/edit': typeof LayoutDashboardAppReviewsReviewIdEditRoute
   '/app/specialists/$specialistId/edit': typeof LayoutDashboardAppSpecialistsSpecialistIdEditRoute
   '/app/users/$userId/edit': typeof LayoutDashboardAppUsersUserIdEditRoute
 }
@@ -295,6 +303,7 @@ export interface FileRoutesByTo {
   '/app/users': typeof LayoutDashboardAppUsersIndexRoute
   '/app/doctors/$doctorId/edit': typeof LayoutDashboardAppDoctorsDoctorIdEditRoute
   '/app/patients/$patientId/edit': typeof LayoutDashboardAppPatientsPatientIdEditRoute
+  '/app/reviews/$reviewId/edit': typeof LayoutDashboardAppReviewsReviewIdEditRoute
   '/app/specialists/$specialistId/edit': typeof LayoutDashboardAppSpecialistsSpecialistIdEditRoute
   '/app/users/$userId/edit': typeof LayoutDashboardAppUsersUserIdEditRoute
 }
@@ -332,6 +341,7 @@ export interface FileRoutesById {
   '/_layout-dashboard/app/users/': typeof LayoutDashboardAppUsersIndexRoute
   '/_layout-dashboard/app/doctors/$doctorId/edit': typeof LayoutDashboardAppDoctorsDoctorIdEditRoute
   '/_layout-dashboard/app/patients/$patientId/edit': typeof LayoutDashboardAppPatientsPatientIdEditRoute
+  '/_layout-dashboard/app/reviews/$reviewId/edit': typeof LayoutDashboardAppReviewsReviewIdEditRoute
   '/_layout-dashboard/app/specialists/$specialistId/edit': typeof LayoutDashboardAppSpecialistsSpecialistIdEditRoute
   '/_layout-dashboard/app/users/$userId/edit': typeof LayoutDashboardAppUsersUserIdEditRoute
 }
@@ -366,6 +376,7 @@ export interface FileRouteTypes {
     | '/app/users/'
     | '/app/doctors/$doctorId/edit'
     | '/app/patients/$patientId/edit'
+    | '/app/reviews/$reviewId/edit'
     | '/app/specialists/$specialistId/edit'
     | '/app/users/$userId/edit'
   fileRoutesByTo: FileRoutesByTo
@@ -397,6 +408,7 @@ export interface FileRouteTypes {
     | '/app/users'
     | '/app/doctors/$doctorId/edit'
     | '/app/patients/$patientId/edit'
+    | '/app/reviews/$reviewId/edit'
     | '/app/specialists/$specialistId/edit'
     | '/app/users/$userId/edit'
   id:
@@ -433,6 +445,7 @@ export interface FileRouteTypes {
     | '/_layout-dashboard/app/users/'
     | '/_layout-dashboard/app/doctors/$doctorId/edit'
     | '/_layout-dashboard/app/patients/$patientId/edit'
+    | '/_layout-dashboard/app/reviews/$reviewId/edit'
     | '/_layout-dashboard/app/specialists/$specialistId/edit'
     | '/_layout-dashboard/app/users/$userId/edit'
   fileRoutesById: FileRoutesById
@@ -671,6 +684,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutDashboardAppSpecialistsSpecialistIdEditRouteImport
       parentRoute: typeof LayoutDashboardRoute
     }
+    '/_layout-dashboard/app/reviews/$reviewId/edit': {
+      id: '/_layout-dashboard/app/reviews/$reviewId/edit'
+      path: '/app/reviews/$reviewId/edit'
+      fullPath: '/app/reviews/$reviewId/edit'
+      preLoaderRoute: typeof LayoutDashboardAppReviewsReviewIdEditRouteImport
+      parentRoute: typeof LayoutDashboardRoute
+    }
     '/_layout-dashboard/app/patients/$patientId/edit': {
       id: '/_layout-dashboard/app/patients/$patientId/edit'
       path: '/app/patients/$patientId/edit'
@@ -728,6 +748,7 @@ interface LayoutDashboardRouteChildren {
   LayoutDashboardAppUsersIndexRoute: typeof LayoutDashboardAppUsersIndexRoute
   LayoutDashboardAppDoctorsDoctorIdEditRoute: typeof LayoutDashboardAppDoctorsDoctorIdEditRoute
   LayoutDashboardAppPatientsPatientIdEditRoute: typeof LayoutDashboardAppPatientsPatientIdEditRoute
+  LayoutDashboardAppReviewsReviewIdEditRoute: typeof LayoutDashboardAppReviewsReviewIdEditRoute
   LayoutDashboardAppSpecialistsSpecialistIdEditRoute: typeof LayoutDashboardAppSpecialistsSpecialistIdEditRoute
   LayoutDashboardAppUsersUserIdEditRoute: typeof LayoutDashboardAppUsersUserIdEditRoute
 }
@@ -752,6 +773,8 @@ const LayoutDashboardRouteChildren: LayoutDashboardRouteChildren = {
     LayoutDashboardAppDoctorsDoctorIdEditRoute,
   LayoutDashboardAppPatientsPatientIdEditRoute:
     LayoutDashboardAppPatientsPatientIdEditRoute,
+  LayoutDashboardAppReviewsReviewIdEditRoute:
+    LayoutDashboardAppReviewsReviewIdEditRoute,
   LayoutDashboardAppSpecialistsSpecialistIdEditRoute:
     LayoutDashboardAppSpecialistsSpecialistIdEditRoute,
   LayoutDashboardAppUsersUserIdEditRoute:
