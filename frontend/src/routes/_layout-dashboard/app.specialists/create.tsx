@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,8 +8,15 @@ import { SpecialistForm } from '@/modules/specialists/components/specialist-form
 import { specialistKeys } from '@/modules/specialists/specialist.key';
 import { specialistMutationOptions } from '@/modules/specialists/specialist.mutation';
 
+import { hasPermission } from '@/utils/auth/has-permission';
+
 export const Route = createFileRoute('/_layout-dashboard/app/specialists/create')({
   component: SpecialistsCreatePage,
+  beforeLoad: ({ context }) => {
+    if (!hasPermission(context.ability, 'create', 'Specialist')) {
+      throw redirect({ to: '/not-found' });
+    }
+  },
 });
 
 function SpecialistsCreatePage() {
