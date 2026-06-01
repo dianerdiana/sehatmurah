@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { SearchX } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -15,12 +15,18 @@ import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 import { specialistQueryOptions } from '@/modules/specialists/specialist.query';
 import { userQueryOptions } from '@/modules/users/user.query';
 
+import { hasPermission } from '@/utils/auth/has-permission';
 import { useDebounce } from '@/utils/hooks/use-debounce';
 
 import { UserRole } from '@/types/enums/user-role.enum';
 
 export const Route = createFileRoute('/_layout-dashboard/app/doctors/create')({
   component: DoctorsCreatePage,
+  beforeLoad: ({ context }) => {
+    if (!hasPermission(context.ability, 'create', 'DoctorProfile')) {
+      throw redirect({ to: '/not-found' });
+    }
+  },
 });
 
 function DoctorsCreatePage() {
