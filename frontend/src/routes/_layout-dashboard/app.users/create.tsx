@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,8 +8,15 @@ import { UserForm } from '@/modules/users/components/user-form';
 import { userKeys } from '@/modules/users/user.key';
 import { userMutationOptions } from '@/modules/users/user.mutation';
 
+import { hasPermission } from '@/utils/auth/has-permission';
+
 export const Route = createFileRoute('/_layout-dashboard/app/users/create')({
   component: UsersCreatePage,
+  beforeLoad: ({ context }) => {
+    if (!hasPermission(context.ability, 'create', 'User')) {
+      throw redirect({ to: '/not-found' });
+    }
+  },
 });
 
 function UsersCreatePage() {
