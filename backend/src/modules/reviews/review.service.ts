@@ -69,14 +69,18 @@ export const createReview = async (user: AuthUser, payload: CreateReviewDto) => 
     }
   }
 
-  const review = await ReviewModel.create({
-    patient: patientId,
-    doctor: payload.doctor,
-    appointment: payload.appointment,
-    rating: payload.rating,
-    comment: payload.comment,
-    status: payload.status,
-  });
+  const review = await ReviewModel.updateOne(
+    { patient: patientId, appointment: payload.appointment, __v: { $lt: 2 } },
+    {
+      patient: patientId,
+      doctor: payload.doctor,
+      appointment: payload.appointment,
+      rating: payload.rating,
+      comment: payload.comment,
+      status: payload.status,
+    },
+    { upsert: true },
+  );
 
   await recalculateDoctorRating(payload.doctor);
 
@@ -309,6 +313,25 @@ export const listReviews = async (query: ListReviewsDto) => {
 
 export const getReviewById = async (reviewId: string) => {
   const review = await ReviewModel.findById(reviewId)
+    .populate('patient', 'fullName')
+    .populate({
+      path: 'doctor',
+      select: 'fullName specialist',
+      populate: {
+        path: 'specialist',
+        select: 'name slug',
+      },
+    });
+
+  if (!review) {
+    throw new ApiError(404, 'Review not found');
+  }
+
+  return review;
+};
+
+export const getReviewByAppointmentId = async (appointmentId: string) => {
+  const review = await ReviewModel.findOne({ appointment: appointmentId })
     .populate('patient', 'fullName')
     .populate({
       path: 'doctor',

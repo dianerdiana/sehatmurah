@@ -4,6 +4,7 @@ import { UserRole } from '../../common/enums/user-role.enum';
 import { authMiddleware } from '../../middlewares/auth.middleware';
 import { roleMiddleware } from '../../middlewares/role.middleware';
 import { validateRequest } from '../../middlewares/validate-request.middleware';
+import { appointmentIdSchema } from '../appointments/appointment.schema';
 
 import * as reviewController from './review.controller';
 import {
@@ -36,6 +37,12 @@ reviewRouter.get(
   roleMiddleware(UserRole.ADMIN),
   validateRequest({ params: reviewIdSchema }),
   reviewController.getReviewById,
+);
+
+reviewRouter.get(
+  '/appointments/:id',
+  validateRequest({ params: appointmentIdSchema }),
+  reviewController.getReviewByAppointmentId,
 );
 
 reviewRouter.put(

@@ -12,6 +12,13 @@ export const reviewQueryOptions = {
       enabled: !!id,
     }),
 
+  getByAppointmentId: (appointmentId: string) =>
+    queryOptions({
+      queryKey: reviewKeys.detail(appointmentId),
+      queryFn: () => reviewApi.getByAppointmentId(appointmentId),
+      enabled: !!appointmentId,
+    }),
+
   list: (params?: ListReviewsDto) =>
     queryOptions({
       queryKey: reviewKeys.list(params),

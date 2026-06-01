@@ -19,6 +19,16 @@ export const reviewApi = {
     }
   },
 
+  getByAppointmentId: async (appointmentId: string) => {
+    try {
+      const response = await api.get<ApiResponse<Review>>(`/reviews/appointments/${appointmentId}`);
+
+      return unwrapApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
   list: async (params?: ListReviewsDto) => {
     try {
       const response = await api.get<ApiResponse<Review[]>>('/reviews', {

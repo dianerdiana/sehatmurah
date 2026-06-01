@@ -62,6 +62,14 @@ export const getReviewById = async (req: Request, res: Response) => {
   res.json(HttpResponse.success({ data }));
 };
 
+export const getReviewByAppointmentId = async (req: Request, res: Response) => {
+  const params = req.sanitizedParams as { id: string };
+  const appointmentId = params.id;
+
+  const data = await reviewService.getReviewByAppointmentId(appointmentId);
+  res.json(HttpResponse.success({ data }));
+};
+
 export const updateReview = async (req: Request, res: Response) => {
   const params = req.sanitizedParams as ReviewIdDto;
   const reviewId = params.id;

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { useForm } from '@tanstack/react-form';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { Star } from 'lucide-react';
 import { toast } from 'sonner';
@@ -18,14 +18,18 @@ import { ReviewStatus } from '@/types/enums/review-status.enum';
 
 import { reviewMutationOptions } from '../review.mutation';
 import { type CreateReviewDto, createReviewSchema } from '../review.schema';
+import type { Review } from '../review.type';
 
 type CreateReviewFormProps = {
   doctorId: string;
   appointmentId?: string;
+  review?: Review | null;
 };
 
-export function ReviewCreateForm({ doctorId, appointmentId }: CreateReviewFormProps) {
+export function ReviewCreateForm({ doctorId, appointmentId, review }: CreateReviewFormProps) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const [hoverRating, setHoverRating] = useState<number | null>(null);
 
   const createReviewMutation = useMutation({
@@ -33,6 +37,8 @@ export function ReviewCreateForm({ doctorId, appointmentId }: CreateReviewFormPr
     onSuccess: () => {
       toast.success('Review created successfully.');
       navigate({ to: '/appointments' });
+
+      queryClient.invalidateQueries({ queryKey: ['reviews'] });
     },
     onError: () => {
       toast.error('Failed to submit review. Please try again.');
@@ -43,9 +49,9 @@ export function ReviewCreateForm({ doctorId, appointmentId }: CreateReviewFormPr
     defaultValues: {
       doctor: doctorId,
       appointment: appointmentId,
-      rating: 0,
-      comment: '',
-      status: ReviewStatus.PENDING,
+      rating: review?.rating ?? 0,
+      comment: review?.comment ?? '',
+      status: review?.status ?? ReviewStatus.PENDING,
     } as CreateReviewDto,
     onSubmit: async ({ value }) => {
       const parsed = createReviewSchema.safeParse(value);
