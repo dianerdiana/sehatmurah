@@ -259,19 +259,20 @@ Rekomendasi struktur internal modul (target konsistensi):
 
 ```text
 modules/<feature>/
-	components/      # UI khusus feature
-	hooks/           # useQuery/useMutation khusus feature
-	services/        # adapter API feature
-	schemas/         # zod schemas + dto mapping
-	types/           # type local feature
-	utils/           # helper local feature
+	components/     				# UI khusus feature
+	<feature>.api.ts    		# adapter API feature
+	<feature>.key.ts				# queryKey khusus feature
+	<feature>.mutation.ts		# mutationOptions khusus feature
+	<feature>.query.ts			# queryOptions khusus feature
+	<feature>.schema.ts			# zod schemas + dto mapping
+	<feature>.type.ts				# type local feature
 ```
 
 Aturan dependensi:
 
 - Modul boleh menggunakan `components/ui` dan `utils` shared.
 - Modul tidak saling import langsung antar domain jika bisa dihindari.
-- Jika ada kebutuhan lintas modul, pindahkan ke `components` atau `utils` shared.
+- Jika ada kebutuhan lintas modul, disarankan untuk pindahkan ke `components` atau `utils` shared.
 
 ## 12. Security dan Access Control
 
