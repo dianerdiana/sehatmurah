@@ -5,10 +5,32 @@ import { unwrapApiResponse, unwrapPaginatedApiResponse } from '@/utils/api-respo
 
 import type { ApiResponse } from '@/types/api-response.type';
 
-import type { CreateReviewDto, ListReviewsByDoctorDto } from './review.schema';
+import type { CreateReviewDto, ListReviewsByDoctorDto, ListReviewsDto, UpdateReviewDto } from './review.schema';
 import type { Review } from './review.type';
 
 export const reviewApi = {
+  getById: async (id: string) => {
+    try {
+      const response = await api.get<ApiResponse<Review>>(`/reviews/${id}`);
+
+      return unwrapApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
+  list: async (params?: ListReviewsDto) => {
+    try {
+      const response = await api.get<ApiResponse<Review[]>>('/reviews', {
+        params,
+      });
+
+      return unwrapPaginatedApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
   listByDoctor: async (doctorId: string, params?: ListReviewsByDoctorDto) => {
     try {
       const response = await api.get<ApiResponse<Review[]>>(`/doctors/${doctorId}/reviews`, {
@@ -24,6 +46,16 @@ export const reviewApi = {
   create: async (payload: CreateReviewDto) => {
     try {
       const response = await api.post<CreateReviewDto, ApiResponse<Review>>('/reviews', payload);
+
+      return unwrapApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
+  update: async (id: string, payload: UpdateReviewDto) => {
+    try {
+      const response = await api.put<UpdateReviewDto, ApiResponse<Review>>(`/reviews/${id}`, payload);
 
       return unwrapApiResponse(response.data);
     } catch (error) {
