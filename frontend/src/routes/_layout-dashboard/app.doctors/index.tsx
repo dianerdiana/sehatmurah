@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router';
 import type { SortingState, Updater } from '@tanstack/react-table';
 import { SearchX } from 'lucide-react';
 
@@ -14,9 +14,16 @@ import { listDoctorsSchema, type ListDoctorsSearchState } from '@/modules/doctor
 import type { Doctor } from '@/modules/doctors/doctor.type';
 import { specialistQueryOptions } from '@/modules/specialists/specialist.query';
 
+import { hasPermission } from '@/utils/auth/has-permission';
+
 export const Route = createFileRoute('/_layout-dashboard/app/doctors/')({
   validateSearch: listDoctorsSchema,
   component: DoctorsListPage,
+  beforeLoad: ({ context }) => {
+    if (!hasPermission(context.ability, 'read', 'ListDoctor')) {
+      throw redirect({ to: '/not-found' });
+    }
+  },
 });
 
 type SortableColumn = 'fullName' | 'createdAt';
