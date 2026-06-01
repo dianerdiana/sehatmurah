@@ -1,11 +1,14 @@
 import { Types } from 'mongoose';
 
+import { ReviewStatus } from '../../common/enums/review-status.enum';
+
 export interface IReviewSeed {
   patient: Types.ObjectId;
   doctor: Types.ObjectId;
   appointment?: Types.ObjectId;
   rating: number;
   comment?: string;
+  status: ReviewStatus;
 }
 
 export function generateReviews(
@@ -27,6 +30,7 @@ export function generateReviews(
   ];
 
   const reviews: IReviewSeed[] = [];
+  const statuses = [ReviewStatus.PENDING, ReviewStatus.APPROVED, ReviewStatus.REJECTED];
 
   // Generate 8 reviews
   for (let i = 0; i < 8; i++) {
@@ -36,6 +40,7 @@ export function generateReviews(
       appointment: appointmentIds ? appointmentIds[i % appointmentIds.length] : undefined,
       rating: Math.floor(Math.random() * 2) + 4, // Rating 4-5
       comment: comments[i % comments.length],
+      status: statuses[i % statuses.length],
     });
   }
 
