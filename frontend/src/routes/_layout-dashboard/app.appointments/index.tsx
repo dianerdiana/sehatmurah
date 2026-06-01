@@ -1,5 +1,7 @@
+import type { DateRange } from 'react-day-picker';
+
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import type { SortingState, Updater } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { SearchX } from 'lucide-react';
@@ -15,9 +17,16 @@ import { AppointmentsTable } from '@/modules/appointments/components/appointment
 import { AppointmentsTablePagination } from '@/modules/appointments/components/appointments-table-pagination';
 import { AppointmentsTableToolbar } from '@/modules/appointments/components/appointments-table-toolbar';
 
+import { hasPermission } from '@/utils/auth/has-permission';
+
 export const Route = createFileRoute('/_layout-dashboard/app/appointments/')({
   validateSearch: listAppointmentsSchema,
   component: AppointmentsListPage,
+  beforeLoad: ({ context }) => {
+    if (!hasPermission(context.ability, 'read', 'ListAppointment')) {
+      throw redirect({ to: '/not-found' });
+    }
+  },
 });
 
 type SortableColumn = 'appointmentDate' | 'status';
@@ -96,22 +105,10 @@ function AppointmentsListPage() {
     );
   };
 
-  const handleStartDateChange = (value: string) => {
-    updateSearch(
-      {
-        startDate: value,
-      },
-      true,
-    );
-  };
-
-  const handleEndDateChange = (value: string) => {
-    updateSearch(
-      {
-        endDate: value,
-      },
-      true,
-    );
+  const handleSelectDateChange = (value: DateRange | undefined) => {
+    if (value && value?.from && value?.to) {
+      updateSearch({ startDate: value.from.toISOString(), endDate: value.to.toISOString() });
+    }
   };
 
   const handleClearFilters = () => {
@@ -163,8 +160,7 @@ function AppointmentsListPage() {
         endDate={search.endDate}
         onSearchChange={handleSearchChange}
         onStatusChange={handleStatusChange}
-        onStartDateChange={handleStartDateChange}
-        onEndDateChange={handleEndDateChange}
+        handleSelectDateChange={handleSelectDateChange}
         onClearFilters={handleClearFilters}
       />
 
