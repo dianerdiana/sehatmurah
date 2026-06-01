@@ -51,7 +51,6 @@ const reviewSchema = new Schema<IReview>(
 );
 
 reviewSchema.index({ doctor: 1 });
-reviewSchema.index({ status: 1 });
 reviewSchema.index({ patient: 1, doctor: 1, appointment: 1 }, { unique: true, sparse: true });
 
 export const ReviewModel = model<IReview>('Review', reviewSchema);
