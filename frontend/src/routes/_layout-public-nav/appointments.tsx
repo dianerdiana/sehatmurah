@@ -1,5 +1,3 @@
-import type { DateRange } from 'react-day-picker';
-
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { SearchX } from 'lucide-react';
@@ -77,10 +75,12 @@ function UserAppointmentList() {
     updateSearch({ status: value }, true);
   };
 
-  const handleSelectDateChange = (value: DateRange | undefined) => {
-    if (value && value?.from && value?.to) {
-      updateSearch({ startDate: value.from.toISOString(), endDate: value.to.toISOString() });
-    }
+  const handleStartDateChange = (value: string) => {
+    updateSearch({ startDate: value ? new Date(value).toISOString() : '' }, true);
+  };
+
+  const handleEndDateChange = (value: string) => {
+    updateSearch({ endDate: value ? new Date(value).toISOString() : '' }, true);
   };
 
   const handleClearFilters = () => {
@@ -111,7 +111,8 @@ function UserAppointmentList() {
         endDate={search.endDate}
         onSearchChange={handleSearchChange}
         onStatusChange={handleStatusChange}
-        handleSelectDateChange={handleSelectDateChange}
+        onStartDateChange={handleStartDateChange}
+        onEndDateChange={handleEndDateChange}
         onClearFilters={handleClearFilters}
       />
 
