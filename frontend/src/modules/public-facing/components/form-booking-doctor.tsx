@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { format, getDay, isBefore, startOfDay } from 'date-fns';
 import { toast } from 'sonner';
@@ -15,6 +15,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 
 import { appointmentMutationOptions } from '@/modules/appointments/appointment.mutation';
+import { appointmentKeys } from '@/modules/appointments/appointment.key';
 import { type CreateAppointmentDto, createAppointmentSchema } from '@/modules/appointments/appointment.schema';
 
 import { useAppForm } from '@/utils/hooks/use-app-form';
@@ -37,6 +38,7 @@ export function FormBookingDoctor({
   consultationFee: number;
 }) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const calendarRef = React.useRef<HTMLButtonElement>(null);
 
   const [selectedDate, setSelectedDate] = React.useState<Date>(new Date());
@@ -57,7 +59,8 @@ export function FormBookingDoctor({
     },
     onSubmit: ({ value }) => {
       createAppointmentMutation.mutate(value, {
-        onSuccess: (appointment) => {
+        onSuccess: async (appointment) => {
+          await queryClient.invalidateQueries({ queryKey: appointmentKeys.lists() });
           toast.success('Appointment created successfully');
           navigate({ to: '/appointments/$appointmentId/success', params: { appointmentId: appointment._id } });
         },
