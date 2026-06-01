@@ -21,9 +21,15 @@ export const doctorKeys = {
 
   create: () => [...doctorKeys.mutations(), 'create'] as const,
 
+  request: () => [...doctorKeys.mutations(), 'request'] as const,
+
   update: (id: string) => [...doctorKeys.mutations(), 'update', id] as const,
 
   updateSchedule: (id: string) => [...doctorKeys.mutations(), 'update-schedule', id] as const,
+
+  approve: (id: string) => [...doctorKeys.mutations(), 'approve', id] as const,
+
+  reject: (id: string) => [...doctorKeys.mutations(), 'reject', id] as const,
 
   delete: (id: string) => [...doctorKeys.mutations(), 'delete', id] as const,
 };

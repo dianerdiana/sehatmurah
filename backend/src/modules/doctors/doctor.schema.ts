@@ -8,6 +8,9 @@ export const doctorIdSchema = z.object({
 
 export const listDoctorsSchema = z.object({
   isAvailable: z.enum(['all', 'true', 'false']).default('all'),
+  status: z
+    .union([z.literal('all'), z.enum(DoctorApprovalStatus)])
+    .default(DoctorApprovalStatus.APPROVED),
   specialist: z
     .string()
     .trim()
@@ -78,6 +81,8 @@ export const createDoctorSchema = z.object({
   isAvailable: z.coerce.boolean().optional(),
 });
 
+export const createDoctorRequestSchema = createDoctorSchema;
+
 export const updateDoctorSchema = createDoctorSchema
   .omit({ userId: true })
   .partial()
@@ -85,24 +90,6 @@ export const updateDoctorSchema = createDoctorSchema
 
 export const updateDoctorScheduleSchema = z.object({
   schedule: z.array(doctorScheduleItemSchema),
-});
-
-export const listPendingDoctorsSchema = z.object({
-  page: z.coerce.number().int().min(1).default(1),
-  limit: z.coerce.number().int().min(1).max(100).default(10),
-  search: z.string().trim().default(''),
-  city: z
-    .string()
-    .trim()
-    .optional()
-    .transform((val) => (val === '' ? undefined : val)),
-  specialist: z
-    .string()
-    .trim()
-    .optional()
-    .transform((val) => (val === '' ? undefined : val)),
-  column: z.enum(['createdAt', 'fullName'] as const).default('createdAt'),
-  sort: z.enum(['asc', 'desc'] as const).default('desc'),
 });
 
 export const updateDoctorApprovalSchema = z.object({
@@ -132,8 +119,8 @@ export type DoctorIdDto = z.infer<typeof doctorIdSchema>;
 export type ListDoctorsDto = z.infer<typeof listDoctorsSchema>;
 export type ListDoctorsCitiesDto = z.infer<typeof listDoctorsCitiesSchema>;
 export type CreateDoctorDto = z.infer<typeof createDoctorSchema>;
+export type CreateDoctorRequestDto = z.infer<typeof createDoctorRequestSchema>;
 export type UpdateDoctorDto = z.infer<typeof updateDoctorSchema>;
 export type UpdateDoctorScheduleDto = z.infer<typeof updateDoctorScheduleSchema>;
-export type ListPendingDoctorsDto = z.infer<typeof listPendingDoctorsSchema>;
 export type ApproveDoctorDto = z.infer<typeof approveDoctorSchema>;
 export type RejectDoctorDto = z.infer<typeof rejectDoctorSchema>;

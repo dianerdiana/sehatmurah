@@ -16,8 +16,8 @@ import * as doctorController from './doctor.controller';
 import {
   approveDoctorSchema,
   createDoctorSchema,
+  createDoctorRequestSchema,
   doctorIdSchema,
-  listPendingDoctorsSchema,
   listDoctorsCitiesSchema,
   listDoctorsSchema,
   rejectDoctorSchema,
@@ -33,13 +33,6 @@ doctorRouter.get(
   validateRequest({ query: listDoctorsCitiesSchema }),
   doctorController.listDoctorsCities,
 );
-doctorRouter.get(
-  '/pending',
-  authMiddleware,
-  roleMiddleware(UserRole.ADMIN),
-  validateRequest({ query: listPendingDoctorsSchema }),
-  doctorController.listPendingDoctors,
-);
 doctorRouter.get('/me', authMiddleware, doctorController.getMyDoctorProfile);
 doctorRouter.get(
   '/:id',
@@ -53,6 +46,16 @@ doctorRouter.get(
     query: listReviewsByDoctorSchema,
   }),
   listReviewsByDoctor,
+);
+
+doctorRouter.post(
+  '/request',
+  authMiddleware,
+  roleMiddleware(UserRole.PATIENT),
+  upload.fields([{ name: 'profilePhoto', maxCount: 1 }]),
+  mapFilesToBody,
+  validateRequest({ body: createDoctorRequestSchema }),
+  doctorController.requestDoctor,
 );
 
 doctorRouter.post(

@@ -9,8 +9,21 @@ import { formatCurrency, formatDate } from '@/utils/utils';
 
 import type { Doctor } from '../doctor.type';
 
+import { DoctorApprovalActions } from './doctor-approval-actions';
 import { DoctorDeletePopover } from './doctor-delete-popover';
 import { DoctorDetailDialog } from './doctor-detail-dialog';
+
+const approvalStatusBadgeVariant: Record<Doctor['approvalStatus'], 'warning' | 'success' | 'danger'> = {
+  pending: 'warning',
+  approved: 'success',
+  rejected: 'danger',
+};
+
+const approvalStatusLabel: Record<Doctor['approvalStatus'], string> = {
+  pending: 'Pending',
+  approved: 'Approved',
+  rejected: 'Rejected',
+};
 
 function SortableHeader({
   label,
@@ -38,6 +51,7 @@ function SortableHeader({
 function RowActions({ doctor }: { doctor: Doctor }) {
   return (
     <div className='flex items-center justify-end gap-1'>
+      <DoctorApprovalActions doctor={doctor} />
       <Button type='button' variant='ghost' size='icon-sm' asChild>
         <Link to='/app/doctors/$doctorId/edit' params={{ doctorId: doctor._id }} aria-label={`Edit ${doctor.fullName}`}>
           <Pencil className='size-4' />
@@ -82,8 +96,17 @@ export const doctorsColumns: ColumnDef<Doctor>[] = [
     cell: ({ row }) => formatCurrency(row.original.consultationFee),
   },
   {
+    accessorKey: 'approvalStatus',
+    header: 'Approval',
+    cell: ({ row }) => {
+      const status = row.original.approvalStatus;
+
+      return <Badge variant={approvalStatusBadgeVariant[status]}>{approvalStatusLabel[status]}</Badge>;
+    },
+  },
+  {
     accessorKey: 'isAvailable',
-    header: 'Status',
+    header: 'Availability',
     cell: ({ row }) => (
       <Badge variant={row.original.isAvailable ? 'success' : 'danger'}>
         {row.original.isAvailable ? 'Available' : 'Unavailable'}

@@ -10,11 +10,14 @@ export const DOCTOR_SCHEDULE_DAYS = [
   'SUNDAY',
 ] as const;
 
+export const DOCTOR_APPROVAL_STATUS = ['pending', 'approved', 'rejected'] as const;
+
 export const doctorIdSchema = z.object({
   id: z.string().trim().min(1, 'id is required'),
 });
 
 export const listDoctorsSchema = z.object({
+  status: z.union([z.literal('all'), z.enum(DOCTOR_APPROVAL_STATUS)]).default('all'),
   isAvailable: z.enum(['all', 'true', 'false']).default('all'),
   specialist: z.string().trim().default(''),
   city: z.string().trim().default(''),
@@ -69,6 +72,15 @@ export const updateDoctorScheduleSchema = z.object({
   schedule: z.array(doctorScheduleItemSchema),
 });
 
+export const approveDoctorSchema = z.object({
+  status: z.literal('approved'),
+});
+
+export const rejectDoctorSchema = z.object({
+  status: z.literal('rejected'),
+  rejectionReason: z.string().trim().min(1, 'Rejection reason is required').max(500),
+});
+
 export const listReviewsByDoctorSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(10),
@@ -83,3 +95,5 @@ export type CreateDoctorDto = FormData;
 export type UpdateDoctorDto = FormData;
 export type UpdateDoctorScheduleDto = z.infer<typeof updateDoctorScheduleSchema>;
 export type ListReviewsByDoctorDto = z.infer<typeof listReviewsByDoctorSchema>;
+export type ApproveDoctorDto = z.infer<typeof approveDoctorSchema>;
+export type RejectDoctorDto = z.infer<typeof rejectDoctorSchema>;

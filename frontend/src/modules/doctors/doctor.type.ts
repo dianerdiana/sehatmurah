@@ -33,6 +33,7 @@ export type Doctor = {
   ratingAverage: number;
   ratingCount: number;
   isAvailable: boolean;
+  approvalStatus: 'pending' | 'approved' | 'rejected';
   createdAt: string;
   updatedAt: string;
 };

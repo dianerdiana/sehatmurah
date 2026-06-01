@@ -13,9 +13,9 @@ import { escapeRegex } from '../../utils/escape-regex';
 import {
   ApproveDoctorDto,
   CreateDoctorDto,
+  CreateDoctorRequestDto,
   ListDoctorsCitiesDto,
   ListDoctorsDto,
-  ListPendingDoctorsDto,
   RejectDoctorDto,
   UpdateDoctorDto,
 } from './doctor.schema';
@@ -59,7 +59,9 @@ const assertDoctorCanBeRejected = (status: DoctorApprovalStatus) => {
 export const listDoctors = async (query: ListDoctorsDto) => {
   const filter: Record<string, unknown> = {};
 
-  filter.approvalStatus = DoctorApprovalStatus.APPROVED;
+  if (query.status !== 'all') {
+    filter.approvalStatus = query.status;
+  }
 
   if (query.isAvailable !== 'all') {
     filter.isAvailable = query.isAvailable === 'true';
@@ -120,7 +122,7 @@ export const listDoctorsCities = async (query: ListDoctorsCitiesDto) => {
     filter['practiceLocation.city'] = { $regex: query.search, $options: 'i' };
   }
 
-  // Gunakan distinct untuk mengambil daftar nama kota unik langsung dari database
+  // Use distinct to get unique city names directly from database.
   const items = await DoctorProfileModel.distinct('practiceLocation.city', filter);
 
   const totalItems = items.length;
@@ -203,6 +205,48 @@ export const createDoctor = async (payload: CreateDoctorDto) => {
   }
 };
 
+export const requestDoctor = async (payload: CreateDoctorRequestDto, authUser: AuthUser) => {
+  const { userId, ...doctorPayload } = payload;
+
+  if (userId !== authUser.id) {
+    throw new ApiError(403, 'You can only submit a request for your own account');
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    throw new ApiError(400, 'Invalid userId');
+  }
+
+  const user = await UserModel.findById(userId);
+
+  if (!user) {
+    throw new ApiError(404, 'User not found');
+  }
+
+  if (user.role !== UserRole.PATIENT) {
+    throw new ApiError(403, 'Only patients can submit doctor requests');
+  }
+
+  const existingProfile = await DoctorProfileModel.findOne({ user: userId });
+
+  if (existingProfile) {
+    throw new ApiError(409, 'Doctor profile already exists for this user');
+  }
+
+  const specialist = await SpecialistModel.findById(payload.specialist);
+
+  if (!specialist) {
+    throw new ApiError(404, 'Specialist not found');
+  }
+
+  const doctorProfile = await DoctorProfileModel.create({
+    ...doctorPayload,
+    user: userId,
+    approvalStatus: DoctorApprovalStatus.PENDING,
+  });
+
+  return doctorProfile;
+};
+
 export const updateDoctor = async (doctorId: string, payload: UpdateDoctorDto, user: AuthUser) => {
   const existingDoctor = await DoctorProfileModel.findById(doctorId);
 
@@ -251,57 +295,6 @@ export const deleteDoctor = async (doctorId: string) => {
   return doctor;
 };
 
-export const listPendingDoctors = async (query: ListPendingDoctorsDto) => {
-  const filter: Record<string, unknown> = {
-    approvalStatus: DoctorApprovalStatus.PENDING,
-  };
-
-  const specialistFilter = await resolveSpecialistFilter(query.specialist);
-
-  if (specialistFilter) {
-    filter.specialist = specialistFilter;
-  }
-
-  if (query.city) {
-    filter['practiceLocation.city'] = { $regex: escapeRegex(query.city), $options: 'i' };
-  }
-
-  if (query.search) {
-    filter.fullName = { $regex: escapeRegex(query.search), $options: 'i' };
-  }
-
-  const { page, limit, skip } = normalizePagination(query);
-  const totalItems = await DoctorProfileModel.countDocuments(filter);
-
-  const sortDirection = query.sort === 'asc' ? 1 : -1;
-  const sortByColumn: Record<ListPendingDoctorsDto['column'], string> = {
-    fullName: 'fullName',
-    createdAt: 'createdAt',
-  };
-
-  const primarySortField = sortByColumn[query.column];
-  const sortOption: Record<string, 1 | -1> = {
-    [primarySortField]: sortDirection,
-    _id: 1,
-  };
-
-  if (primarySortField !== 'createdAt') {
-    sortOption.createdAt = -1;
-  }
-
-  if (primarySortField !== 'fullName') {
-    sortOption.fullName = 1;
-  }
-
-  const items = await DoctorProfileModel.find(filter)
-    .populate('specialist', 'name slug icon')
-    .sort(sortOption)
-    .skip(skip)
-    .limit(limit);
-
-  return { items, totalItems, page, limit };
-};
-
 export const approveDoctor = async (
   doctorId: string,
   payload: ApproveDoctorDto,
@@ -323,6 +316,7 @@ export const approveDoctor = async (
   doctor.rejectionReason = undefined;
 
   await doctor.save();
+  await UserModel.findByIdAndUpdate(doctor.user, { role: UserRole.DOCTOR });
 
   return doctor;
 };

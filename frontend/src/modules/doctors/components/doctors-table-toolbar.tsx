@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 import { useDebounce } from '@/utils/hooks/use-debounce';
 
-export type DoctorStatusFilter = 'all' | 'true' | 'false';
+export type DoctorStatusFilter = 'all' | 'pending' | 'approved' | 'rejected';
 
 type SpecialistOption = {
   id: string;
@@ -17,7 +17,7 @@ type SpecialistOption = {
 type DoctorsTableToolbarProps = {
   search: string;
   specialist: string;
-  isAvailable: DoctorStatusFilter;
+  status: DoctorStatusFilter;
   specialistOptions: SpecialistOption[];
   onSearchChange: (search: string) => void;
   onSpecialistChange: (specialist: string) => void;
@@ -28,7 +28,7 @@ type DoctorsTableToolbarProps = {
 export function DoctorsTableToolbar({
   search,
   specialist,
-  isAvailable,
+  status,
   specialistOptions,
   onSearchChange,
   onSpecialistChange,
@@ -48,7 +48,7 @@ export function DoctorsTableToolbar({
     onSearchChange(normalizedSearch);
   }, [debouncedSearch, onSearchChange, search]);
 
-  const hasActiveFilters = Boolean(search || specialist || isAvailable !== 'all');
+  const hasActiveFilters = Boolean(search || specialist || status !== 'all');
 
   const specialistValue = useMemo(() => {
     return specialist || 'all';
@@ -90,16 +90,17 @@ export function DoctorsTableToolbar({
 
         <div className='space-y-2'>
           <label htmlFor='doctor-status' className='text-sm font-medium'>
-            Status
+            Approval Status
           </label>
-          <Select value={isAvailable} onValueChange={(value) => onStatusChange(value as DoctorStatusFilter)}>
+          <Select value={status} onValueChange={(value) => onStatusChange(value as DoctorStatusFilter)}>
             <SelectTrigger id='doctor-status' className='w-full'>
-              <SelectValue placeholder='All statuses' />
+              <SelectValue placeholder='All approval statuses' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='all'>All statuses</SelectItem>
-              <SelectItem value='true'>Available</SelectItem>
-              <SelectItem value='false'>Unavailable</SelectItem>
+              <SelectItem value='pending'>Pending</SelectItem>
+              <SelectItem value='approved'>Approved</SelectItem>
+              <SelectItem value='rejected'>Rejected</SelectItem>
             </SelectContent>
           </Select>
         </div>

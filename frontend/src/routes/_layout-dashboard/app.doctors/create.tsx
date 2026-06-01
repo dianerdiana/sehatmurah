@@ -74,6 +74,7 @@ function DoctorsCreatePage() {
       search: '',
       specialist: '',
       city: '',
+      status: 'all',
       isAvailable: 'all',
       column: 'createdAt',
       sort: 'desc',

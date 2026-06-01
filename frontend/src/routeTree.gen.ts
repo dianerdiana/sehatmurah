@@ -20,6 +20,7 @@ import { Route as LayoutPublicNavAppointmentsRouteImport } from './routes/_layou
 import { Route as LayoutDashboardDashboardRouteImport } from './routes/_layout-dashboard/dashboard'
 import { Route as LayoutBlankAuthRouteImport } from './routes/_layout-blank/auth'
 import { Route as LayoutPublicNavProfileIndexRouteImport } from './routes/_layout-public-nav/profile/index'
+import { Route as LayoutPublicNavProfileJoinDoctorRouteImport } from './routes/_layout-public-nav/profile/join-doctor'
 import { Route as LayoutPublicNavProfileEditRouteImport } from './routes/_layout-public-nav/profile/edit'
 import { Route as LayoutPublicNavDoctorsSearchRouteImport } from './routes/_layout-public-nav/doctors.search'
 import { Route as LayoutPublicBlankDoctorsResultsRouteImport } from './routes/_layout-public-blank/doctors.results'
@@ -98,6 +99,12 @@ const LayoutPublicNavProfileIndexRoute =
   LayoutPublicNavProfileIndexRouteImport.update({
     id: '/',
     path: '/',
+    getParentRoute: () => LayoutPublicNavProfileRoute,
+  } as any)
+const LayoutPublicNavProfileJoinDoctorRoute =
+  LayoutPublicNavProfileJoinDoctorRouteImport.update({
+    id: '/join-doctor',
+    path: '/join-doctor',
     getParentRoute: () => LayoutPublicNavProfileRoute,
   } as any)
 const LayoutPublicNavProfileEditRoute =
@@ -261,6 +268,7 @@ export interface FileRoutesByFullPath {
   '/doctors/results': typeof LayoutPublicBlankDoctorsResultsRoute
   '/doctors/search': typeof LayoutPublicNavDoctorsSearchRoute
   '/profile/edit': typeof LayoutPublicNavProfileEditRoute
+  '/profile/join-doctor': typeof LayoutPublicNavProfileJoinDoctorRoute
   '/profile/': typeof LayoutPublicNavProfileIndexRoute
   '/app/doctors/create': typeof LayoutDashboardAppDoctorsCreateRoute
   '/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
@@ -294,6 +302,7 @@ export interface FileRoutesByTo {
   '/doctors/results': typeof LayoutPublicBlankDoctorsResultsRoute
   '/doctors/search': typeof LayoutPublicNavDoctorsSearchRoute
   '/profile/edit': typeof LayoutPublicNavProfileEditRoute
+  '/profile/join-doctor': typeof LayoutPublicNavProfileJoinDoctorRoute
   '/profile': typeof LayoutPublicNavProfileIndexRoute
   '/app/doctors/create': typeof LayoutDashboardAppDoctorsCreateRoute
   '/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
@@ -333,6 +342,7 @@ export interface FileRoutesById {
   '/_layout-public-blank/doctors/results': typeof LayoutPublicBlankDoctorsResultsRoute
   '/_layout-public-nav/doctors/search': typeof LayoutPublicNavDoctorsSearchRoute
   '/_layout-public-nav/profile/edit': typeof LayoutPublicNavProfileEditRoute
+  '/_layout-public-nav/profile/join-doctor': typeof LayoutPublicNavProfileJoinDoctorRoute
   '/_layout-public-nav/profile/': typeof LayoutPublicNavProfileIndexRoute
   '/_layout-dashboard/app/doctors/create': typeof LayoutDashboardAppDoctorsCreateRoute
   '/_layout-dashboard/app/specialists/create': typeof LayoutDashboardAppSpecialistsCreateRoute
@@ -369,6 +379,7 @@ export interface FileRouteTypes {
     | '/doctors/results'
     | '/doctors/search'
     | '/profile/edit'
+    | '/profile/join-doctor'
     | '/profile/'
     | '/app/doctors/create'
     | '/app/specialists/create'
@@ -402,6 +413,7 @@ export interface FileRouteTypes {
     | '/doctors/results'
     | '/doctors/search'
     | '/profile/edit'
+    | '/profile/join-doctor'
     | '/profile'
     | '/app/doctors/create'
     | '/app/specialists/create'
@@ -440,6 +452,7 @@ export interface FileRouteTypes {
     | '/_layout-public-blank/doctors/results'
     | '/_layout-public-nav/doctors/search'
     | '/_layout-public-nav/profile/edit'
+    | '/_layout-public-nav/profile/join-doctor'
     | '/_layout-public-nav/profile/'
     | '/_layout-dashboard/app/doctors/create'
     | '/_layout-dashboard/app/specialists/create'
@@ -548,6 +561,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/profile/'
       preLoaderRoute: typeof LayoutPublicNavProfileIndexRouteImport
+      parentRoute: typeof LayoutPublicNavProfileRoute
+    }
+    '/_layout-public-nav/profile/join-doctor': {
+      id: '/_layout-public-nav/profile/join-doctor'
+      path: '/join-doctor'
+      fullPath: '/profile/join-doctor'
+      preLoaderRoute: typeof LayoutPublicNavProfileJoinDoctorRouteImport
       parentRoute: typeof LayoutPublicNavProfileRoute
     }
     '/_layout-public-nav/profile/edit': {
@@ -830,12 +850,15 @@ const LayoutPublicBlankRouteWithChildren =
 
 interface LayoutPublicNavProfileRouteChildren {
   LayoutPublicNavProfileEditRoute: typeof LayoutPublicNavProfileEditRoute
+  LayoutPublicNavProfileJoinDoctorRoute: typeof LayoutPublicNavProfileJoinDoctorRoute
   LayoutPublicNavProfileIndexRoute: typeof LayoutPublicNavProfileIndexRoute
 }
 
 const LayoutPublicNavProfileRouteChildren: LayoutPublicNavProfileRouteChildren =
   {
     LayoutPublicNavProfileEditRoute: LayoutPublicNavProfileEditRoute,
+    LayoutPublicNavProfileJoinDoctorRoute:
+      LayoutPublicNavProfileJoinDoctorRoute,
     LayoutPublicNavProfileIndexRoute: LayoutPublicNavProfileIndexRoute,
   }
 

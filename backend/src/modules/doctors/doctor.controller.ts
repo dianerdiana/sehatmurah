@@ -12,8 +12,8 @@ import {
 import {
   ApproveDoctorDto,
   CreateDoctorDto,
+  CreateDoctorRequestDto,
   DoctorIdDto,
-  ListPendingDoctorsDto,
   ListDoctorsCitiesDto,
   ListDoctorsDto,
   RejectDoctorDto,
@@ -52,21 +52,6 @@ export const listDoctorsCities = async (req: Request, res: Response) => {
   );
 };
 
-export const listPendingDoctors = async (req: Request, res: Response) => {
-  const query = req.sanitizedQuery as ListPendingDoctorsDto;
-  const result = await doctorService.listPendingDoctors(query);
-
-  res.json(
-    HttpResponse.success({
-      data: result.items,
-      meta: buildResponseMeta({
-        ...query,
-        totalItems: result.totalItems,
-      }),
-    }),
-  );
-};
-
 export const getDoctorById = async (req: Request, res: Response) => {
   const params = req.sanitizedParams as DoctorIdDto;
   const doctorId = params.id;
@@ -90,6 +75,24 @@ export const createDoctor = async (req: Request, res: Response) => {
 
     const data = await doctorService.createDoctor(payload);
     res.status(201).json(HttpResponse.success({ data }));
+  } catch (error) {
+    if (uploadedProfilePhoto) {
+      await cleanupUploadedFilesFromRequest(req, ['profilePhoto']);
+    }
+
+    throw error;
+  }
+};
+
+export const requestDoctor = async (req: Request, res: Response) => {
+  const uploadedProfilePhoto = getFirstUploadedFileByField(req, 'profilePhoto');
+
+  try {
+    const payload = req.body as CreateDoctorRequestDto;
+    const authUser = req.user as AuthUser;
+
+    const data = await doctorService.requestDoctor(payload, authUser);
+    res.status(201).json(HttpResponse.success({ data, message: 'Doctor request submitted' }));
   } catch (error) {
     if (uploadedProfilePhoto) {
       await cleanupUploadedFilesFromRequest(req, ['profilePhoto']);

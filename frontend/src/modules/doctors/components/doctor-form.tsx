@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -40,6 +40,9 @@ type DoctorFormProps = {
   isSpecialistsLoading?: boolean;
   isCitiesLoading?: boolean;
   isUsersLoading?: boolean;
+  hideUserSelector?: boolean;
+  fixedUserId?: string;
+  submitLabel?: string;
   onSpecialistSearchChange?: (value: string) => void;
   onCitySearchChange?: (value: string) => void;
   onUserSearchChange?: (value: string) => void;
@@ -159,6 +162,9 @@ export function DoctorForm({
   isSpecialistsLoading = false,
   isCitiesLoading = false,
   isUsersLoading = false,
+  hideUserSelector = false,
+  fixedUserId,
+  submitLabel,
   onSpecialistSearchChange,
   onCitySearchChange,
   onUserSearchChange,
@@ -166,17 +172,29 @@ export function DoctorForm({
 }: DoctorFormProps) {
   const subtitle = useMemo(() => {
     if (mode === 'create') {
+      if (hideUserSelector) {
+        return 'Complete your doctor profile request and wait for admin approval.';
+      }
+
       return 'Create a doctor profile from a registered account and upload doctor photo.';
     }
 
     return 'Update doctor profile details. User role is not changed in this form.';
-  }, [mode]);
+  }, [hideUserSelector, mode]);
 
   const form = useAppForm({
     defaultValues: buildDefaultValues(initialValue),
     onSubmit: ({ value }) => {
+      const submissionValue =
+        mode === 'create' && fixedUserId
+          ? {
+              ...value,
+              userId: fixedUserId,
+            }
+          : value;
+
       if (mode === 'create') {
-        const parsed = createDoctorSchema.safeParse(value);
+        const parsed = createDoctorSchema.safeParse(submissionValue);
 
         if (!parsed.success) {
           toast.error(parsed.error.issues[0]?.message ?? 'Validation error');
@@ -198,6 +216,12 @@ export function DoctorForm({
     },
   });
 
+  useEffect(() => {
+    if (mode === 'create' && fixedUserId) {
+      form.setFieldValue('userId', fixedUserId);
+    }
+  }, [fixedUserId, form, mode]);
+
   return (
     <Card className='rounded-2xl shadow-sm'>
       <CardHeader>
@@ -214,7 +238,7 @@ export function DoctorForm({
           }}
         >
           <FieldGroup>
-            {mode === 'create' ? (
+            {mode === 'create' && !hideUserSelector ? (
               <form.Field
                 name='userId'
                 children={(field) => (
@@ -513,10 +537,14 @@ export function DoctorForm({
                 <div className='flex flex-wrap gap-2'>
                   <Button
                     type='submit'
-                    disabled={isSubmitting || formSubmitting || (mode === 'create' && !availableUserOptions.length)}
+                    disabled={
+                      isSubmitting ||
+                      formSubmitting ||
+                      (mode === 'create' && !hideUserSelector && !availableUserOptions.length)
+                    }
                   >
                     {isSubmitting || formSubmitting ? <Loader2 className='size-4 animate-spin' /> : null}
-                    {mode === 'create' ? 'Create Doctor' : 'Save Changes'}
+                    {submitLabel ?? (mode === 'create' ? 'Create Doctor' : 'Save Changes')}
                   </Button>
                 </div>
               )}

@@ -99,7 +99,7 @@ function DoctorsListPage() {
   };
 
   const handleStatusChange = (value: DoctorStatusFilter) => {
-    updateSearch({ isAvailable: value }, true);
+    updateSearch({ status: value }, true);
   };
 
   const handleClearFilters = () => {
@@ -107,7 +107,7 @@ function DoctorsListPage() {
       {
         search: '',
         specialist: '',
-        isAvailable: 'all',
+        status: 'all',
         column: 'createdAt',
         sort: 'desc',
       },
@@ -157,7 +157,7 @@ function DoctorsListPage() {
       <DoctorsTableToolbar
         search={search.search}
         specialist={search.specialist}
-        isAvailable={search.isAvailable}
+        status={search.status}
         specialistOptions={specialistOptions}
         onSearchChange={handleSearchChange}
         onSpecialistChange={handleSpecialistChange}
@@ -198,12 +198,13 @@ function DoctorsListPage() {
         </>
       )}
 
-      {search.search || search.specialist || search.isAvailable !== 'all' ? (
+      {search.search || search.specialist || search.status !== 'all' ? (
         <p className='text-sm text-muted-foreground'>
           Showing {totalItems} doctor{totalItems === 1 ? '' : 's'}
           {search.search ? ` for "${search.search}"` : ''}
-          {search.isAvailable === 'true' ? ' with available status' : ''}
-          {search.isAvailable === 'false' ? ' with unavailable status' : ''}.
+          {search.status === 'pending' ? ' with pending approval status' : ''}
+          {search.status === 'approved' ? ' with approved status' : ''}
+          {search.status === 'rejected' ? ' with rejected status' : ''}.
         </p>
       ) : null}
     </div>

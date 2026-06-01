@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { SearchX } from 'lucide-react';
+import { ChevronRight, SearchX, Stethoscope } from 'lucide-react';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -105,8 +105,23 @@ function RouteComponent() {
       </section>
 
       <section aria-label='Profile footer'>
-        <Card className='rounded-3xl shadow-none border-none'>
-          <CardContent>
+        <Card className='rounded-3xl border-none shadow-none'>
+          <CardContent className='space-y-3'>
+            <Button variant='outline' className='h-auto w-full justify-between rounded-2xl px-4 py-4' asChild>
+              <Link to='/profile/join-doctor'>
+                <span className='flex items-center gap-3 text-left'>
+                  <span className='rounded-full bg-primary/10 p-2 text-primary'>
+                    <Stethoscope className='size-4' />
+                  </span>
+                  <span>
+                    <span className='block text-sm font-semibold text-foreground'>Join as a Doctor</span>
+                    <span className='block text-xs text-muted-foreground'>Submit your doctor profile for review</span>
+                  </span>
+                </span>
+                <ChevronRight className='size-4 text-muted-foreground' />
+              </Link>
+            </Button>
+
             <Button
               variant='outline'
               className='h-11 w-full rounded-full border-red-200 font-semibold text-red-600 hover:bg-red-50 hover:text-red-700'

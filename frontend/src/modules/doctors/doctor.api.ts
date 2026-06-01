@@ -8,10 +8,12 @@ import { unwrapApiResponse, unwrapPaginatedApiResponse } from '@/utils/api-respo
 import type { ApiResponse } from '@/types/api-response.type';
 
 import type {
+  ApproveDoctorDto,
   CreateDoctorDto,
   ListDoctorsCitiesDto,
   ListDoctorsDto,
   ListReviewsByDoctorDto,
+  RejectDoctorDto,
   UpdateDoctorDto,
   UpdateDoctorScheduleDto,
 } from './doctor.schema';
@@ -86,6 +88,20 @@ export const doctorApi = {
     }
   },
 
+  request: async (payload: CreateDoctorDto) => {
+    try {
+      const response = await api.post<CreateDoctorDto, ApiResponse<Doctor>>('/doctors/request', payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      return unwrapApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
   update: async (id: string, payload: UpdateDoctorDto) => {
     try {
       const response = await api.put<UpdateDoctorDto, ApiResponse<Doctor>>(`/doctors/${id}`, payload, {
@@ -106,6 +122,26 @@ export const doctorApi = {
         `/doctors/${id}/schedule`,
         payload,
       );
+
+      return unwrapApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
+  approve: async (id: string, payload: ApproveDoctorDto) => {
+    try {
+      const response = await api.patch<ApproveDoctorDto, ApiResponse<Doctor>>(`/doctors/${id}/approve`, payload);
+
+      return unwrapApiResponse(response.data);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  },
+
+  reject: async (id: string, payload: RejectDoctorDto) => {
+    try {
+      const response = await api.patch<RejectDoctorDto, ApiResponse<Doctor>>(`/doctors/${id}/reject`, payload);
 
       return unwrapApiResponse(response.data);
     } catch (error) {
