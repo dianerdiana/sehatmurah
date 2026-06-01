@@ -3,7 +3,7 @@ import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { CompanyBrand } from '@/components/layouts/company-brand';
 import { NavMain } from '@/components/layouts/nav-main';
 import { NavUser } from '@/components/layouts/nav-user';
-import { ModeToggle } from '@/components/themes/mode-toogle';
+import { ModeToggle } from '@/components/themes/mode-toggle';
 import {
   Breadcrumb,
   BreadcrumbItem,
