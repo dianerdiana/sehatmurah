@@ -1,5 +1,7 @@
 import { Document, model, Schema, Types } from 'mongoose';
 
+import { DoctorApprovalStatus } from '../common/enums/doctor-approval-status.enum';
+
 export interface IPracticeLocation {
   clinicName: string;
   address: string;
@@ -26,6 +28,12 @@ export interface IDoctorProfile extends Document {
   ratingAverage: number;
   ratingCount: number;
   isAvailable: boolean;
+  approvalStatus: DoctorApprovalStatus;
+  approvedAt?: Date;
+  approvedBy?: Types.ObjectId;
+  rejectedAt?: Date;
+  rejectedBy?: Types.ObjectId;
+  rejectionReason?: string;
 }
 
 const practiceLocationSchema = new Schema<IPracticeLocation>(
@@ -131,6 +139,31 @@ const doctorProfileSchema = new Schema<IDoctorProfile>(
       type: Boolean,
       default: true,
     },
+    approvalStatus: {
+      type: String,
+      enum: Object.values(DoctorApprovalStatus),
+      default: DoctorApprovalStatus.PENDING,
+      required: true,
+    },
+    approvedAt: {
+      type: Date,
+    },
+    approvedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    rejectedAt: {
+      type: Date,
+    },
+    rejectedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    rejectionReason: {
+      type: String,
+      trim: true,
+      maxlength: 500,
+    },
   },
   {
     timestamps: true,
@@ -140,5 +173,6 @@ const doctorProfileSchema = new Schema<IDoctorProfile>(
 doctorProfileSchema.index({ specialist: 1 });
 doctorProfileSchema.index({ isAvailable: 1 });
 doctorProfileSchema.index({ ratingAverage: -1 });
+doctorProfileSchema.index({ approvalStatus: 1, createdAt: -1 });
 
 export const DoctorProfileModel = model<IDoctorProfile>('DoctorProfile', doctorProfileSchema);

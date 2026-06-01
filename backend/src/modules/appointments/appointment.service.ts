@@ -1,5 +1,6 @@
 import { ApiError } from '../../common/api-error';
 import { AppointmentStatus } from '../../common/enums/appointment-status.enum';
+import { DoctorApprovalStatus } from '../../common/enums/doctor-approval-status.enum';
 import { UserRole } from '../../common/enums/user-role.enum';
 import { normalizePagination } from '../../common/pagination';
 import { AppointmentModel } from '../../models/appointment.model';
@@ -64,6 +65,10 @@ export const createAppointment = async (user: AuthUser, payload: CreateAppointme
 
   if (!doctor.isAvailable) {
     throw new ApiError(400, 'Doctor is not available');
+  }
+
+  if (doctor.approvalStatus !== DoctorApprovalStatus.APPROVED) {
+    throw new ApiError(400, 'Doctor is not approved');
   }
 
   const appointment = await AppointmentModel.create({

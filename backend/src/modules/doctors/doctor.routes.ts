@@ -14,10 +14,13 @@ import {
 
 import * as doctorController from './doctor.controller';
 import {
+  approveDoctorSchema,
   createDoctorSchema,
   doctorIdSchema,
+  listPendingDoctorsSchema,
   listDoctorsCitiesSchema,
   listDoctorsSchema,
+  rejectDoctorSchema,
   updateDoctorScheduleSchema,
   updateDoctorSchema,
 } from './doctor.schema';
@@ -29,6 +32,13 @@ doctorRouter.get(
   '/cities',
   validateRequest({ query: listDoctorsCitiesSchema }),
   doctorController.listDoctorsCities,
+);
+doctorRouter.get(
+  '/pending',
+  authMiddleware,
+  roleMiddleware(UserRole.ADMIN),
+  validateRequest({ query: listPendingDoctorsSchema }),
+  doctorController.listPendingDoctors,
 );
 doctorRouter.get('/me', authMiddleware, doctorController.getMyDoctorProfile);
 doctorRouter.get(
@@ -66,6 +76,28 @@ doctorRouter.put(
     body: updateDoctorSchema,
   }),
   doctorController.updateDoctor,
+);
+
+doctorRouter.patch(
+  '/:id/approve',
+  authMiddleware,
+  roleMiddleware(UserRole.ADMIN),
+  validateRequest({
+    params: doctorIdSchema,
+    body: approveDoctorSchema,
+  }),
+  doctorController.approveDoctor,
+);
+
+doctorRouter.patch(
+  '/:id/reject',
+  authMiddleware,
+  roleMiddleware(UserRole.ADMIN),
+  validateRequest({
+    params: doctorIdSchema,
+    body: rejectDoctorSchema,
+  }),
+  doctorController.rejectDoctor,
 );
 
 doctorRouter.patch(

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 import { ApiError } from '../../common/api-error';
+import { DoctorApprovalStatus } from '../../common/enums/doctor-approval-status.enum';
 import { UserRole } from '../../common/enums/user-role.enum';
 import { normalizePagination } from '../../common/pagination';
 import { DoctorProfileModel } from '../../models/doctor-profile.model';
@@ -10,39 +11,64 @@ import { AuthUser } from '../../types/auth-user.type';
 import { escapeRegex } from '../../utils/escape-regex';
 
 import {
+  ApproveDoctorDto,
   CreateDoctorDto,
   ListDoctorsCitiesDto,
   ListDoctorsDto,
+  ListPendingDoctorsDto,
+  RejectDoctorDto,
   UpdateDoctorDto,
 } from './doctor.schema';
 
+const resolveSpecialistFilter = async (
+  specialist?: string,
+): Promise<mongoose.Types.ObjectId | string | undefined> => {
+  if (!specialist) {
+    return undefined;
+  }
+
+  const isObjectId = mongoose.Types.ObjectId.isValid(specialist);
+
+  if (isObjectId) {
+    return specialist;
+  }
+
+  const specialistData = await SpecialistModel.findOne({
+    $or: [{ slug: specialist }, { name: { $regex: specialist, $options: 'i' } }],
+  }).select('_id');
+
+  if (specialistData) {
+    return specialistData._id;
+  }
+
+  return new mongoose.Types.ObjectId();
+};
+
+const assertDoctorCanBeApproved = (status: DoctorApprovalStatus) => {
+  if (status !== DoctorApprovalStatus.PENDING) {
+    throw new ApiError(409, 'Only pending doctor can be approved');
+  }
+};
+
+const assertDoctorCanBeRejected = (status: DoctorApprovalStatus) => {
+  if (status !== DoctorApprovalStatus.PENDING) {
+    throw new ApiError(409, 'Only pending doctor can be rejected');
+  }
+};
+
 export const listDoctors = async (query: ListDoctorsDto) => {
   const filter: Record<string, unknown> = {};
+
+  filter.approvalStatus = DoctorApprovalStatus.APPROVED;
 
   if (query.isAvailable !== 'all') {
     filter.isAvailable = query.isAvailable === 'true';
   }
 
-  if (query.specialist) {
-    const isObjectId = mongoose.Types.ObjectId.isValid(query.specialist);
+  const specialistFilter = await resolveSpecialistFilter(query.specialist);
 
-    if (isObjectId) {
-      filter.specialist = query.specialist;
-    } else {
-      const specialistData = await SpecialistModel.findOne({
-        $or: [
-          { slug: query.specialist },
-          { name: { $regex: query.specialist, $options: 'i' } }, // Case-insensitive
-        ],
-      }).select('_id');
-
-      if (specialistData) {
-        filter.specialist = specialistData._id;
-      } else {
-        // Jika spesialis tidak ditemukan, paksa hasil pencarian dokter kosong
-        filter.specialist = new mongoose.Types.ObjectId();
-      }
-    }
+  if (specialistFilter) {
+    filter.specialist = specialistFilter;
   }
 
   if (query.city) {
@@ -87,6 +113,8 @@ export const listDoctors = async (query: ListDoctorsDto) => {
 
 export const listDoctorsCities = async (query: ListDoctorsCitiesDto) => {
   const filter: Record<string, unknown> = {};
+
+  filter.approvalStatus = DoctorApprovalStatus.APPROVED;
 
   if (query.search) {
     filter['practiceLocation.city'] = { $regex: query.search, $options: 'i' };
@@ -219,6 +247,103 @@ export const deleteDoctor = async (doctorId: string) => {
   if (!doctor) {
     throw new ApiError(404, 'Doctor not found');
   }
+
+  return doctor;
+};
+
+export const listPendingDoctors = async (query: ListPendingDoctorsDto) => {
+  const filter: Record<string, unknown> = {
+    approvalStatus: DoctorApprovalStatus.PENDING,
+  };
+
+  const specialistFilter = await resolveSpecialistFilter(query.specialist);
+
+  if (specialistFilter) {
+    filter.specialist = specialistFilter;
+  }
+
+  if (query.city) {
+    filter['practiceLocation.city'] = { $regex: escapeRegex(query.city), $options: 'i' };
+  }
+
+  if (query.search) {
+    filter.fullName = { $regex: escapeRegex(query.search), $options: 'i' };
+  }
+
+  const { page, limit, skip } = normalizePagination(query);
+  const totalItems = await DoctorProfileModel.countDocuments(filter);
+
+  const sortDirection = query.sort === 'asc' ? 1 : -1;
+  const sortByColumn: Record<ListPendingDoctorsDto['column'], string> = {
+    fullName: 'fullName',
+    createdAt: 'createdAt',
+  };
+
+  const primarySortField = sortByColumn[query.column];
+  const sortOption: Record<string, 1 | -1> = {
+    [primarySortField]: sortDirection,
+    _id: 1,
+  };
+
+  if (primarySortField !== 'createdAt') {
+    sortOption.createdAt = -1;
+  }
+
+  if (primarySortField !== 'fullName') {
+    sortOption.fullName = 1;
+  }
+
+  const items = await DoctorProfileModel.find(filter)
+    .populate('specialist', 'name slug icon')
+    .sort(sortOption)
+    .skip(skip)
+    .limit(limit);
+
+  return { items, totalItems, page, limit };
+};
+
+export const approveDoctor = async (
+  doctorId: string,
+  payload: ApproveDoctorDto,
+  user: AuthUser,
+) => {
+  const doctor = await DoctorProfileModel.findById(doctorId);
+
+  if (!doctor) {
+    throw new ApiError(404, 'Doctor not found');
+  }
+
+  assertDoctorCanBeApproved(doctor.approvalStatus);
+
+  doctor.approvalStatus = payload.status;
+  doctor.approvedAt = new Date();
+  doctor.approvedBy = new mongoose.Types.ObjectId(user.id);
+  doctor.rejectedAt = undefined;
+  doctor.rejectedBy = undefined;
+  doctor.rejectionReason = undefined;
+
+  await doctor.save();
+
+  return doctor;
+};
+
+export const rejectDoctor = async (doctorId: string, payload: RejectDoctorDto, user: AuthUser) => {
+  const doctor = await DoctorProfileModel.findById(doctorId);
+
+  if (!doctor) {
+    throw new ApiError(404, 'Doctor not found');
+  }
+
+  assertDoctorCanBeRejected(doctor.approvalStatus);
+
+  doctor.approvalStatus = payload.status;
+  doctor.rejectedAt = new Date();
+  doctor.rejectedBy = new mongoose.Types.ObjectId(user.id);
+  doctor.rejectionReason = payload.rejectionReason;
+  doctor.approvedAt = undefined;
+  doctor.approvedBy = undefined;
+
+  await doctor.save();
 
   return doctor;
 };

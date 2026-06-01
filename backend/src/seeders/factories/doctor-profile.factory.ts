@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 
+import { DoctorApprovalStatus } from '../../common/enums/doctor-approval-status.enum';
 import { IDoctorSchedule, IPracticeLocation } from '../../models/doctor-profile.model';
 
 export interface IDoctorProfileSeed {
@@ -15,6 +16,7 @@ export interface IDoctorProfileSeed {
   ratingAverage: number;
   ratingCount: number;
   isAvailable: boolean;
+  approvalStatus: DoctorApprovalStatus;
 }
 
 export function generateDoctorProfiles(
@@ -53,6 +55,7 @@ export function generateDoctorProfiles(
       ratingAverage: 4.8,
       ratingCount: 42,
       isAvailable: true,
+      approvalStatus: DoctorApprovalStatus.APPROVED,
     },
     {
       user: doctorUserIds[1],
@@ -71,6 +74,7 @@ export function generateDoctorProfiles(
       ratingAverage: 4.6,
       ratingCount: 38,
       isAvailable: true,
+      approvalStatus: DoctorApprovalStatus.APPROVED,
     },
     {
       user: doctorUserIds[2],
@@ -89,6 +93,7 @@ export function generateDoctorProfiles(
       ratingAverage: 4.9,
       ratingCount: 55,
       isAvailable: true,
+      approvalStatus: DoctorApprovalStatus.APPROVED,
     },
     {
       user: doctorUserIds[3],
@@ -107,6 +112,7 @@ export function generateDoctorProfiles(
       ratingAverage: 4.7,
       ratingCount: 31,
       isAvailable: true,
+      approvalStatus: DoctorApprovalStatus.APPROVED,
     },
     {
       user: doctorUserIds[4],
@@ -125,6 +131,7 @@ export function generateDoctorProfiles(
       ratingAverage: 4.5,
       ratingCount: 28,
       isAvailable: true,
+      approvalStatus: DoctorApprovalStatus.APPROVED,
     },
   ];
 

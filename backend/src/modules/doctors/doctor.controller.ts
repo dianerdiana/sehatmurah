@@ -10,10 +10,13 @@ import {
 } from '../../utils/uploaded-file-request';
 
 import {
+  ApproveDoctorDto,
   CreateDoctorDto,
   DoctorIdDto,
+  ListPendingDoctorsDto,
   ListDoctorsCitiesDto,
   ListDoctorsDto,
+  RejectDoctorDto,
   UpdateDoctorDto,
   UpdateDoctorScheduleDto,
 } from './doctor.schema';
@@ -37,6 +40,21 @@ export const listDoctors = async (req: Request, res: Response) => {
 export const listDoctorsCities = async (req: Request, res: Response) => {
   const query = req.sanitizedQuery as ListDoctorsCitiesDto;
   const result = await doctorService.listDoctorsCities(query);
+
+  res.json(
+    HttpResponse.success({
+      data: result.items,
+      meta: buildResponseMeta({
+        ...query,
+        totalItems: result.totalItems,
+      }),
+    }),
+  );
+};
+
+export const listPendingDoctors = async (req: Request, res: Response) => {
+  const query = req.sanitizedQuery as ListPendingDoctorsDto;
+  const result = await doctorService.listPendingDoctors(query);
 
   res.json(
     HttpResponse.success({
@@ -136,4 +154,24 @@ export const deleteDoctor = async (req: Request, res: Response) => {
 
   const data = await doctorService.deleteDoctor(doctorId);
   res.json(HttpResponse.success({ data, message: 'Doctor deleted' }));
+};
+
+export const approveDoctor = async (req: Request, res: Response) => {
+  const params = req.sanitizedParams as DoctorIdDto;
+  const doctorId = params.id;
+  const payload = req.body as ApproveDoctorDto;
+  const authUser = req.user as AuthUser;
+
+  const data = await doctorService.approveDoctor(doctorId, payload, authUser);
+  res.json(HttpResponse.success({ data, message: 'Doctor approved' }));
+};
+
+export const rejectDoctor = async (req: Request, res: Response) => {
+  const params = req.sanitizedParams as DoctorIdDto;
+  const doctorId = params.id;
+  const payload = req.body as RejectDoctorDto;
+  const authUser = req.user as AuthUser;
+
+  const data = await doctorService.rejectDoctor(doctorId, payload, authUser);
+  res.json(HttpResponse.success({ data, message: 'Doctor rejected' }));
 };

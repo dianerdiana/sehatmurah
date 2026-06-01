@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { DoctorApprovalStatus } from '../../common/enums/doctor-approval-status.enum';
+
 export const doctorIdSchema = z.object({
   id: z.string().trim().min(1, 'id is required'),
 });
@@ -85,9 +87,53 @@ export const updateDoctorScheduleSchema = z.object({
   schedule: z.array(doctorScheduleItemSchema),
 });
 
+export const listPendingDoctorsSchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(10),
+  search: z.string().trim().default(''),
+  city: z
+    .string()
+    .trim()
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
+  specialist: z
+    .string()
+    .trim()
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
+  column: z.enum(['createdAt', 'fullName'] as const).default('createdAt'),
+  sort: z.enum(['asc', 'desc'] as const).default('desc'),
+});
+
+export const updateDoctorApprovalSchema = z.object({
+  status: z.enum(DoctorApprovalStatus).refine((status) => status !== DoctorApprovalStatus.PENDING, {
+    message: 'status must be approved or rejected',
+  }),
+  rejectionReason: z.string().trim().max(500).optional(),
+});
+
+export const approveDoctorSchema = updateDoctorApprovalSchema.refine(
+  (value) => value.status === DoctorApprovalStatus.APPROVED,
+  {
+    message: 'status must be approved',
+    path: ['status'],
+  },
+);
+
+export const rejectDoctorSchema = updateDoctorApprovalSchema.refine(
+  (value) => value.status === DoctorApprovalStatus.REJECTED && !!value.rejectionReason,
+  {
+    message: 'rejectionReason is required for rejected status',
+    path: ['rejectionReason'],
+  },
+);
+
 export type DoctorIdDto = z.infer<typeof doctorIdSchema>;
 export type ListDoctorsDto = z.infer<typeof listDoctorsSchema>;
 export type ListDoctorsCitiesDto = z.infer<typeof listDoctorsCitiesSchema>;
 export type CreateDoctorDto = z.infer<typeof createDoctorSchema>;
 export type UpdateDoctorDto = z.infer<typeof updateDoctorSchema>;
 export type UpdateDoctorScheduleDto = z.infer<typeof updateDoctorScheduleSchema>;
+export type ListPendingDoctorsDto = z.infer<typeof listPendingDoctorsSchema>;
+export type ApproveDoctorDto = z.infer<typeof approveDoctorSchema>;
+export type RejectDoctorDto = z.infer<typeof rejectDoctorSchema>;
