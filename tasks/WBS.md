@@ -35,7 +35,7 @@ nodemon.
 
 
 ### Milestone 2: Backend Development
-- **Status:** in_progress
+- **Status:** done
 - **Priority:** medium
 - **Due:** 2026-05-16
 
@@ -101,7 +101,7 @@ These schemas establish relationships between users, doctors, and appointments f
 
 
 ### Milestone 4: Frontend Development
-- **Status:** todo
+- **Status:** done
 - **Priority:** medium
 - **Due:** 2026-05-19
 
@@ -123,7 +123,7 @@ These schemas establish relationships between users, doctors, and appointments f
 
 
 ### Milestone 5: Project Implementation
-- **Status:** todo
+- **Status:** done
 - **Priority:** medium
 - **Due:** 2026-05-23
 
