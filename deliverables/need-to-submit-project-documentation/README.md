@@ -1,66 +1,361 @@
-# Full Stack Development with MERN
-
-# Project Documentation format
+# SehatMurah Project Documentation
 
 ## 1. Introduction
 
-- Project Title: [Your Project Title]
-- Team Members: List team members and their roles.
+- Project Title: **SehatMurah - Doctor Appointment Booking Platform**
+- Team Members:
+  - **Dian Erdiana** - Full Stack Developer
 
 ## 2. Project Overview
 
-- Purpose: Briefly describe the purpose and goals of the project.
-- Features: Highlight key features and functionalities.
+- Purpose:
+  SehatMurah is a MERN-based healthcare platform that helps patients discover doctors, book appointments, manage profiles, and submit reviews. It also provides admin tools for managing users, specialists, doctors, patients, appointments, and reviews.
+- Features:
+  - Patient registration and login with JWT authentication
+  - Doctor discovery by specialist, city, and availability
+  - Doctor detail pages with reviews and schedules
+  - Appointment booking and appointment status management
+  - Patient profile management
+  - Review creation for completed appointments
+  - Admin dashboard modules for users, doctors, patients, specialists, appointments, and reviews
+  - File upload support for doctor profile photos and specialist assets
 
 ## 3. Architecture
 
-- Frontend: Describe the frontend architecture using React.
-- Backend: Outline the backend architecture using Node.js and Express.js.
-- Database: Detail the database schema and interactions with MongoDB.
+- Frontend:
+  - Built with **React 19**, **TypeScript**, and **Vite**
+  - Uses **TanStack Router** for file-based routing
+  - Uses **TanStack Query** for server-state fetching and caching
+  - Uses **CASL** for frontend ability/permission handling
+  - Organized by feature modules such as `auth`, `doctors`, `appointments`, `patients`, `reviews`, `specialists`, and `users`
+- Backend:
+  - Built with **Node.js**, **Express 5**, and **TypeScript**
+  - Follows a **modular monolith** architecture
+  - Uses route -> controller -> service -> model layering
+  - Uses **Zod** for request validation
+  - Uses **Multer** for multipart uploads
+- Database:
+  - Uses **MongoDB** with **Mongoose**
+  - Main collections:
+    - `users`
+    - `patientprofiles`
+    - `doctorprofiles`
+    - `appointments`
+    - `reviews`
+    - `specialists`
+  - Main relationships:
+    - One `User` can have one `PatientProfile`
+    - One `User` can have one `DoctorProfile`
+    - One `DoctorProfile` belongs to one `Specialist`
+    - One `Appointment` belongs to one patient and one doctor
+    - One `Review` belongs to one patient, one doctor, and optionally one appointment
 
 ## 4. Setup Instructions
 
-- Prerequisites: List software dependencies (e.g., Node.js, MongoDB).
-- Installation: Step-by-step guide to clone, install dependencies, and set up the
-  environment variables.
+- Prerequisites:
+  - **Node.js** 20+ recommended
+  - **npm**
+  - **MongoDB** local server or MongoDB Atlas
+- Installation:
+
+### Clone repository
+
+```bash
+git clone https://github.com/dianerdiana/sehatmurah.git
+cd sehatmurah
+```
+
+### Install backend dependencies
+
+```bash
+cd backend
+npm install
+```
+
+### Install frontend dependencies
+
+```bash
+cd ../frontend
+npm install
+```
+
+### Backend environment variables
+
+Create `backend/.env`:
+
+```env
+NODE_ENV=development
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/sehatmurah
+JWT_SECRET=your-secret-key
+JWT_EXPIRES_IN=1d
+UPLOAD_DIR=uploads
+UPLOAD_BASE_URL=/uploads
+UPLOAD_MAX_FILE_SIZE_MB=5
+```
+
+### Frontend environment variables
+
+Create `frontend/.env`:
+
+```env
+VITE_BASE_SERVER_URL=http://localhost:5000
+```
 
 ## 5. Folder Structure
 
-- Client: Describe the structure of the React frontend.
-- Server: Explain the organization of the Node.js backend.
+- Client:
+
+```txt
+frontend/
+|-- public/
+|   |-- assets/
+|-- src/
+|   |-- components/
+|   |-- configs/
+|   |-- integrations/
+|   |-- modules/
+|   |-- routes/
+|   |-- types/
+|   \-- utils/
+|-- package.json
+\-- vite.config.*
+```
+
+- Server:
+
+```txt
+backend/
+|-- docs/
+|   \-- api-spec/
+|-- src/
+|   |-- common/
+|   |-- config/
+|   |-- middlewares/
+|   |-- models/
+|   |-- modules/
+|   |-- seeders/
+|   |-- types/
+|   \-- utils/
+|-- package.json
+\-- tsconfig.json
+```
 
 ## 6. Running the Application
 
-- Provide commands to start the frontend and backend servers locally.
-  o Frontend: npm start in the client directory.
-  o Backend: npm start in the server directory.
+- Backend:
+
+```bash
+cd backend
+npm run dev
+```
+
+- Frontend:
+
+```bash
+cd frontend
+npm run dev
+```
+
+- Default local URLs:
+  - Frontend: `http://localhost:3000`
+  - Backend API: `http://localhost:5000`
+  - Health check: `http://localhost:5000/health`
 
 ## 7. API Documentation
 
-- Document all endpoints exposed by the backend.
-- Include request methods, parameters, and example responses.
+The backend exposes REST endpoints under `/api`. Detailed request parameters and response examples already exist in:
+
+- [Auth docs](../../backend/docs/api-spec/auth.md)
+- [Appointments docs](../../backend/docs/api-spec/appointments.md)
+- [Doctors docs](../../backend/docs/api-spec/doctors.md)
+- [Patients docs](../../backend/docs/api-spec/patients.md)
+- [Reviews docs](../../backend/docs/api-spec/reviews.md)
+- [Specialists docs](../../backend/docs/api-spec/specialists.md)
+- [Users docs](../../backend/docs/api-spec/users.md)
+
+### Standard success response
+
+```json
+{
+  "status": "success",
+  "message": "ok",
+  "data": {}
+}
+```
+
+### Standard error response
+
+```json
+{
+  "status": "error",
+  "message": "Validation error",
+  "code": "VALIDATION_ERROR",
+  "details": []
+}
+```
+
+### Endpoint summary
+
+#### Authentication
+
+| Method | Endpoint | Auth | Description |
+| --- | --- | --- | --- |
+| POST | `/api/auth/register` | Public | Register a patient account |
+| POST | `/api/auth/login` | Public | Login and receive JWT token |
+| GET | `/api/auth/me` | Bearer token | Get current authenticated user |
+
+#### Doctors
+
+| Method | Endpoint | Auth | Description |
+| --- | --- | --- | --- |
+| GET | `/api/doctors` | Public | List doctors with filters |
+| GET | `/api/doctors/cities` | Public | List doctor cities |
+| GET | `/api/doctors/me` | Bearer token | Get current doctor's profile |
+| GET | `/api/doctors/:id` | Public | Get doctor by id |
+| GET | `/api/doctors/:doctorId/reviews` | Public | List doctor reviews |
+| POST | `/api/doctors/request` | Patient | Submit request to become a doctor |
+| POST | `/api/doctors` | Admin | Create doctor profile |
+| PUT | `/api/doctors/:id` | Admin, Doctor | Update doctor profile |
+| PATCH | `/api/doctors/:id/approve` | Admin | Approve doctor request |
+| PATCH | `/api/doctors/:id/reject` | Admin | Reject doctor request |
+| PATCH | `/api/doctors/:id/schedule` | Admin, Doctor | Update doctor schedule |
+| DELETE | `/api/doctors/:id` | Admin | Delete doctor |
+
+#### Appointments
+
+| Method | Endpoint | Auth | Description |
+| --- | --- | --- | --- |
+| POST | `/api/appointments` | Patient | Create appointment |
+| GET | `/api/appointments` | Patient, Doctor, Admin | List appointments |
+| GET | `/api/appointments/:id` | Patient, Doctor, Admin | Get appointment by id |
+| PATCH | `/api/appointments/:id/status` | Doctor, Admin | Update appointment status |
+| DELETE | `/api/appointments/:id` | Patient, Admin | Delete appointment |
+
+#### Patients
+
+| Method | Endpoint | Auth | Description |
+| --- | --- | --- | --- |
+| GET | `/api/patients/me` | Patient | Get own patient profile |
+| PUT | `/api/patients/me` | Patient | Update own patient profile |
+| GET | `/api/patients` | Admin | List patients |
+| GET | `/api/patients/:id` | Admin | Get patient by id |
+| PUT | `/api/patients/:id` | Admin | Update patient by id |
+| DELETE | `/api/patients/:id` | Admin | Delete patient |
+
+#### Specialists
+
+| Method | Endpoint | Auth | Description |
+| --- | --- | --- | --- |
+| GET | `/api/specialists` | Public | List specialists |
+| GET | `/api/specialists/:id` | Public | Get specialist by id |
+| POST | `/api/specialists` | Admin | Create specialist |
+| PUT | `/api/specialists/:id` | Admin | Update specialist |
+| DELETE | `/api/specialists/:id` | Admin | Delete specialist |
+
+#### Reviews
+
+| Method | Endpoint | Auth | Description |
+| --- | --- | --- | --- |
+| POST | `/api/reviews` | Patient | Create review |
+| GET | `/api/reviews` | Admin | List reviews |
+| GET | `/api/reviews/:id` | Admin | Get review by id |
+| GET | `/api/reviews/appointments/:id` | Bearer token | Get review by appointment id |
+| PUT | `/api/reviews/:id` | Admin | Update review |
+| DELETE | `/api/reviews/:id` | Admin | Delete review |
+
+#### Users
+
+| Method | Endpoint | Auth | Description |
+| --- | --- | --- | --- |
+| GET | `/api/users` | Admin | List users |
+| POST | `/api/users` | Admin | Create user |
+| GET | `/api/users/:id` | Admin | Get user by id |
+| PUT | `/api/users/:id` | Admin | Update user including activation state |
+| DELETE | `/api/users/:id` | Admin | Delete user |
 
 ## 8. Authentication
 
-- Explain how authentication and authorization are handled in the project.
-- Include details about tokens, sessions, or any other methods used.
+- The backend uses **JWT bearer tokens**
+- A token is returned after successful registration and login
+- Protected routes require:
+
+```http
+Authorization: Bearer <token>
+```
+
+- Authentication and authorization flow:
+  - `authMiddleware` verifies the JWT token
+  - The backend checks whether the user still exists and is still active
+  - `roleMiddleware` restricts endpoints by role: `ADMIN`, `DOCTOR`, or `PATIENT`
+  - The frontend uses **CASL** to shape UI access based on permissions returned from the backend
+- Security notes:
+  - Inactive accounts cannot log in
+  - Old tokens from disabled accounts are blocked on protected endpoints
+  - Passwords are hashed before storage
 
 ## 9. User Interface
 
-- Provide screenshots or GIFs showcasing different UI features.
+Main UI areas included in the frontend:
+
+- Public homepage for browsing specialists and recommended doctors
+- Doctor search and doctor detail pages
+- Booking flow and booking success page
+- Patient profile and join-doctor flow
+- Authentication screens for login and registration
+- Admin dashboard modules for users, doctors, specialists, patients, appointments, and reviews
+
+Representative UI assets currently included in the frontend:
+
+![Homepage Banner](../../frontend/public/assets/image/homepage-header-banner.png)
+
+![Login Illustration](../../frontend/public/assets/image/login-image.png)
 
 ## 10. Testing
 
-- Describe the testing strategy and tools used.
+- Testing tools configured in the project:
+  - Backend: `vitest` script is defined in `backend/package.json`
+  - Frontend: `vitest` script is defined in `frontend/package.json`
+- Available commands:
+
+```bash
+cd backend
+npm test
+```
+
+```bash
+cd frontend
+npm test
+```
+
+- Current testing status:
+  - No committed `*.test.*` or `*.spec.*` files were found in the repository
+  - This means automated tests are planned in the toolchain, but test coverage is not yet implemented in the current codebase
 
 ## 11. Screenshots or Demo
 
-- Provide screenshots or a link to a demo to showcase the application.
+- Current demo status:
+  - No deployed public demo URL was found in the repository
+  - The project is designed to be run locally using the setup steps above
+- Suggested demo flow:
+  1. Register a patient account
+  2. Browse doctors by specialist and city
+  3. Book an appointment
+  4. Log in as admin and manage doctors, specialists, users, and appointments
 
 ## 12. Known Issues
 
-- Document any known bugs or issues that users or developers should be aware of.
+- The dashboard route currently contains a placeholder page instead of finished analytics content
+- Automated test files are not yet committed, so regression checking is mostly manual
+- The frontend should define `VITE_BASE_SERVER_URL`; otherwise API URL construction can become invalid
+- A live demo link and real in-app screenshots are not currently bundled in the repository
 
 ## 13. Future Enhancements
 
-- Outline potential future features or improvements that could be made to the project.
+- Add a fully implemented analytics dashboard for admins
+- Add email or WhatsApp notifications for appointment reminders
+- Add payment gateway integration for consultation fees
+- Add richer doctor availability management and time-slot conflict prevention UX
+- Add deployment configuration with Docker and CI/CD
+- Add automated unit, integration, and end-to-end test coverage
+- Add reporting and audit logs for administrative actions
