@@ -37,7 +37,7 @@ Reference: [https://www.mural.co/templates/empathy-map-canvas](https://www.mural
 | **DOES** *(Actions and behaviors observed)* | - Searches doctor directories online by specialty, price, and schedule.<br>- Relies heavily on reviews and peer recommendations.<br>- Manages physical folders containing paper prescriptions, laboratory reports, and hospital files manually. |
 | **FEELS** *(The emotional state of the patient)* | - **Frustrated** by archaic booking slots and delayed consultation starts.<br>- **Anxious** about doctor credential integrity and the safety of medical uploads.<br>- **Overwhelmed** by coordinating multiple paper health records. |
 | **PAINS** *(Frustrations & Obstacles)* | - Time-consuming physical waiting times.<br>- Lack of transparent, public, and easily accessible licensing validation.<br>- Security anxiety over sharing private files digitally. |
-| **GAINS** *(Desires & Success Metrics)* | - Instant booking with real-time schedule slot confirmation.<br>- Total trust established through validated STR/SIP doctor listings.<br>- A secure digital vault for medical documents that are shared instantly with doctors. |
+| **GAINS** *(Desires & Success Metrics)* | - Instant booking with real-time schedule slot confirmation.<br>- Total trust established through validated STR/SIP doctor listings.<br>- A secure digital vault for medical documents that are shared instantly with doctors (planned as a future improvement). |
 
 ---
 
@@ -50,7 +50,7 @@ Reference: [https://www.mural.co/templates/empathy-map-canvas](https://www.mural
 | **DOES** *(Actions and behaviors observed)* | - Manages booking schedules on offline spreadsheets or manual ledgers.<br>- Consults patients with zero pre-consultation medical record visibility.<br>- Manually accepts or declines incoming patient slot requests. |
 | **FEELS** *(The emotional state of the doctor)* | - **Stressed** by inefficient schedule coordination and administrative chores.<br>- **Apprehensive** about diagnosing complex cases without previous medical histories.<br>- **Eager** to adopt a modern platform that saves practice management hours. |
 | **PAINS** *(Frustrations & Obstacles)* | - High patient no-show rates and fragmented calendar blocks.<br>- Minimal visibility of patient medical background before checkups.<br>- Inefficient manual administrative approval loops. |
-| **GAINS** *(Desires & Success Metrics)* | - A centralized, automated practice calendar checking booking conflicts.<br>- Secure access to pre-uploaded patient records prior to consultation.<br>- Higher diagnosis confidence and streamlined administrative workflows. |
+| **GAINS** *(Desires & Success Metrics)* | - A centralized, automated practice calendar checking booking conflicts.<br>- Secure access to pre-uploaded patient records prior to consultation (planned as a future improvement).<br>- Higher diagnosis confidence and streamlined administrative workflows. |
 
 ---
 
