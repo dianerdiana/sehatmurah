@@ -1,6 +1,5 @@
 import cors from 'cors';
 import express from 'express';
-import fs from 'fs';
 import path from 'path';
 
 import { HttpResponse } from './common/http-response';
@@ -12,13 +11,9 @@ import { patientRouter } from './modules/patients/patient.routes';
 import { reviewRouter } from './modules/reviews/review.routes';
 import { specialistRouter } from './modules/specialists/specialist.routes';
 import { userRouter } from './modules/users/user.routes';
-import { uploadDir } from './utils/upload-dir';
 
 export const app = express();
 
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
 
 // Static Path
 const uploadPath = path.join(__dirname, '../uploads');

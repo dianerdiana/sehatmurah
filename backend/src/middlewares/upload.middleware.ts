@@ -1,4 +1,3 @@
-import fs from 'fs';
 import multer from 'multer';
 import path from 'path';
 
@@ -22,9 +21,6 @@ const storage = multer.diskStorage({
 
     const targetDir = path.resolve(uploadDir, subFolder);
 
-    if (!fs.existsSync(targetDir)) {
-      fs.mkdirSync(targetDir, { recursive: true });
-    }
 
     callback(null, targetDir);
   },
