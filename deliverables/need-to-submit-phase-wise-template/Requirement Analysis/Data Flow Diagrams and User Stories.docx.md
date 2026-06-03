@@ -37,8 +37,8 @@ graph TD
     %% Patient Flows
     Patient -->|1. Credentials / Registration| System
     Patient -->|2. Search & Calendar Filters| System
-    Patient -->|3. Booking Requests & PDF Reports| System
-    System -->|4. Appointment Alerts & Notifications| System
+    Patient -->|3. Booking Requests [PDF Uploads Planned for Future Phase]| System
+    System -->|4. Appointment Alerts & Notifications [Future Phase]| System
     System -->|5. Doctor Directories & Availability| Patient
 
     %% Doctor Flows
@@ -46,7 +46,7 @@ graph TD
     Doctor -->|2. Timetable & Slot Settings| System
     Doctor -->|3. Accept/Reject Status Actions| System
     System -->|4. Booking Request Alerts & Details| Doctor
-    System -->|5. Secure Medical Records Stream| Doctor
+    System -->|5. Secure Medical Records Stream [Future Phase]| Doctor
 
     %% Admin Flows
     Admin -->|1. Audit Commands & Queries| System
@@ -71,13 +71,13 @@ graph TD
     P1["(1.0 Auth & Profile Engine)"]
     P2["(2.0 Doctor Onboarding Portal)"]
     P3["(3.0 Scheduling & Booking Gateway)"]
-    P4["(4.0 Notifications & Governance)"]
+    P4["(4.0 Notifications & Governance - Future Phase)"]
 
     %% Data Stores
     D1[("MongoDB: Users Collection")]
     D2[("MongoDB: Doctors Collection")]
     D3[("MongoDB: Appointments Collection")]
-    D4["Secure Directory: uploads/ folder"]
+    D4["Secure Directory: uploads/ folder [Future Phase]"]
 
     %% Process 1.0 Flows
     Patient -->|Credentials| P1
@@ -96,27 +96,27 @@ graph TD
     Patient -->|Specialty Search| P3
     D2 -->|Approved listings| P3
     P3 -->|Available slots| Patient
-    Patient -->|Booking & PDF uploads| P3
-    P3 -->|Save file metadata| D3
-    P3 -->|Save PDF| D4
-    Doctor -->|Request file stream| P3
-    D4 -->|Stream PDF file data| P3
-    P3 -->|Authorized file stream| Doctor
+    Patient -->|Booking [PDF Uploads Planned for Future Phase]| P3
+    P3 -->|Save file metadata [Future Phase]| D3
+    P3 -->|Save PDF [Future Phase]| D4
+    Doctor -->|Request file stream [Future Phase]| P3
+    D4 -->|Stream PDF file data [Future Phase]| P3
+    P3 -->|Authorized file stream [Future Phase]| Doctor
     Doctor -->|Approve/Reject booking| P3
     P3 -->|Update booking status| D3
 
     %% Process 4.0 Flows
-    P3 -->|Trigger alerts| P4
-    P2 -->|Trigger alerts| P4
-    P4 -->|In-app alerts| Patient
-    P4 -->|In-app alerts| Doctor
+    P3 -->|Trigger alerts [Future Phase]| P4
+    P2 -->|Trigger alerts [Future Phase]| P4
+    P4 -->|In-app alerts [Future Phase]| Patient
+    P4 -->|In-app alerts [Future Phase]| Doctor
 ```
 
 ---
 
-### 1.3. DFD Level 2: Secure Document Upload & Streaming Process
+### 1.3. DFD Level 2: Secure Document Upload & Streaming Process (Future Integration)
 
-The Level 2 DFD details the precise data operations that occur during process **(3.0 Scheduling & Booking Gateway)** to securely upload and retrieve medical records (PDFs/Images) using Express Multer and MongoDB data mapping.
+The Level 2 DFD details the precise data operations that are planned to occur during process **(3.0 Scheduling & Booking Gateway)** to securely upload and retrieve medical records (PDFs/Images) in a future iteration using Express Multer and MongoDB data mapping.
 
 ```mermaid
 graph TD
@@ -158,12 +158,13 @@ Below is the complete list of User Stories for the SehatMurah platform, categori
 | **Patient** | Profile Setup | **USN-3** | As a patient, I can set up and edit my clinical profile (name, phone, medical history) so my details are ready for booking appointments. | User data is committed to MongoDB `users` collection and reflects live on the React profile page. | Medium | Sprint-1 |
 | **Doctor** | Onboarding | **USN-4** | As a doctor applicant, I can submit my professional registration application (specialty, fee, experience, address) so the admin can review my credentials. | Node.js creates a `doctorSchema` record with `status: "pending"` and alerts administrative feeds. | High | Sprint-1 |
 | **Doctor** | Schedule Setup | **USN-5** | As an approved doctor, I can configure my weekly availability timings so patients can see when I am free to consult. | The system updates the doctor timings array in MongoDB, which reflects live on the patient booking calendar. | High | Sprint-2 |
-| **Admin** | Verification | **USN-6** | As an administrator, I can view, approve, or reject pending doctor applications so that only certified medical providers are active. | Approving changes doctor status to `"approved"`, sets `user.isdoctor = true`, and notifies the doctor. | High | Sprint-2 |
+| **Admin** | Verification | **USN-6** | As an administrator, I can view, approve, or reject pending doctor applications so that only certified medical providers are active. | Approving changes doctor status to `"approved"` and sets `user.isdoctor = true`. | High | Sprint-2 |
 | **Patient** | Search & Discovery | **USN-7** | As a patient, I can search and filter approved doctors by specialty, location, and fees so I can select the best provider. | React Patient dashboard fetches only doctors with status `"approved"` using specialty/fee filter arguments. | High | Sprint-2 |
-| **Patient** | Booking & Uploads | **USN-8** | As a patient, I can book an appointment for a specific slot and upload my clinical PDF/images so my doctor can review them. | Multer stores the PDF securely in `/uploads/` and links the file path to a new `appointmentSchema` record. | High | Sprint-3 |
-| **Doctor** | Document Streaming| **USN-9** | As a doctor, I can securely download/stream the clinical files attached to my bookings to review patient history. | The API verifies that the requester is the assigned doctor, reads the file from `/uploads/`, and streams it. | High | Sprint-3 |
-| **Patient** | Alerts & Feed | **USN-10**| As a patient, I can view my in-app notification feed to receive real-time alerts whenever a doctor updates my booking status. | Updates to the booking collection automatically trigger database changes that populate the patient's notification feed. | Medium | Sprint-3 |
-| **Doctor** | Queue Management | **USN-11**| As a doctor, I can view all my scheduled bookings on my private dashboard and update their status (Approve/Reject) in real-time. | Status changes update the database state and dispatch notifications to the respective patient. | High | Sprint-4 |
+| **Patient** | Booking | **USN-8a**| As a patient, I can book an appointment for a specific slot so that I can schedule a consultation. | The system reserves the selected slot and commits the new booking record to MongoDB. | High | Sprint-3 |
+| **Patient** | Document Uploads | **USN-8b**| As a patient, I can upload my clinical PDF/images during booking so my doctor can review them. | Multer stores the PDF securely in `/uploads/` and links the file path to a new `appointmentSchema` record. | Medium | Future Phase |
+| **Doctor** | Document Streaming| **USN-9** | As a doctor, I can securely download/stream the clinical files attached to my bookings to review patient history. | The API verifies that the requester is the assigned doctor, reads the file from `/uploads/`, and streams it. | High | Future Phase |
+| **Patient** | Alerts & Feed | **USN-10**| As a patient, I can view my in-app notification feed to receive real-time alerts whenever a doctor updates my booking status. | Updates to the booking collection automatically trigger database changes that populate the patient's notification feed. | Medium | Future Phase |
+| **Doctor** | Queue Management | **USN-11**| As a doctor, I can view all my scheduled bookings on my private dashboard and update their status (Approve/Reject) in real-time. | Status changes update the database state. | High | Sprint-4 |
 | **Admin** | Governance | **USN-12**| As an administrator, I can monitor all registered users, active doctors, and historical booking transactions in a single dashboard. | Admin gains a unified view of all database collections, facilitating easy audits and troubleshooting. | Medium | Sprint-4 |
 
 ---
