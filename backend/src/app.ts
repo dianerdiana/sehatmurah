@@ -12,7 +12,7 @@ import { reviewRouter } from './modules/reviews/review.routes';
 import { specialistRouter } from './modules/specialists/specialist.routes';
 import { userRouter } from './modules/users/user.routes';
 
-export const app = express();
+const app = express();
 
 
 // Static Path
@@ -41,3 +41,5 @@ app.use('/api/users', userRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
+
+export { app };
