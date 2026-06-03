@@ -3,6 +3,7 @@ import express from 'express';
 import path from 'path';
 
 import { HttpResponse } from './common/http-response';
+import { connectDatabase } from './config/database';
 import { errorHandler, notFoundHandler } from './middlewares/error.middleware';
 import { appointmentRouter } from './modules/appointments/appointment.routes';
 import { authRouter } from './modules/auth/auth.routes';
@@ -14,9 +15,18 @@ import { userRouter } from './modules/users/user.routes';
 
 const app = express();
 
+// Database connection middleware for serverless environment
+app.use(async (_req, _res, next) => {
+  try {
+    await connectDatabase();
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 // Static Path
-const uploadPath = path.join(__dirname, '../uploads');
+const uploadPath = path.join(process.cwd(), 'uploads');
 
 app.use(cors());
 app.use(express.json());
@@ -43,3 +53,5 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 export { app };
+export default app;
+
