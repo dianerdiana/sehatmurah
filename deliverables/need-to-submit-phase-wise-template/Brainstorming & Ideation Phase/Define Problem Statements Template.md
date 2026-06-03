@@ -25,8 +25,8 @@ Reference: [https://miro.com/templates/customer-problem-statement/](https://miro
 
 | Problem Statement (PS) | I am (Customer/Stakeholder) | I’m trying to | But | Because | Which makes me feel |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **PS-1: The Patient** | An active healthcare patient in Indonesia who needs a routine checkup or specialized consultation with a trusted family doctor. | Browse verified doctors, filter by availability or specialty, select a convenient time slot, and securely upload my past medical history or lab results. | I encounter long, unpredictable queue times at clinics, struggle to verify doctor licensing, and have no secure, centralized way to share paper-based medical files. | The current scheduling system is completely manual, lacks verification checks, and does not have an integrated electronic document pipeline. | Anxious about doctor credentials, frustrated by waiting, and overwhelmed by managing scattered physical medical records. |
-| **PS-2: The Doctor** | A licensed healthcare professional managing a busy practice and coordinating multiple clinical consultation sessions. | Keep my practice schedule organized, update my slot availability, and review patient medical documents beforehand to make highly accurate diagnoses. | Patients frequently miss slots due to lack of reminders, scheduling conflicts occur, and I cannot access patient records before the actual checkup begins. | There is no unified scheduling calendar that links my real-time availability with secure patient-to-doctor document uploads. | Stressed, disorganized, and worried that the lack of patient history will compromise the quality of my diagnosis. |
+| **PS-1: The Patient** | An active healthcare patient in Indonesia who needs a routine checkup or specialized consultation with a trusted family doctor. | Browse verified doctors, filter by availability or specialty, and select a convenient time slot (with secure medical history and lab result uploads planned as a future improvement). | I encounter long, unpredictable queue times at clinics, struggle to verify doctor licensing, and have no easy way to coordinate appointment schedules (sharing and viewing medical documents securely is planned for a future release). | The current scheduling system is completely manual and lacks verification checks (an integrated electronic document pipeline is deferred to a future phase). | Anxious about doctor credentials, frustrated by waiting, and overwhelmed by managing scattered physical medical records. |
+| **PS-2: The Doctor** | A licensed healthcare professional managing a busy practice and coordinating multiple clinical consultation sessions. | Keep my practice schedule organized and update my slot availability (reviewing patient-uploaded medical documents beforehand is planned as a future improvement). | Patients frequently miss slots due to lack of reminders, scheduling conflicts occur, and I cannot access patient records before the actual checkup begins. | There is no unified scheduling calendar that links my real-time availability with the booking system. | Stressed, disorganized, and worried that the lack of patient history will compromise the quality of my diagnosis. |
 | **PS-3: The Admin** | A platform administrator responsible for governing the platform, verifying credentials, and maintaining system compliance. | Onboard new doctors, verify their STR/SIP medical licensing, manage platform policies, and resolve booking system conflicts efficiently. | The verification process is completely manual and highly vulnerable to human error, risking legal liability and potential platform security breaches. | The administration dashboard lacks automated approval pipelines, audit logging, and centralized role-based access control (RBAC). | Vulnerable to compliance risks, highly inefficient, and anxious about platform security and credential integrity. |
 
 ---
@@ -60,6 +60,14 @@ Reference: [https://miro.com/templates/customer-problem-statement/](https://miro
   4. Ambil tangkapan layar (screenshot) beresolusi tinggi pada bagan alur relasi masalah-ke-solusi tersebut.
 * **Referensi Pengambilan Gambar**:
   - Cari referensi bagan alur di internet dengan kata kunci *"Miro Problem Statement Mapping"* atau *"Miro User Story Mapping"* untuk melihat desain pemetaan visual yang menarik.
+
+---
+
+### **Future Improvements Roadmap**
+
+To align the development milestones with the current MERN stack release phase, the following features have been deferred to the future roadmap:
+- **Secure Medical Document Uploads:** Integrating a Multer-based clinical file pipeline to allow patients to upload lab results and past diagnoses during booking.
+- **In-App Notification Feeds:** Real-time updates and dash notifications for patients and doctors when booking statuses are changed or doctor profiles are approved.
 
 
 
