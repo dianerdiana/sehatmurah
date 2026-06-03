@@ -38,7 +38,7 @@ The technical system is segmented into three distinct structural layers:
 ```mermaid
 graph TD
     subgraph Presentation_Layer ["Presentation Layer (React Frontend)"]
-        UI["React Web App (Bootstrap / Material UI)"]
+        UI["React Web App (Shadcn UI)"]
         Routes["React Router: Patient/Doctor/Admin Views"]
         AuthGuard["Route Guards (JWT Verification)"]
     end
@@ -70,12 +70,12 @@ graph TD
 
 ### 3.2. Application & Business Logic Layer (Node.js & Express.js)
 *   **REST API Gateway (Express):** Hosts endpoint routes categorized by user roles:
-    *   `/api/user/*` (handled by `UserRoutes.js`): Register, Login, Apply as Doctor, Book Appointment, Get Notifications.
-    *   `/api/doctor/*` (handled by `DoctorRoutes.js`): Update Profile, View Scheduled Bookings, Update Status, Stream Document.
+    *   `/api/user/*` (handled by `UserRoutes.js`): Register, Login, Apply as Doctor, Book Appointment (in-app notifications are planned for future versions).
+    *   `/api/doctor/*` (handled by `DoctorRoutes.js`): Update Profile, View Scheduled Bookings, Update Status (secure file streaming is planned for future versions).
     *   `/api/admin/*` (handled by `AdminRoutes.js`): Approve/Reject Doctors, View All Users, Audit Bookings.
 *   **Controllers (Separation of Concerns):** Independent modules (`userController.js`, `docController.js`, `adminController.js`) process incoming business logic, communicate with the database, and compile unified JSON responses.
 *   **Auth Middleware:** `AuthMiddleware.js` intercepts private requests, parses authorization headers, verifies the JWT signature using a secret `JWT_KEY`, and extracts the `userId` payload to pass downstream.
-*   **File Stream Upload Interceptor (Multer):** Intercepts multipart/form-data requests during appointment bookings, saves medical records (PDFs/Images) under the `uploads/` directory, and maps the filename directly to the booking document schema.
+*   **File Stream Upload Interceptor (Multer - Future Roadmap):** Planned to intercept multipart/form-data requests during appointment bookings, save medical records (PDFs/Images) under the `uploads/` directory, and map the filename directly to the booking document schema.
 
 ### 3.3. Database & Storage Layer (MongoDB & Mongoose)
 *   **Document-Based NoSQL Database:** MongoDB holds all system states, organized into three collections: `users` (hashing credentials with Bcrypt), `doctors` (capturing clinical details, schedules, and approval states), and `appointments` (tracking dates, times, secure file paths, and current status).
@@ -91,10 +91,10 @@ The codebase utilizes a clean **MVC design pattern** adapted for API-based servi
 ### 4.2. Role-Based Access Control (RBAC)
 To prevent unauthorized users from tampering with data (e.g., a patient approving their own booking or a doctor accessing other doctors' patients), we enforce strict **RBAC**:
 *   A `JWT` is generated upon authentication containing the user's roles (`isDoctor`, `type`).
-*   Backend middleware decodes this token on every request. Endpoints under `/api/admin` and `/api/doctor` strictly validate that the user type matches the required credentials before executing logic.
+*   Backend middleware decodes this token on every request. Endpoints under `/api/admin/` and `/api/doctor/` strictly validate that the user type matches the required credentials before executing logic.
 
-### 4.3. Secure Media Streaming Pattern
-To maintain absolute compliance with clinical confidentiality, SehatMurah avoids exposing direct public URLs to patient medical files. Instead:
+### 4.3. Secure Media Streaming Pattern (Future Roadmap)
+To maintain absolute compliance with clinical confidentiality, SehatMurah plans to avoid exposing direct public URLs to patient medical files. When implemented:
 1.  Files are saved in a local, unindexed directory (`uploads/`).
 2.  The file paths are saved privately inside the `appointmentSchema`.
 3.  When a verified doctor requests a file, the `documentDownloadController` validates their session ownership, retrieves the file from `uploads/`, and streams it dynamically to the response header. This prevents external unauthorized harvesting of medical records.
@@ -103,7 +103,9 @@ To maintain absolute compliance with clinical confidentiality, SehatMurah avoids
 
 ## 5. End-to-End System Data Flows
 
-### 5.1. Patient Doctor Booking & Secure Upload Flow
+### 5.1. Patient Doctor Booking & Secure Upload Flow (Future Integration)
+
+The diagram below represents the planned sequence flow for patient bookings when secure document uploads are integrated in a future release:
 
 ```mermaid
 sequenceDiagram
@@ -128,11 +130,13 @@ sequenceDiagram
     deactivate Server
 ```
 
+*Figure 2: Planned Future Sequence Flow for Booking and Secure Medical Document Upload.*
+
 ### 5.2. Admin Doctor Verification Flow
 1.  **Submission:** A registered user fills in a doctor application form, creating a record in `doctorSchema` with `status: "pending"`.
-2.  **Notification:** The backend pushes a notification to the administrator collection.
+2.  **Notification (Future Improvement):** Real-time in-app notifications are planned for the administrator dashboard. In the current version, administrators check the pending applications queue upon dashboard load.
 3.  **Audit:** The administrator opens their panel, dispatches a `GET /api/admin/getalldoctors` request, and audits credentials.
-4.  **Verification:** Admin triggers `POST /api/admin/getapprove`. Node updates the doctor status to `"approved"`, sets `user.isdoctor = true` in the DB, and sends a confirmation notification to the doctor's feed.
+4.  **Verification:** Admin triggers `POST /api/admin/getapprove`. Node updates the doctor status to `"approved"` and sets `user.isdoctor = true` in the DB (sending a confirmation in-app notification to the doctor is planned as a future improvement).
 
 ---
 
