@@ -50,20 +50,20 @@ During the brainstorming session, our team encouraged all participants to voice 
 #### **Category A: Patient-Centric Core Features**
 * **Secure Registration & Profile Creation**: User accounts with encrypted passwords (bcrypt) and session security via JSON Web Tokens (JWT).
 * **Doctor Search & Filtration**: A dynamic search feature allowing patients to filter verified doctors by name, medical specialty, geographic location, and real-time schedule availability.
-* **Seamless Appointment Booking Form**: An interactive interface enabling patients to select available consultation slots and upload medical history documents (via Multer).
+* **Seamless Appointment Booking Form**: An interactive interface enabling patients to select available consultation slots.
 * **Appointment Consultation History**: A clean history dashboard displaying past and upcoming bookings, including doctor names and status labels.
 
 #### **Category B: Doctor Dashboard & Autonomy**
 * **Profile & Availability Management**: An administrative panel for doctors to update their bio details, fees, specialty fields, addresses, and practice timings dynamically.
 * **Inbound Booking Dashboard**: A centralized system for doctors to review incoming patient requests and update status attributes (Approve/Reject).
-* **Secure Document Access**: A secure file viewing and downloading pipeline allowing doctors to review pre-uploaded patient records prior to consultation.
 
 #### **Category C: Platform Governance & Admin Controls**
 * **Onboarding & Verification Portal**: A specialized back-office dashboard for platform administrators to review STR/SIP medical licenses of new doctor applicants (Apply as Doctor) and grant/revoke access.
 * **Role-Based Access Control (RBAC)**: Robust route-level middleware protection ensuring strict separation of access (Patients, Doctors, Admins).
-* **Integrated Notification Log**: Real-time status update notifications mapped to user dashboard headers (seen/unseen controls).
 
 #### **Category D: Inventions & Future Roadmap Scope**
+* **Medical Document Upload & Access**: An interactive file upload pipeline (via Multer) allowing patients to upload medical history documents during booking, and enabling doctors to securely view/download them prior to consultation.
+* **In-App Notifications**: Real-time status update notifications and alert logs mapped to user dashboard headers (seen/unseen controls) to notify patients when booking status changes.
 * **Direct Video Consultations (Telemedicine)**: WebRTC integration allowing peer-to-peer virtual checkups inside the platform.
 * **Automated SMS & WhatsApp Reminders**: Notification gateway integrations to alert patients H-1 before their scheduled appointments to reduce no-show rates.
 * **Digital Payment Integration**: A payment gateway integration (such as Midtrans) to facilitate digital consultation fee processing securely.
@@ -82,10 +82,11 @@ To identify the Minimum Viable Product (MVP) core features for initial platform 
 | :--- | :--- | :--- | :--- | :--- |
 | **JWT Authentication & Bcrypt Hashing (RBAC)** | Very High | Medium | **Core MVP (Must Have)** | Ensuring secure access and protecting private patient records is a fundamental medical application requirement. |
 | **Dynamic Search & Specialty Filtration** | High | Low | **Quick Win (Must Have)** | Delivers high value to patients by solving search friction with minimal developer overhead. |
-| **Booking Form & Multer File Upload** | High | Medium | **Core MVP (Must Have)** | The transactional backbone of our platform; allows medical documentation exchange. |
+| **Booking Form (Select & Confirm Slots)** | High | Low-Medium | **Core MVP (Must Have)** | The transactional backbone of our platform; allows patients to schedule slots. |
 | **Doctor Dashboard (Accept/Reject Slots)** | High | Medium | **Core MVP (Must Have)** | Empowers doctors to control their practice calendars autonomously and update booking queues. |
 | **Admin Doctor Licensing Verification Flow** | High | Medium | **Core MVP (Must Have)** | Essential for legal compliance and establishing patient trust in listed healthcare professionals. |
-| **Real-Time Notification Seen Toggle** | Medium | Low | **Quick Win (Should Have)**| Substantially improves user experience by alerting users to booking status changes immediately. |
+| **Multer File Upload (Medical Documents)** | Medium-High | Medium | **Future Roadmap (Nice to Have)** | Allows exchange of sensitive medical history documents; postponed for security and storage optimizations. |
+| **In-App Notifications & Seen Toggle** | Medium | Medium | **Future Roadmap (Nice to Have)** | Alerting users to booking status changes; postponed for future development. |
 | **Midtrans Payment Gateway Integration** | Medium | High | **Major Project (Should Have)**| Key to monetization, but can be deferred until the core appointment booking flow is stable. |
 | **WebRTC Telemedicine Video Consultation** | High | Very High | **Long-term Roadmap (Nice to Have)**| Extremely high-value feature but requires intensive server architecture and high bandwidth. |
 | **AI Symptom Checker** | Low-Medium | High | **Postponed (Nice to Have)** | Adds complexity without addressing core scheduling needs for the initial launch. |
