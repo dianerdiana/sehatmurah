@@ -95,17 +95,17 @@ graph TD
 
 ### Technical Mapping of the Fit:
 1. **Frictionless Real-time Scheduling:** The React frontend handles dynamic queries, allowing patients to filter verified doctors by specialty, view open time slots instantly, and book a doctor. This eliminates walk-in queues.
-2. **Secure Medical File Streaming:** Rather than using unsecured messaging channels, patients upload diagnostic reports (PDF/images) via the booking form. Node.js handles file uploads securely with a structured `uploads/` directory, while MongoDB maintains absolute file-to-booking relationships. Only the assigned doctor can securely access or stream the files.
+2. **Secure Medical File Upload & Streaming (Future Improvement):** Planned feature to replace unsecured messaging sharing (like WhatsApp) with direct, secure file uploads via Multer and authenticated streaming to assigned doctors.
 3. **Robust Admin Verification & Role-Based Access Control (RBAC):** To address trust limitations, patients can only browse doctors with `status === "approved"`. The React Admin Dashboard allows system administrators to review and approve/reject pending doctor registrations. 
-4. **Doctor-Empowered Calendars:** The specialized Doctor Dashboard enables medical professionals to set availability timings, view all upcoming patient histories, and update appointment statuses (e.g., Confirmed, Completed) in one click, sending automated notifications back to the patient.
+4. **Doctor-Empowered Calendars:** The specialized Doctor Dashboard enables medical professionals to set availability timings, view upcoming booking details, and update appointment statuses (e.g., Confirmed, Completed) in one click. Real-time in-app notifications and alerts are planned as future improvements.
 
 ---
 
 ## 4. Key Strategic Takeaways
 
 *   **Trust is Paramount:** For health applications, customer adoption is driven by safety. The admin verification panel is not just an operational necessity; it is our principal customer trust builder.
-*   **Experience-first Frontends:** The patient dashboard must be designed to accommodate patients in physical or emotional distress. A simple, three-step booking flow (Search Doctor -> Select Timings -> Upload File) ensures high completion rates.
-*   **Security Drives File Exchanges:** By treating document sharing as an integrated, authenticated process rather than an external WhatsApp/Email task, we create a highly premium product experience that sets SehatMurah apart from general scheduling alternatives.
+*   **Experience-first Frontends:** The patient dashboard must be designed to accommodate patients in physical or emotional distress. A simple, two-step booking flow (Search Doctor -> Select Timings) ensures high completion rates (with document uploads planned for future iterations).
+*   **Security Drives File Exchanges (Future Roadmap):** By planning document sharing as an integrated, authenticated process rather than an external WhatsApp/Email task, we aim to create a highly premium product experience that sets SehatMurah apart from general scheduling alternatives.
 
 ---
 
@@ -114,8 +114,8 @@ graph TD
 For a highly professional and premium documentation package, we recommend including high-quality screenshots and mockups of the **SehatMurah Doctor Appointment Platform**. Below are the detailed procedures and reference standards to capture or generate these visual assets.
 
 ### Recommended Visual Mockups
-1.  **Patient Booking Interface (React View):** Highlighting the real-time doctor search filter and the document upload form.
-2.  **Doctor Schedule Dashboard:** Displaying the timetable, patient details, and download links for medical records.
+1.  **Patient Booking Interface (React View):** Highlighting the real-time doctor search filter (with medical history uploads planned as future improvements).
+2.  **Doctor Schedule Dashboard:** Displaying the timetable and booking details (with medical record download links planned as future roadmap scope).
 3.  **Admin Verification Portal:** Demonstrating how administrators approve/reject new doctor applications.
 4.  **MERN System Architecture Diagram:** A clean diagram showing MongoDB, Express, React, and Node.js interactions.
 
