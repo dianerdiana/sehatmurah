@@ -69,3 +69,4 @@ note.md
 # additional folder
 /dist
 app.yaml
+.vercel
