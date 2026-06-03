@@ -13,7 +13,7 @@
 ## Project Overview
 
 *   **Project Name:** SehatMurah - Doctor Appointment Booking Platform
-*   **Project Description:** SehatMurah is a healthcare platform built on the MERN stack that connects patients with approved medical practitioners. The platform allows patients to search for doctors by specialty, location, and fees; book appointments; upload clinical records; and submit reviews. It enables doctors to configure weekly consulting schedules and process patient queues. Administrators are equipped with an audit dashboard to verify doctor applications, manage user activation states, and monitor transaction logs.
+*   **Project Description:** SehatMurah is a healthcare platform built on the MERN stack that connects patients with approved medical practitioners. The platform allows patients to search for doctors by specialty, location, and fees; book appointments; and submit reviews (medical record uploading is planned as a future improvement).
 *   **Project Version:** 1.0.0
 *   **Testing Period:** 20 May 2026 to 2 June 2026
 
@@ -29,10 +29,10 @@ The scope of this User Acceptance Testing covers all core functional blocks of t
 *   **Administrative Verification Dashboard:** Auditing pending doctor applications, viewing doctor credentials, and approving/rejecting status switches.
 *   **Doctor Availability Scheduling:** Timetable setup tools for doctors to define consulting availability hours.
 *   **Doctor Search Directory:** Dynamic search filters by clinical specialty, location, pricing thresholds, and doctor calendar slots.
-*   **Appointment Booking & Document Uploads:** Reserving a specific slot, slot collision checking, uploading medical reports via Multer, and saving file metadata.
-*   **Secure File Access Layer:** Role and assigned-relationship checks when a doctor attempts to stream/download clinical PDF attachments.
+*   **Appointment Booking:** Reserving a specific slot and slot collision checking (medical report uploading via Multer is planned as a future improvement).
+*   **Secure File Access Layer (Future Roadmap):** Role and assigned-relationship checks when a doctor attempts to stream/download clinical PDF attachments.
 *   **Doctor Queue Control:** Real-time dashboards listing upcoming appointments with direct action buttons (Accept/Complete/Reject).
-*   **Patient Notifications Feed:** Live in-app alert logs populated when booking status changes are submitted.
+*   **Patient Notifications Feed (Future Roadmap):** Live in-app alert logs populated when booking status changes are submitted.
 *   **System-Wide Administration Audit:** Admin tool for listing and toggling account statuses (`isActive`) to instantly lock out disabled profiles.
 
 ### 2. User Stories / Requirements to be Tested:
@@ -43,9 +43,9 @@ The scope of this User Acceptance Testing covers all core functional blocks of t
 *   **USN-5:** As an approved doctor, I can configure my weekly availability timings so patients can see when I am free to consult.
 *   **USN-6:** As an administrator, I can view, approve, or reject pending doctor applications so that only certified medical providers are active.
 *   **USN-7:** As a patient, I can search and filter approved doctors by specialty, location, and fees so I can select the best provider.
-*   **USN-8:** As a patient, I can book an appointment for a specific slot and upload my clinical PDF/images so my doctor can review them.
-*   **USN-9:** As a doctor, I can securely download/stream the clinical files attached to my bookings to review patient history.
-*   **USN-10:** As a patient, I can view my in-app notification feed to receive real-time alerts whenever a doctor updates my booking status.
+*   **USN-8 (Future Roadmap):** As a patient, I can book an appointment for a specific slot and upload my clinical PDF/images so my doctor can review them.
+*   **USN-9 (Future Roadmap):** As a doctor, I can securely download/stream the clinical files attached to my bookings to review patient history.
+*   **USN-10 (Future Roadmap):** As a patient, I can view my in-app notification feed to receive real-time alerts whenever a doctor updates my booking status.
 *   **USN-11:** As a doctor, I can view all my scheduled bookings on my private dashboard and update their status (Approve/Reject) in real-time.
 *   **USN-12:** As an administrator, I can monitor all registered users, active doctors, and historical booking transactions in a single dashboard.
 
@@ -78,11 +78,11 @@ The table below catalogs the functional blackbox test cases executed to verify p
 | **TC-007** | **Admin Verification Portal (Positive Flow)** | 1. Log in as Administrator.<br>2. Navigate to Admin Dashboard `/admin/doctors`.<br>3. Locate the pending doctor onboarding application.<br>4. Click "Approve". | Application status changes from `pending` to `approved`. User collection updates: `isDoctor` flag set to `true`. | Onboarded doctor status switched to approved, access grants synchronized. | **Pass** |
 | **TC-008** | **Doctor Availability Timetable Configuration (Positive Flow)** | 1. Log in as approved Doctor.<br>2. Navigate to `/dashboard/schedule`.<br>3. Select days and input active slot timings (e.g., Mon 09:00 - 12:00).<br>4. Click "Save Timetable". | Schedule details save to `doctorprofiles` timing collection. Timeslots reflect on the public listing calendar. | Availability timeslots saved and verified on doctor detail calendars. | **Pass** |
 | **TC-009** | **Patient Doctor Discovery Filters (Positive Flow)** | 1. Log in as Patient.<br>2. On search page, apply filters: Specialty = *"Cardiologist"*, Location = *"Bandung"*, Max Fee = *150,000* IDR.<br>3. Click search. | React UI dynamically filters. The search result returns only approved doctors matching all parameters. | Filter query returned correct matching entries. Non-approved/inactive records are omitted. | **Pass** |
-| **TC-010** | **Appointment Booking and PDF Upload (Positive Flow)** | 1. On doctor profile, choose an available calendar time slot.<br>2. Attach a medical diagnostic history PDF file.<br>3. Click "Confirm Booking". | Database commits booking. File is parsed via Multer, stored in `/uploads/`, and mapped to the appointment. | Appointment created with custom booking code; PDF file metadata registered successfully. | **Pass** |
+| **TC-010** | **Appointment Booking and PDF Upload (Positive Flow)** | 1. On doctor profile, choose an available calendar time slot.<br>2. Attach a medical diagnostic history PDF file.<br>3. Click "Confirm Booking". | Database commits booking. File is parsed via Multer, stored in `/uploads/`, and mapped to the appointment. | Feature deferred for future release; patient booking is slots-only for now. | **Deferred** |
 | **TC-011** | **Secure Slot Reservation (Negative Boundary - Collision)** | 1. Open two concurrent browser sessions with different patients.<br>2. Select the same time slot for the same doctor.<br>3. Submit booking simultaneously. | The first transaction completes. The second is rejected with validation block: *"Time slot is no longer available"*. | One transaction completed successfully; second transaction was blocked with elegant error UI. | **Pass** |
-| **TC-012** | **Doctor Document Retrieval and Stream (Positive Flow - Security)** | 1. Log in as the Doctor assigned to the booking.<br>2. Navigate to Doctor Dashboard queue.<br>3. Click "Download Attached Diagnostic PDF" link. | Express routes authorize the assigned doctor, read the PDF binary from secure `/uploads/` and stream the file. | PDF streamed and displayed in doctor's browser window with full integrity. | **Pass** |
-| **TC-013** | **Secure Document Interceptor (Negative Boundary - Unauthorized Access)** | 1. Copy the PDF download path URL from TC-012.<br>2. Log out and log back in as an unassigned user (another patient or doctor).<br>3. Paste the URL directly into browser address bar. | Security middleware checks token and associations, blocks download, and returns `403 Forbidden` / `401 Unauthorized`. | Access blocked. Browser rendered structured JSON response indicating unauthorized entry. | **Pass** |
-| **TC-014** | **Doctor Dashboard Queue Action (Positive Flow)** | 1. Log in as Doctor.<br>2. On booking management panel, locate patient appointment.<br>3. Click "Complete Appointment" action. | Appointment record updates to `status: "completed"`. Patient notification feed is instantly updated with status alert. | Database updated status to completed, triggers correct alert in patient's top feed. | **Pass** |
+| **TC-012** | **Doctor Document Retrieval and Stream (Positive Flow - Security)** | 1. Log in as the Doctor assigned to the booking.<br>2. Navigate to Doctor Dashboard queue.<br>3. Click "Download Attached Diagnostic PDF" link. | Express routes authorize the assigned doctor, read the PDF binary from secure `/uploads/` and stream the file. | Feature deferred; patient document streaming is planned for future release. | **Deferred** |
+| **TC-013** | **Secure Document Interceptor (Negative Boundary - Unauthorized Access)** | 1. Copy the PDF download path URL from TC-012.<br>2. Log out and log back in as an unassigned user (another patient or doctor).<br>3. Paste the URL directly into browser address bar. | Security middleware checks token and associations, blocks download, and returns `403 Forbidden` / `401 Unauthorized`. | Feature deferred; document authorization checks planned for future release. | **Deferred** |
+| **TC-014** | **Doctor Dashboard Queue Action (Positive Flow)** | 1. Log in as Doctor.<br>2. On booking management panel, locate patient appointment.<br>3. Click "Complete Appointment" action. | Appointment record updates to `status: "completed"`. Patient notification feed is instantly updated with status alert. | Database updated status to completed; in-app notification alert updates deferred for future release. | **Pass** |
 | **TC-015** | **Admin Governance User Activation Control (Positive Flow)** | 1. Log in as Administrator.<br>2. Navigate to `/admin/users`.<br>3. Find a target user account and toggle "Active Status" to `Inactive` (`isActive = false`). | The targeted user is updated in database. The user's active session is blocked on their next API route request. | Account blocked successfully; subsequent requests from user's JWT were rejected. | **Pass** |
 
 ---
