@@ -311,26 +311,43 @@ Representative UI assets currently included in the frontend:
 
 ![Login Illustration](../../frontend/public/assets/image/login-image.png)
 
-## 10. Testing
+## 10. Blackbox Testing
 
-- Testing tools configured in the project:
-  - Backend: `vitest` script is defined in `backend/package.json`
-  - Frontend: `vitest` script is defined in `frontend/package.json`
-- Available commands:
+Metodologi pengujian pada platform SehatMurah difokuskan pada **Blackbox Testing** untuk memvalidasi alur fungsional sistem, hak akses berbasis peran (RBAC), dan kebenaran aliran data transaksi.
 
-```bash
-cd backend
-npm test
-```
+### 10.1 Skenario Pengujian Blackbox (Blackbox Test Cases)
 
-```bash
-cd frontend
-npm test
-```
+Berikut adalah daftar skenario pengujian fungsionalitas sistem SehatMurah dari sudut pandang pengguna akhir (Patient, Doctor, Admin):
 
-- Current testing status:
-  - No committed `*.test.*` or `*.spec.*` files were found in the repository
-  - This means automated tests are planned in the toolchain, but test coverage is not yet implemented in the current codebase
+| Test ID | Modul / Fitur | Deskripsi Pengujian | Langkah Pengujian / Input | Hasil yang Diharapkan (Expected Result) | Status |
+| :--- | :--- | :--- | :--- | :--- | :---: |
+| **TC-01** | **Authentication** | Registrasi Pasien Baru | Masukkan nama, email valid, dan password aman. Klik tombol "Sign Up". | Password di-hash menggunakan Bcrypt. Akun baru berhasil dibuat di MongoDB dan user diarahkan ke halaman Login. | Pending |
+| **TC-02** | **Authentication** | Login Pengguna | Masukkan email dan password yang terdaftar. Klik tombol "Log In". | Server memvalidasi kecocokan password, menandatangani JWT token, menyimpannya di client-side session, dan mengarahkan ke Dashboard. | Pending |
+| **TC-03** | **Auth & Authorization** | Batasan Akses Peran (RBAC) | Akses route `/admin` atau `/doctor` menggunakan akun dengan role Patient. | Akses ditolak oleh JWT Middleware (AuthGuard). Sistem mengembalikan response HTTP 403 Forbidden atau me-redirect ke dashboard pasien. | Pending |
+| **TC-04** | **Patient Dashboard** | Pencarian & Filter Dokter | Ketik spesialisasi medis atau nama kota pada filter pencarian. | Halaman pencarian hanya menampilkan daftar dokter yang memiliki status `"approved"`. | Pending |
+| **TC-05** | **Doctor Onboarding** | Pengajuan Onboarding Dokter | Calon dokter mengisi data STR/SIP, biodata, spesialisasi, dan biaya. Klik "Submit". | Sistem membuat record baru di MongoDB dengan `status: "pending"` dan menampilkan aplikasi tersebut pada dashboard Admin. | Pending |
+| **TC-06** | **Admin Dashboard** | Verifikasi Dokter oleh Admin | Admin masuk ke dashboard, melihat daftar dokter pending, lalu menekan tombol "Approve". | Status dokter berubah menjadi `"approved"` dan properti `isDoctor` pada user terkait diubah menjadi `true`. | Pending |
+| **TC-07** | **Doctor Dashboard** | Pengaturan Jadwal Konsultasi | Dokter menentukan slot hari dan jam praktik aktif di kalender mingguan. | Slot waktu tersimpan di MongoDB dan muncul secara dinamis sebagai slot yang tersedia pada kalender pemesanan pasien. | Pending |
+| **TC-08** | **Booking Gateway** | Pemesanan Jadwal (Booking) | Pasien memilih dokter, slot waktu kosong yang aktif, mengisi keluhan medis, dan klik "Book Now". | Transaksi booking tersimpan di database dengan `status: "pending"`. Slot waktu terkunci agar tidak bisa dipesan pasien lain. | Pending |
+| **TC-09** | **Doctor Dashboard** | Manajemen Antrean Booking | Dokter melihat daftar janji masuk, lalu memilih status "Accept" or "Reject". | Status janji temu diperbarui di MongoDB dan notifikasi real-time dikirimkan ke dasbor pasien terkait. | Pending |
+| **TC-10** | **Admin Dashboard** | Audit Log & Governance | Admin memantau rekap total pengguna, data dokter aktif, dan seluruh transaksi janji temu di dashboard. | Sistem menyajikan data agregat realtime dari koleksi database MongoDB secara akurat untuk audit sistem. | Pending |
+
+### 10.2 Cara Menjalankan Pengujian Manual
+
+1. **Jalankan Aplikasi secara Lokal**:
+   ```bash
+   # Jalankan backend
+   cd backend && npm run dev
+   
+   # Jalankan frontend
+   cd frontend && npm run dev
+   ```
+2. **Uji Kasus Positif (Positive Path)**:
+   - Daftarkan pasien baru -> daftarkan dokter baru (status pending) -> masuk sebagai admin -> setujui dokter -> masuk sebagai dokter -> atur jadwal -> masuk sebagai pasien -> cari dokter tersebut -> pesan slot -> masuk sebagai dokter -> terima janji temu.
+3. **Uji Kasus Negatif (Negative Path)**:
+   - Coba lakukan login dengan password yang salah.
+   - Coba pesan slot waktu yang sama oleh dua pasien berbeda secara bersamaan.
+   - Coba akses halaman Admin secara langsung dari URL tanpa memiliki hak akses Admin.
 
 ## 11. Screenshots or Demo
 
