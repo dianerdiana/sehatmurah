@@ -24,13 +24,16 @@ Below is the dependency-ordered Product Backlog and Sprint Schedule designed spe
 | **Sprint-2** | Doctor Onboarding & Setup | **USN-5** | As an approved doctor, I can configure my weekly availability timings so patients can see when I am free to consult. | **3** | High | Dian (Fullstack) |
 | **Sprint-2** | Doctor Onboarding & Setup | **USN-6** | As an administrator, I can view, approve, or reject pending doctor applications so that only certified medical providers are active. | **5** | High | Dian (Fullstack) |
 | **Sprint-2** | Patient Booking & Search | **USN-7** | As a patient, I can search and filter approved doctors by specialty, location, and fees so I can select the best provider for my needs. | **5** | High | Dian (Fullstack) |
-| **Sprint-3** | Patient Booking & Search | **USN-8** | As a patient, I can book an appointment for a specific slot and upload my clinical PDF/images (using a secure upload stream) so my doctor can review them. | **8** | High | Dian (Fullstack) |
-| **Sprint-3** | Patient Booking & Search | **USN-9** | As a doctor, I can securely download/stream the clinical files attached to my bookings to review patient history without exposure. | **5** | High | Dian (Fullstack) |
-| **Sprint-3** | Real-time Notifications | **USN-10**| As a patient, I can view my in-app notification feed to receive real-time alerts whenever a doctor updates my booking status. | **3** | Medium | Dian (Fullstack) |
+| **Sprint-3** | Patient Booking & Search | **USN-8a** | As a patient, I can book an appointment for a specific slot so that I can schedule a consultation. | **4** | High | Dian (Fullstack) |
 | **Sprint-4** | Live Booking Dashboards | **USN-11**| As a doctor, I can view all my scheduled bookings on my private dashboard and update their status (Approve/Reject) in real-time. | **5** | High | Dian (Fullstack) |
 | **Sprint-4** | Admin Governance Portal | **USN-12**| As an administrator, I can monitor all registered users, active doctors, and historical booking transactions in a single dashboard. | **8** | Medium | Dian (Fullstack) |
+| **Future Phase** | Patient Booking & Search | **USN-8b** | As a patient, I can upload my clinical PDF/images during booking so my doctor can review them. | **4** | Medium | Dian (Fullstack) |
+| **Future Phase** | Patient Booking & Search | **USN-9** | As a doctor, I can securely download/stream the clinical files attached to my bookings to review patient history without exposure. | **5** | High | Dian (Fullstack) |
+| **Future Phase** | Real-time Notifications | **USN-10**| As a patient, I can view my in-app notification feed to receive real-time alerts whenever a doctor updates my booking status. | **3** | Medium | Dian (Fullstack) |
 
-**Total Estimated Backlog Effort:** **55 Story Points (SP)**
+**Active Backlog Effort:** **43 Story Points (SP)**  
+**Deferred Backlog Effort (Future Phase):** **12 Story Points (SP)**  
+**Total Backlog Effort:** **55 Story Points (SP)**
 
 ---
 
@@ -42,7 +45,7 @@ The project tracker table details the execution timeline of the 4 Sprints. Sprin
 | :--- | :---: | :---: | :--- | :--- | :---: | :--- |
 | **Sprint-1** | 13 SP | 6 Days | 3 June 2026 | 9 June 2026 | 13 SP | 9 June 2026 |
 | **Sprint-2** | 13 SP | 6 Days | 10 June 2026 | 16 June 2026 | 13 SP | 16 June 2026 |
-| **Sprint-3** | 16 SP | 6 Days | 17 June 2026 | 23 June 2026 | 16 SP | 23 June 2026 |
+| **Sprint-3** | 4 SP | 6 Days | 17 June 2026 | 23 June 2026 | 4 SP | 23 June 2026 |
 | **Sprint-4** | 13 SP | 6 Days | 24 June 2026 | 30 June 2026 | 13 SP | 30 June 2026 |
 
 ---
@@ -51,12 +54,12 @@ The project tracker table details the execution timeline of the 4 Sprints. Sprin
 
 **Velocity** represents the rate at which the development team can complete story points per iteration unit. It is a critical metric for predicting the release date of future features.
 
-*   **Total Backlog Points:** 55 Story Points (SP)
+*   **Total Active Backlog Points:** 43 Story Points (SP)
 *   **Total Project Duration:** 24 Days (4 Sprints × 6 Days per Sprint)
 *   **Average Velocity (AV) per Sprint:**  
-    $$\text{AV per Sprint} = \frac{\text{Total Story Points}}{\text{Total Sprints}} = \frac{55 \text{ SP}}{4} = 13.75 \text{ SP/Sprint}$$
+    $$\text{AV per Sprint} = \frac{\text{Total Active Story Points}}{\text{Total Sprints}} = \frac{43 \text{ SP}}{4} = 10.75 \text{ SP/Sprint}$$
 *   **Average Velocity (AV) per Day:**  
-    $$\text{AV per Day} = \frac{\text{AV per Sprint}}{\text{Sprint Duration}} = \frac{13.75 \text{ SP}}{6 \text{ Days}} \approx 2.29 \text{ SP/Day}$$
+    $$\text{AV per Day} = \frac{\text{AV per Sprint}}{\text{Sprint Duration}} = \frac{10.75 \text{ SP}}{6 \text{ Days}} \approx 1.79 \text{ SP/Day}$$
 
 This steady velocity rate indicates a highly balanced workload distribution across Sprints, avoiding developer burnout while ensuring modular and dependent components (such as auth before bookings, and registration before admin verification) are developed sequentially.
 
@@ -65,9 +68,9 @@ This steady velocity rate indicates a highly balanced workload distribution acro
 ## 4. Burndown Chart Management
 
 A **Burndown Chart** is a graphical representation of the work remaining in the backlog versus time. 
-*   **Y-Axis:** Represents the remaining story points (starting at 55 SP and trending down to 0 SP).
+*   **Y-Axis:** Represents the remaining story points (starting at 43 SP and trending down to 0 SP).
 *   **X-Axis:** Represents time (days or sprints).
-*   **Ideal Effort Line:** A straight line from the top-left (Day 0: 55 SP) to the bottom-right (Day 24: 0 SP) representing the optimal completion rate of approximately **2.29 Story Points per day**.
+*   **Ideal Effort Line:** A straight line from the top-left (Day 0: 43 SP) to the bottom-right (Day 24: 0 SP) representing the optimal completion rate of approximately **1.79 Story Points per day**.
 *   **Actual Effort Line:** The actual remaining points logged daily. Keeping this line close to the ideal effort line ensures that team progress is on track and risks of delayed sprint releases are mitigated.
 
 ---
