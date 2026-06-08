@@ -162,7 +162,7 @@ export function FormSearchDoctor() {
           </Dialog>
         </div>
         <Link
-          from='/doctors/results'
+          from='/doctors/search'
           to='.'
           search={{
             specialist: selectedSpecialist,
