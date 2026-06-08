@@ -12,6 +12,7 @@ import { useDebounce } from '@/utils/hooks/use-debounce';
 import { type AppointmentStatusFilter, appointmentStatusOptions } from '../appointment-status';
 
 type AppointmentsTableToolbarProps = {
+  isDashboard?: boolean;
   search: string;
   status: AppointmentStatusFilter;
   startDate: string;
@@ -33,6 +34,7 @@ const toInputDateValue = (value: string) => {
 };
 
 export function AppointmentsTableToolbar({
+  isDashboard = false,
   search,
   status,
   startDate,
@@ -57,11 +59,13 @@ export function AppointmentsTableToolbar({
   const hasActiveFilters = Boolean(search || status !== 'all' || startDate || endDate);
 
   return (
-    <Card className='rounded-3xl border-none shadow-none'>
-      <CardHeader className='space-y-1 px-4 pt-4 sm:px-6 sm:pt-6'>
-        <p className='text-sm font-medium text-muted-foreground'>Appointments</p>
-        <h1 className='text-xl font-bold tracking-tight text-gray-900 sm:text-2xl'>My Appointment List</h1>
-      </CardHeader>
+    <Card className={isDashboard ? 'rounded-3xl border' : 'rounded-4xl border-none shadow-none'}>
+      {!isDashboard && (
+        <CardHeader className='space-y-1 px-4 pt-4 sm:px-6 sm:pt-6'>
+          <p className='text-sm font-medium text-muted-foreground'>Appointments</p>
+          <h1 className='text-xl font-bold tracking-tight text-gray-900 sm:text-2xl'>My Appointment List</h1>
+        </CardHeader>
+      )}
       <CardContent className='grid gap-4 px-4 pb-4 sm:px-6 sm:pb-6 lg:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,1fr))_max-content]'>
         <div className='space-y-2 lg:col-span-1'>
           <label htmlFor='appointment-search' className='text-sm font-medium'>
@@ -126,7 +130,7 @@ export function AppointmentsTableToolbar({
             onClick={onClearFilters}
             disabled={!hasActiveFilters}
           >
-            <Trash2 />
+            {isDashboard ? 'Clear Filters' : <Trash2 />}
           </Button>
         </div>
       </CardContent>
