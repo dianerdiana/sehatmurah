@@ -44,6 +44,9 @@ export function FormLogin() {
             toast.error(props.message);
           }
         },
+        onError: (error) => {
+          toast.error(error.message || 'Login failed. Please try again.');
+        },
       }),
   });
 
