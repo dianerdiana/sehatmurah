@@ -107,7 +107,7 @@ export const navigation: NavigationGroup[] = [
     label: 'SETTING',
     permission: {
       action: 'read',
-      subject: 'PlatformTitle',
+      subject: 'SettingTitle',
     },
     items: [
       {
@@ -116,7 +116,7 @@ export const navigation: NavigationGroup[] = [
         icon: <Calendar />,
         permission: {
           action: 'update',
-          subject: 'DoctorProfile',
+          subject: 'OwnDoctorProfile',
         },
       },
     ],
