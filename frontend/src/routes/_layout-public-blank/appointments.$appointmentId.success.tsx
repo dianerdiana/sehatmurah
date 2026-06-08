@@ -27,7 +27,7 @@ function BookingAppointmentSuccess() {
   }
 
   return (
-    <div className='px-4 py-8 flex items-center'>
+    <div className='px-4 pt-8 pb-44 md:pb-8 flex items-center'>
       <section id='ContainerSuccess' className='w-full rounded-3xl py-8 bg-background'>
         <header className='mb-8 w-full px-4'>
           <img src='/assets/icons/succespage-booking-succes.svg' alt='Icon' className='mx-auto mb-6' />
@@ -40,7 +40,7 @@ function BookingAppointmentSuccess() {
         <div id='BookingId' className='w-full px-4'>
           <section className='h-37 w-full rounded-3xl bg-[linear-gradient(100.99deg,#277B53_0%,#277B7B_100%)] pb-6'>
             <div className='w-full rounded-3xl bg-[linear-gradient(100.99deg,#277B53_0%,#277B7B_100%)] p-0.5'>
-              <div className='mb-4 flex h-14 w-full items-center gap-x-1 rounded-3xl bg-background p-4'>
+              <div className='mb-4 flex flex-col md:flex-row md:h-14 h-auto w-full items-center gap-x-1 rounded-3xl bg-background p-4'>
                 <img src='/assets/icons/succespage-booking-id.svg' alt='Icon' loading='lazy' />
                 <h2 className='font-semibold leading-[20.16px] text-gray-500'>Booking ID:</h2>
                 <strong className='font-extrabold leading-[20.16px] text-primary'>{appointment?.bookingCode}</strong>
