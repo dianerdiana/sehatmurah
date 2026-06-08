@@ -72,10 +72,10 @@ function DoctorsSearchPage() {
     <div className='pb-8'>
       <header className='h-67 w-full rounded-b-2xl bg-primary px-4 pt-6 lg:pt-12'>
         <div className='flex flex-wrap items-center gap-4'>
-          <Button onClick={() => router.history.back()} className='px-0 md:px-4'>
+          <Button onClick={() => router.history.back()} className='px-0'>
             <img src='/assets/icons/arrow-left-blue.svg' alt='Image' />
           </Button>
-          <div className='lg:absolute lg:left-1/2 lg:top-12 lg:-translate-x-1/2 flex flex-col items-center w-full'>
+          <div className='lg:absolute lg:left-1/2 lg:top-12 lg:-translate-x-1/2 lg:max-w-fit flex flex-col items-center w-full'>
             <h1 className='mb-0.75 whitespace-nowrap text-center text-xl font-bold leading-[25.2px] text-white'>
               Recommended Doctors
             </h1>
