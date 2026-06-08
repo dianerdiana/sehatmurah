@@ -5,6 +5,7 @@ import { ArrowDown, ArrowUp, ArrowUpDown, Pencil } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
+import { Can } from '@/utils/context/ability-context';
 import { formatDateTime } from '@/utils/utils';
 
 import type { Specialist } from '../specialist.type';
@@ -38,11 +39,15 @@ function SortableHeader({
 function RowActions({ specialist }: { specialist: Specialist }) {
   return (
     <div className='flex items-center justify-center gap-1'>
-      <Link to='/app/specialists/$specialistId/edit' params={{ specialistId: specialist._id }}>
-        <Pencil className='size-4 stroke-amber-500' />
-      </Link>
+      <Can I='update' a='Specialist'>
+        <Link to='/app/specialists/$specialistId/edit' params={{ specialistId: specialist._id }}>
+          <Pencil className='size-4 stroke-amber-500' />
+        </Link>
+      </Can>
       <SpecialistDetailDialog specialist={specialist} />
-      <SpecialistDeletePopover specialistId={specialist._id} specialistName={specialist.name} />
+      <Can I='delete' a='Specialist'>
+        <SpecialistDeletePopover specialistId={specialist._id} specialistName={specialist.name} />
+      </Can>
     </div>
   );
 }
