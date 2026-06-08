@@ -6,10 +6,12 @@ import { SearchX } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 import { doctorQueryOptions } from '@/modules/doctors/doctor.query';
 import { listDoctorsSchema } from '@/modules/doctors/doctor.schema';
 import { CardDoctor, CardDoctorSkeleton } from '@/modules/public-facing/components/card-doctor';
+import { specialistQueryOptions } from '@/modules/specialists/specialist.query';
 
 import { useDebounce } from '@/utils/hooks/use-debounce';
 
@@ -23,13 +25,20 @@ function DoctorsSearchPage() {
   const navigate = useNavigate({ from: '/doctors/search' });
   const { specialist, city, search } = Route.useSearch();
   const [searchInput, setSearchInput] = React.useState(search ?? '');
+  const [specialistInput, setSpecialistInput] = React.useState(specialist ?? '');
+  const [cityInput, setCityInput] = React.useState(city ?? '');
 
   const debouncedSearch = useDebounce(searchInput, 350);
+  const debouncedSpecialist = useDebounce(specialistInput, 350);
+  const debouncedCity = useDebounce(cityInput, 350);
+
+  const querySpecialists = useQuery(specialistQueryOptions.list({ limit: 100, page: 1, isActive: 'true' }));
+  const queryCities = useQuery(doctorQueryOptions.cities());
 
   const queryDoctors = useQuery({
     ...doctorQueryOptions.list({
-      specialist,
-      city,
+      specialist: debouncedSpecialist,
+      city: debouncedCity,
       limit: 10,
       page: 1,
       search: debouncedSearch,
@@ -42,7 +51,7 @@ function DoctorsSearchPage() {
   const doctors = queryDoctors.data?.items ?? [];
 
   useEffect(() => {
-    if (debouncedSearch === search) {
+    if (debouncedSearch === search && debouncedSpecialist === specialist && debouncedCity === city) {
       return;
     }
 
@@ -52,10 +61,12 @@ function DoctorsSearchPage() {
       search: (previous) => ({
         ...previous,
         search: debouncedSearch,
+        specialist: debouncedSpecialist,
+        city: debouncedCity,
         page: 1,
       }),
     });
-  }, [debouncedSearch, navigate, search]);
+  }, [debouncedCity, debouncedSearch, debouncedSpecialist, city, navigate, search, specialist]);
 
   return (
     <div className='pb-8'>
@@ -74,13 +85,50 @@ function DoctorsSearchPage() {
           </h2>
         </div>
         <div className='mt-4 flex items-center justify-center px-4'>
-          <Input
-            name='search'
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            className='bg-white rounded-full w-full max-w-md py-5 px-6 focus:ring-2 focus:ring-primary focus:outline-none'
-            placeholder='Search doctors...'
-          />
+          <div className='flex flex-wrap w-full space-y-3 gap-3'>
+            <div className='max-w-lg flex-1'>
+              <Input
+                name='search'
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className='w-full rounded-full bg-white px-6 py-5 focus:outline-none focus:ring-2 focus:ring-primary'
+                placeholder='Search doctors...'
+              />
+            </div>
+
+            <div className='grid grid-cols-2 gap-3'>
+              <Select
+                value={specialistInput || 'all'}
+                onValueChange={(value) => setSpecialistInput(value === 'all' ? '' : value)}
+              >
+                <SelectTrigger className='py-5 rounded-full bg-white px-4 font-medium text-gray-500'>
+                  <SelectValue placeholder='All specialists' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='all'>All specialists</SelectItem>
+                  {querySpecialists.data?.items.map((item) => (
+                    <SelectItem key={item._id} value={item.name}>
+                      {item.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select value={cityInput || 'all'} onValueChange={(value) => setCityInput(value === 'all' ? '' : value)}>
+                <SelectTrigger className='py-5 rounded-full bg-white px-4 font-medium text-gray-500'>
+                  <SelectValue placeholder='All cities' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='all'>All cities</SelectItem>
+                  {queryCities.data?.map((item) => (
+                    <SelectItem key={item} value={item}>
+                      {item}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
         </div>
       </header>
       <section id='ContainerCards' className='-mt-26 w-full space-y-4 px-4'>
