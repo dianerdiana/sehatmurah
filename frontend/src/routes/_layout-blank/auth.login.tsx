@@ -12,7 +12,7 @@ function LoginPage() {
   return (
     <div className='grid min-h-svh lg:grid-cols-2'>
       <div className='flex flex-col gap-4 p-6 md:p-10'>
-        <div className='flex justify-center gap-2 md:justify-start'>
+        <div className='flex gap-2 justify-start'>
           <Link to='/' className='flex items-center gap-2 font-medium'>
             <div className='flex w-60 items-center justify-center rounded-md text-primary-foreground'>
               <img src={themeConfig.app.logoBrandName} alt='logo-brand' className='w-full h-auto' />
