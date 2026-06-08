@@ -15,8 +15,8 @@ import {
 import * as doctorController from './doctor.controller';
 import {
   approveDoctorSchema,
-  createDoctorSchema,
   createDoctorRequestSchema,
+  createDoctorSchema,
   doctorIdSchema,
   listDoctorsCitiesSchema,
   listDoctorsSchema,

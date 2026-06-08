@@ -26,9 +26,7 @@ const clampPositiveInteger = (value: number, fallback: number): number => {
   return Math.max(1, Math.trunc(value));
 };
 
-export const normalizePagination = (
-  query: PaginationQuery = {},
-): PaginationWindow => {
+export const normalizePagination = (query: PaginationQuery = {}): PaginationWindow => {
   const page = clampPositiveInteger(query.page ?? DEFAULT_PAGE, DEFAULT_PAGE);
   const limit = Math.min(
     MAX_LIMIT,
@@ -46,8 +44,7 @@ export const buildResponseMeta = (
   query: PaginationQuery & { totalItems: number },
 ): ResponseMeta => {
   const { page, limit } = normalizePagination(query);
-  const totalPages =
-    query.totalItems === 0 ? 0 : Math.ceil(query.totalItems / limit);
+  const totalPages = query.totalItems === 0 ? 0 : Math.ceil(query.totalItems / limit);
 
   return {
     page,

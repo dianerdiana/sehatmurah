@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AppointmentStatus } from '../../common/enums/appointment-status.enum';
 import { DoctorApprovalStatus } from '../../common/enums/doctor-approval-status.enum';
 import { ReviewStatus } from '../../common/enums/review-status.enum';
@@ -190,7 +191,10 @@ const getSpecialistName = (value: unknown) => {
   return specialist && typeof specialist.name === 'string' ? specialist.name : 'Unknown specialist';
 };
 
-const getDoctorSummary = (doctor: PopulatedDoctorProfile, createdAt?: string): DashboardDoctorItem => ({
+const getDoctorSummary = (
+  doctor: PopulatedDoctorProfile,
+  createdAt?: string,
+): DashboardDoctorItem => ({
   id: String(doctor._id ?? ''),
   fullName: doctor.fullName ?? '-',
   specialistName: getSpecialistName(doctor.specialist),
@@ -284,10 +288,10 @@ const getAdminDashboardSummary = async (): Promise<AdminDashboardSummary> => {
     totalDoctors,
     doctorStatusCounts,
     totalPatients,
-    totalAppointments,
+    _totalAppointments,
     todayAppointments,
     appointmentStatusCounts,
-    totalReviews,
+    _totalReviews,
     reviewStatusCounts,
     recentAppointments,
     pendingDoctors,
@@ -351,15 +355,34 @@ const getAdminDashboardSummary = async (): Promise<AdminDashboardSummary> => {
   return {
     role: UserRole.ADMIN,
     title: 'Admin dashboard',
-    description: 'Monitor platform health, keep the approval queue moving, and spot activity trends at a glance.',
+    description:
+      'Monitor platform health, keep the approval queue moving, and spot activity trends at a glance.',
     metrics: [
       metric('Total Users', totalUsers, 'All registered accounts', 'number', 'info'),
       metric('Active Users', activeUsers, 'Accounts currently active', 'number', 'success'),
-      metric('Doctor Profiles', totalDoctors, 'Clinics and practitioners on record', 'number', 'warning'),
-      metric('Patient Profiles', totalPatients, 'Patients available in the system', 'number', 'default'),
+      metric(
+        'Doctor Profiles',
+        totalDoctors,
+        'Clinics and practitioners on record',
+        'number',
+        'warning',
+      ),
+      metric(
+        'Patient Profiles',
+        totalPatients,
+        'Patients available in the system',
+        'number',
+        'default',
+      ),
     ],
     statusMetrics: [
-      metric("Today's Appointments", todayAppointments, 'Scheduled within the Jakarta day', 'number', 'info'),
+      metric(
+        "Today's Appointments",
+        todayAppointments,
+        'Scheduled within the Jakarta day',
+        'number',
+        'info',
+      ),
       metric(
         'Pending Doctors',
         doctorStatusCounts[DoctorApprovalStatus.PENDING],
@@ -397,8 +420,12 @@ const getAdminDashboardSummary = async (): Promise<AdminDashboardSummary> => {
       ),
     ],
     recentAppointments: recentAppointments.map(getAppointmentSummary),
-    pendingDoctors: pendingDoctors.map((doctor) => getDoctorSummary(doctor, toISOString(doctor.createdAt))),
-    recentPatients: recentPatients.map((patient) => getPatientSummary(patient, toISOString(patient.createdAt))),
+    pendingDoctors: pendingDoctors.map((doctor) =>
+      getDoctorSummary(doctor, toISOString(doctor.createdAt)),
+    ),
+    recentPatients: recentPatients.map((patient) =>
+      getPatientSummary(patient, toISOString(patient.createdAt)),
+    ),
     recentReviews: recentReviews.map(getReviewSummary),
   };
 };
@@ -499,7 +526,8 @@ const getDoctorDashboardSummary = async (authUser: AuthUser): Promise<DoctorDash
   return {
     role: UserRole.DOCTOR,
     title: `Welcome back, ${doctor.fullName ?? 'Doctor'}`,
-    description: "Review your schedule, check today's queue, and keep an eye on the patient experience.",
+    description:
+      "Review your schedule, check today's queue, and keep an eye on the patient experience.",
     doctor: {
       id: doctorId,
       fullName: doctor.fullName ?? '-',
@@ -515,10 +543,34 @@ const getDoctorDashboardSummary = async (authUser: AuthUser): Promise<DoctorDash
       experienceYears: Number(doctor.experienceYears ?? 0),
     },
     metrics: [
-      metric('Total Appointments', totalAppointments, 'All appointments linked to your profile', 'number', 'info'),
-      metric("Today's Appointments", todayAppointments, 'Appointments scheduled in Jakarta today', 'number', 'warning'),
-      metric('Upcoming Appointments', upcomingAppointmentsCount, 'Confirmed and pending future visits', 'number', 'success'),
-      metric('Total Reviews', totalReviews, 'Patient feedback collected so far', 'number', 'default'),
+      metric(
+        'Total Appointments',
+        totalAppointments,
+        'All appointments linked to your profile',
+        'number',
+        'info',
+      ),
+      metric(
+        "Today's Appointments",
+        todayAppointments,
+        'Appointments scheduled in Jakarta today',
+        'number',
+        'warning',
+      ),
+      metric(
+        'Upcoming Appointments',
+        upcomingAppointmentsCount,
+        'Confirmed and pending future visits',
+        'number',
+        'success',
+      ),
+      metric(
+        'Total Reviews',
+        totalReviews,
+        'Patient feedback collected so far',
+        'number',
+        'default',
+      ),
     ],
     statusMetrics: [
       metric(

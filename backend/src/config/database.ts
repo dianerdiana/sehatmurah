@@ -18,4 +18,3 @@ export const connectDatabase = async (): Promise<void> => {
 
   await cachedDb;
 };
-
