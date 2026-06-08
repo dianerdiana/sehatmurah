@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { TanStackDevtools } from '@tanstack/react-devtools';
-import { createRootRouteWithContext } from '@tanstack/react-router';
-import { Outlet } from '@tanstack/react-router';
+import { createRootRouteWithContext, HeadContent, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
 import NotFound from '@/components/pages/not-found';
@@ -30,6 +29,7 @@ function RootDocument() {
     <React.Suspense fallback={null}>
       <TanstackQueryProvider>
         <TooltipProvider>
+          <HeadContent />
           <Outlet />
           <TopLoadingBar />
         </TooltipProvider>

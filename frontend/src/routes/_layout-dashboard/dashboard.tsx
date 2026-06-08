@@ -55,6 +55,9 @@ export const Route = createFileRoute('/_layout-dashboard/dashboard')({
     hasPermissionPage(context, 'read', 'Dashboard');
   },
   component: DashboardPage,
+  head: () => ({
+    meta: [{ title: 'Dashboard | Sehatmurah' }],
+  }),
 });
 
 type QuickAction = {
