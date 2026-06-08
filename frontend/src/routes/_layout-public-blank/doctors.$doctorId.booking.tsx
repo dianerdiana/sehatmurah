@@ -26,21 +26,23 @@ function BookingDoctorPage() {
 
   return (
     <div className='pb-24.5'>
-      <header className='h-67 w-full rounded-b-2xl bg-primary px-4 pt-12'>
-        <Button onClick={() => router.history.back()}>
-          <img src='/assets/icons/arrow-left-blue.svg' alt='Image' />
-        </Button>
-        <div className='absolute left-1/2 top-12 -translate-x-1/2'>
-          <h1 className='mb-0.75 whitespace-nowrap text-center text-xl font-bold leading-[25.2px] text-white'>
-            Appointment Details
-          </h1>
-          <h2 className='whitespace-nowrap text-center font-semibold leading-[20.16px] text-primary-light'>
-            Set your appointment schedule
-          </h2>
+      <header className='h-67 w-full rounded-b-2xl bg-primary px-4 pt-6 lg:pt-12'>
+        <div className='flex flex-wrap items-center gap-4'>
+          <Button onClick={() => router.history.back()} className='px-0'>
+            <img src='/assets/icons/arrow-left-blue.svg' alt='Image' />
+          </Button>
+          <div className='lg:absolute lg:left-1/2 lg:top-12 lg:-translate-x-1/2 lg:max-w-fit flex flex-col items-center w-full'>
+            <h1 className='mb-0.75 whitespace-nowrap text-center text-xl font-bold leading-[25.2px] text-white'>
+              Appointment Details
+            </h1>
+            <h2 className='whitespace-nowrap text-center font-semibold leading-[20.16px] text-primary-light'>
+              Set your appointment schedule
+            </h2>
+          </div>
         </div>
       </header>
 
-      <section id='ContainerCards' className='-mt-35 w-full space-y-4 px-4 pb-8'>
+      <section id='ContainerCards' className='-mt-32 md:-mt-35 w-full space-y-4 px-4 pb-8'>
         {queryDoctor.isPending ? (
           <CardDoctorSkeleton />
         ) : doctor ? (
