@@ -7,11 +7,13 @@ export type PermissionSubject =
   | 'Appointment'
   | 'DoctorProfile'
   | 'GeneralDoctorProfile'
+  | 'OwnDoctorProfile'
   | 'PatientProfile'
   | 'Review'
   | 'Specialist'
   | 'Dashboard'
   | 'PlatformTitle'
+  | 'SettingTitle'
   | 'ListAppointment'
   | 'ListDoctor'
   | 'ListPatient'
@@ -74,6 +76,7 @@ export const permissionsByRole: Record<UserRole, PermissionTuple[]> = {
     ['read', 'ListDoctor'],
     ['read', 'DoctorProfile'],
     ['update', 'DoctorProfile'],
+    ['update', 'OwnDoctorProfile'],
 
     ['read', 'Review'],
 
@@ -83,6 +86,7 @@ export const permissionsByRole: Record<UserRole, PermissionTuple[]> = {
     ['read', 'Dashboard'],
 
     ['read', 'PlatformTitle'],
+    ['read', 'SettingTitle'],
   ],
   [UserRole.PATIENT]: [
     ['create', 'Auth'],
@@ -104,6 +108,7 @@ export const permissionsByRole: Record<UserRole, PermissionTuple[]> = {
     ['read', 'Specialist'],
 
     ['read', 'PlatformTitle'],
+    ['read', 'SettingTitle'],
   ],
 };
 
