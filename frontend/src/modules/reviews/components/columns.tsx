@@ -47,10 +47,10 @@ function SortableHeader({
 
 function RowActions({ review }: { review: Review }) {
   return (
-    <div className='flex items-center justify-end gap-1'>
+    <div className='flex items-center justify-center gap-1'>
       <Link to='/app/reviews/$reviewId/edit' params={{ reviewId: review._id }}>
         <Button type='button' variant='ghost' size='icon-sm' aria-label={`Edit review from ${review.patient.fullName}`}>
-          <Pencil className='size-4' />
+          <Pencil className='size-4 stroke-amber-500' />
         </Button>
       </Link>
       <ReviewDetailDialog review={review} />
@@ -141,7 +141,7 @@ export const reviewsColumns: ColumnDef<Review>[] = [
   },
   {
     id: 'actions',
-    header: () => <div className='text-right'>Actions</div>,
+    header: () => <div className='text-center'>Actions</div>,
     cell: ({ row }) => <RowActions review={row.original} />,
     enableSorting: false,
   },

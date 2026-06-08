@@ -37,10 +37,10 @@ function SortableHeader({
 
 function RowActions({ patient }: { patient: PatientListItem }) {
   return (
-    <div className='flex items-center justify-end gap-1'>
+    <div className='flex items-center justify-center gap-1'>
       <Link to='/app/patients/$patientId/edit' params={{ patientId: patient._id }}>
         <Button type='button' variant='ghost' size='icon-sm' aria-label={`Edit ${patient.fullName}`}>
-          <Pencil className='size-4' />
+          <Pencil className='size-4 stroke-amber-500' />
         </Button>
       </Link>
       <PatientDetailDialog patient={patient} />
@@ -102,7 +102,7 @@ export const patientsColumns: ColumnDef<PatientListItem>[] = [
   },
   {
     id: 'actions',
-    header: () => <div className='text-right'>Actions</div>,
+    header: () => <div className='text-center'>Actions</div>,
     cell: ({ row }) => <RowActions patient={row.original} />,
     enableSorting: false,
   },

@@ -32,7 +32,7 @@ export function UserDetailDialog({ user }: UserDetailDialogProps) {
     <Dialog>
       <DialogTrigger asChild>
         <Button type='button' variant='ghost' size='icon-sm' aria-label={`View ${user.name} details`}>
-          <Eye className='size-4' />
+          <Eye className='size-4 stroke-primary' />
         </Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-xl'>

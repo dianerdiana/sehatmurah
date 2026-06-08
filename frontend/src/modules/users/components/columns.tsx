@@ -45,10 +45,10 @@ function SortableHeader({
 
 function RowActions({ user }: { user: UserListItem }) {
   return (
-    <div className='flex items-center justify-end gap-1'>
+    <div className='flex items-center justify-center gap-1'>
       <Link to='/app/users/$userId/edit' params={{ userId: user._id }}>
         <Button type='button' variant='ghost' size='icon-sm' aria-label={`Edit ${user.name}`}>
-          <Pencil className='size-4' />
+          <Pencil className='size-4 stroke-amber-500' />
         </Button>
       </Link>
       <UserDetailDialog user={user} />
@@ -101,7 +101,7 @@ export const usersColumns: ColumnDef<UserListItem>[] = [
   },
   {
     id: 'actions',
-    header: () => <div className='text-right'>Actions</div>,
+    header: () => <div className='text-center'>Actions</div>,
     cell: ({ row }) => <RowActions user={row.original} />,
     enableSorting: false,
   },

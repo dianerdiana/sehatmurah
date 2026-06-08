@@ -6,6 +6,7 @@ export type PermissionSubject =
   | 'User'
   | 'Appointment'
   | 'DoctorProfile'
+  | 'GeneralDoctorProfile'
   | 'PatientProfile'
   | 'Review'
   | 'Specialist'

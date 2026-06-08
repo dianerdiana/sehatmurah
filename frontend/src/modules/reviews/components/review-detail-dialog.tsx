@@ -42,7 +42,7 @@ export function ReviewDetailDialog({ review }: ReviewDetailDialogProps) {
     <Dialog>
       <DialogTrigger asChild>
         <Button type='button' variant='ghost' size='icon-sm' aria-label={`View review from ${review.patient.fullName}`}>
-          <Eye className='size-4' />
+          <Eye className='size-4 stroke-primary' />
         </Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-2xl'>

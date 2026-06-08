@@ -6,6 +6,7 @@ export type PermissionSubject =
   | 'User'
   | 'Appointment'
   | 'DoctorProfile'
+  | 'GeneralDoctorProfile'
   | 'PatientProfile'
   | 'Review'
   | 'Specialist'
@@ -24,22 +25,35 @@ export const permissionsByRole: Record<UserRole, PermissionTuple[]> = {
   [UserRole.ADMIN]: [
     ['create', 'Auth'],
     ['read', 'Auth'],
+
+    ['read', 'ListUser'],
     ['create', 'User'],
     ['read', 'User'],
     ['update', 'User'],
     ['delete', 'User'],
+
+    ['read', 'ListAppointment'],
     ['read', 'Appointment'],
     ['update', 'Appointment'],
     ['delete', 'Appointment'],
+
+    ['read', 'ListDoctor'],
     ['create', 'DoctorProfile'],
     ['read', 'DoctorProfile'],
     ['update', 'DoctorProfile'],
     ['delete', 'DoctorProfile'],
+    ['update', 'GeneralDoctorProfile'],
+
+    ['read', 'ListPatient'],
     ['read', 'PatientProfile'],
     ['delete', 'PatientProfile'],
+
+    ['read', 'ListReview'],
     ['read', 'Review'],
     ['update', 'Review'],
     ['delete', 'Review'],
+
+    ['read', 'ListSpecialist'],
     ['create', 'Specialist'],
     ['read', 'Specialist'],
     ['update', 'Specialist'],
@@ -48,46 +62,48 @@ export const permissionsByRole: Record<UserRole, PermissionTuple[]> = {
     ['read', 'Dashboard'],
 
     ['read', 'PlatformTitle'],
-    ['read', 'ListAppointment'],
-    ['read', 'ListDoctor'],
-    ['read', 'ListPatient'],
-    ['read', 'ListSpecialist'],
-    ['read', 'ListUser'],
-    ['read', 'ListReview'],
   ],
   [UserRole.DOCTOR]: [
     ['create', 'Auth'],
     ['read', 'Auth'],
+
+    ['read', 'ListAppointment'],
     ['read', 'Appointment'],
     ['update', 'Appointment'],
+
+    ['read', 'ListDoctor'],
     ['read', 'DoctorProfile'],
     ['update', 'DoctorProfile'],
+
     ['read', 'Review'],
+
+    ['read', 'ListSpecialist'],
     ['read', 'Specialist'],
 
     ['read', 'Dashboard'],
 
     ['read', 'PlatformTitle'],
-    ['read', 'ListAppointment'],
-    ['read', 'ListSpecialist'],
-    ['read', 'ListDoctor'],
-    ['read', 'ListReview'],
   ],
   [UserRole.PATIENT]: [
     ['create', 'Auth'],
     ['read', 'Auth'],
+
+    ['read', 'ListAppointment'],
     ['create', 'Appointment'],
     ['read', 'Appointment'],
     ['delete', 'Appointment'],
+
     ['read', 'DoctorProfile'],
+
     ['read', 'PatientProfile'],
     ['update', 'PatientProfile'],
+
     ['create', 'Review'],
     ['read', 'Review'],
+
     ['read', 'Specialist'],
 
     ['read', 'PlatformTitle'],
-    ['read', 'ListAppointment'],
   ],
 };
 

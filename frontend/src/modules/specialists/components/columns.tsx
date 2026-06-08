@@ -37,9 +37,9 @@ function SortableHeader({
 
 function RowActions({ specialist }: { specialist: Specialist }) {
   return (
-    <div className='flex items-center justify-end gap-1'>
+    <div className='flex items-center justify-center gap-1'>
       <Link to='/app/specialists/$specialistId/edit' params={{ specialistId: specialist._id }}>
-        <Pencil className='size-4' />
+        <Pencil className='size-4 stroke-amber-500' />
       </Link>
       <SpecialistDetailDialog specialist={specialist} />
       <SpecialistDeletePopover specialistId={specialist._id} specialistName={specialist.name} />
@@ -109,7 +109,7 @@ export const specialistsColumns: ColumnDef<Specialist>[] = [
   },
   {
     id: 'actions',
-    header: () => <div className='text-right'>Actions</div>,
+    header: () => <div className='text-center'>Actions</div>,
     cell: ({ row }) => <RowActions specialist={row.original} />,
     enableSorting: false,
   },

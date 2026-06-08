@@ -24,7 +24,7 @@ export function PatientDetailDialog({ patient }: PatientDetailDialogProps) {
     <Dialog>
       <DialogTrigger asChild>
         <Button type='button' variant='ghost' size='icon-sm' aria-label={`View ${patient.fullName} details`}>
-          <Eye className='size-4' />
+          <Eye className='size-4 stroke-primary' />
         </Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-xl'>

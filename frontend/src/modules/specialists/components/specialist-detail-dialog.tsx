@@ -25,7 +25,7 @@ export function SpecialistDetailDialog({ specialist }: SpecialistDetailDialogPro
     <Dialog>
       <DialogTrigger asChild>
         <Button type='button' variant='ghost' size='icon-sm' aria-label={`View ${specialist.name} details`}>
-          <Eye className='size-4' />
+          <Eye className='size-4 stroke-primary' />
         </Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-xl'>

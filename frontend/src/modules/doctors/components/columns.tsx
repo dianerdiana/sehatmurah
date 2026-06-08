@@ -5,6 +5,7 @@ import { ArrowDown, ArrowUp, ArrowUpDown, Pencil } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
+import { Can } from '@/utils/context/ability-context';
 import { formatCurrency, formatDate } from '@/utils/utils';
 
 import type { Doctor } from '../doctor.type';
@@ -50,13 +51,19 @@ function SortableHeader({
 
 function RowActions({ doctor }: { doctor: Doctor }) {
   return (
-    <div className='flex items-center justify-end gap-1'>
+    <div className='flex items-center justify-center gap-1'>
       <DoctorApprovalActions doctor={doctor} />
-      <Button type='button' variant='ghost' size='icon-sm' asChild>
-        <Link to='/app/doctors/$doctorId/edit' params={{ doctorId: doctor._id }} aria-label={`Edit ${doctor.fullName}`}>
-          <Pencil className='size-4' />
-        </Link>
-      </Button>
+      <Can I='update' a='GeneralDoctorProfile'>
+        <Button type='button' variant='ghost' size='icon-sm' asChild>
+          <Link
+            to='/app/doctors/$doctorId/edit'
+            params={{ doctorId: doctor._id }}
+            aria-label={`Edit ${doctor.fullName}`}
+          >
+            <Pencil className='size-4 stroke-amber-500 stroke-amber-500' />
+          </Link>
+        </Button>
+      </Can>
       <DoctorDetailDialog doctor={doctor} />
       <DoctorDeletePopover doctorId={doctor._id} doctorName={doctor.fullName} />
     </div>
@@ -126,7 +133,7 @@ export const doctorsColumns: ColumnDef<Doctor>[] = [
   },
   {
     id: 'actions',
-    header: () => <div className='text-right'>Actions</div>,
+    header: () => <div className='text-center'>Actions</div>,
     cell: ({ row }) => <RowActions doctor={row.original} />,
     enableSorting: false,
   },
