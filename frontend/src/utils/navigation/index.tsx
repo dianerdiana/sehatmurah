@@ -111,7 +111,7 @@ export const navigation: NavigationGroup[] = [
     },
     items: [
       {
-        title: 'Doctor Schedule',
+        title: 'Doctor Profile',
         url: '/settings/doctors/schedule',
         icon: <Calendar />,
         permission: {
