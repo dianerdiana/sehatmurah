@@ -106,12 +106,12 @@ export function PatientForm({ initialValue, isSubmitting, onSubmit }: PatientFor
   });
 
   return (
-    <Card className='rounded-3xl border-none'>
-      <CardHeader>
+    <Card className='rounded-3xl border-none shadow-none'>
+      <CardHeader className='px-4 pt-4 sm:px-6 sm:pt-6'>
         <CardTitle className='text-xl font-semibold'>Edit Patient</CardTitle>
         <p className='text-sm text-muted-foreground'>{subtitle}</p>
       </CardHeader>
-      <CardContent>
+      <CardContent className='px-4 pb-4 sm:px-6 sm:pb-6'>
         <form
           className='grid gap-5'
           onSubmit={(event) => {
