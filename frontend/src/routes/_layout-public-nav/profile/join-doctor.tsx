@@ -2,11 +2,12 @@ import { useMemo, useState } from 'react';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { Loader2, SearchX, Stethoscope } from 'lucide-react';
+import { SearchX, Stethoscope } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { FallbackSpinner } from '@/components/ui/fallback-spinner';
 
 import { DoctorForm } from '@/modules/doctors/components/doctor-form';
 import { doctorKeys } from '@/modules/doctors/doctor.key';
@@ -96,11 +97,7 @@ function RouteComponent() {
   );
 
   if (patientQuery.isPending || myDoctorQuery.isPending || specialistQuery.isPending || citiesQuery.isPending) {
-    return (
-      <div className='flex min-h-60 items-center justify-center'>
-        <Loader2 className='size-6 animate-spin text-muted-foreground' />
-      </div>
-    );
+    return <FallbackSpinner fullscreen />;
   }
 
   if (patientQuery.isError || specialistQuery.isError || citiesQuery.isError) {

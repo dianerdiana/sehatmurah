@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
-import { Loader2, SearchX } from 'lucide-react';
+import { SearchX } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { FallbackSpinner } from '@/components/ui/fallback-spinner';
 import { ImageServer } from '@/components/ui/image-server';
 
 import { appointmentQueryOptions } from '@/modules/appointments/appointment.query';
@@ -70,11 +71,7 @@ function BookingAppointmentSuccess() {
   const isLoading = appointmentQuery.isPending || (!!doctorId && doctorQuery.isPending);
 
   if (isLoading) {
-    return (
-      <div className='flex min-h-60 items-center justify-center'>
-        <Loader2 className='size-6 animate-spin text-muted-foreground' />
-      </div>
-    );
+    return <FallbackSpinner fullscreen />;
   }
 
   if (appointmentQuery.isError || doctorQuery.isError || !appointment || !doctor) {

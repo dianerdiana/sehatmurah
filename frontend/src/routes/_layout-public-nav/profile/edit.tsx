@@ -1,10 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Loader2, SearchX } from 'lucide-react';
+import { SearchX } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { FallbackSpinner } from '@/components/ui/fallback-spinner';
 
 import { PatientForm } from '@/modules/patients/components/patient-form';
 import { patientKeys } from '@/modules/patients/patient.key';
@@ -53,11 +54,7 @@ function RouteComponent() {
   }
 
   if (patientQuery.isPending || !patientQuery.data) {
-    return (
-      <div className='flex min-h-60 items-center justify-center'>
-        <Loader2 className='size-6 animate-spin text-muted-foreground' />
-      </div>
-    );
+    return <FallbackSpinner fullscreen />;
   }
 
   return (

@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { FallbackSpinner } from '@/components/ui/fallback-spinner';
 
 import { appointmentQueryOptions } from '@/modules/appointments/appointment.query';
 
@@ -19,11 +19,7 @@ function BookingAppointmentSuccess() {
   const doctorId = getPartyId(appointment?.doctor);
 
   if (queryAppointment.isPending) {
-    return (
-      <div className='flex min-h-60 items-center justify-center'>
-        <Loader2 className='size-6 animate-spin text-muted-foreground' />
-      </div>
-    );
+    return <FallbackSpinner fullscreen />;
   }
 
   return (
