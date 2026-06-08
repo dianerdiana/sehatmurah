@@ -24,7 +24,7 @@ function RouteComponent() {
   const existingReview = queryReview.data || null;
 
   return (
-    <div className='container py-10'>
+    <div className='mx-auto w-full max-w-2xl px-4 py-6 sm:py-10'>
       <ReviewCreateForm review={existingReview} doctorId={doctorId} appointmentId={appointmentId} />
     </div>
   );
