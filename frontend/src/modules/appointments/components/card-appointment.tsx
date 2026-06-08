@@ -42,7 +42,7 @@ export function CardAppointment({ appointment }: CardAppointmentProps) {
 
   return (
     <Card className='rounded-3xl bg-white py-0 shadow-none border-none'>
-      <CardContent className='space-y-4 px-4 py-4'>
+      <CardContent className='space-y-4 px-4 py-4 sm:px-5 sm:py-5'>
         <header className='flex items-start gap-3'>
           {doctor ? (
             <Avatar className='size-14 shrink-0 rounded-2xl bg-gray-200 p-1'>
@@ -62,9 +62,9 @@ export function CardAppointment({ appointment }: CardAppointmentProps) {
           ) : null}
 
           <div className='min-w-0 flex-1'>
-            <div className='flex flex-wrap items-start justify-between gap-2'>
+            <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
               <div className='py-1 space-y-1'>
-                <p className='truncate text-lg font-bold leading-tight text-gray-900'>{doctorName}</p>
+                <p className='truncate text-base font-bold leading-tight text-gray-900 sm:text-lg'>{doctorName}</p>
                 <p className='truncate text-sm font-semibold text-gray-500'>{specialistName}</p>
               </div>
               <Badge variant={appointmentStatusBadgeVariants[appointment.status]} className='shrink-0'>
@@ -79,14 +79,14 @@ export function CardAppointment({ appointment }: CardAppointmentProps) {
             <p className='text-xs font-semibold uppercase tracking-wide text-gray-500'>Booking Code</p>
             <h2 className='truncate text-base font-bold text-gray-900'>{appointment.bookingCode}</h2>
           </div>
-          <div className='flex items-center justify-between gap-3'>
-            <div>
+          <div className='grid gap-3 sm:flex sm:items-center sm:justify-between'>
+            <div className='min-w-0'>
               <p className='text-xs font-semibold uppercase tracking-wide text-gray-500'>Appointment Date</p>
               <p className='mt-1 text-sm font-bold text-gray-900'>
                 {formatAppointmentDate(appointment.appointmentDate)}
               </p>
             </div>
-            <div className='text-right'>
+            <div className='min-w-0 sm:text-right'>
               <p className='text-xs font-semibold uppercase tracking-wide text-gray-500'>Time</p>
               <p className='mt-1 text-sm font-bold text-gray-900'>
                 {formatAppointmentTime(appointment.startTime)} - {formatAppointmentTime(appointment.endTime)}
@@ -105,19 +105,19 @@ export function CardAppointment({ appointment }: CardAppointmentProps) {
         </div>
       </CardContent>
 
-      <CardFooter className='flex items-center justify-between gap-2 border-t border-gray-100 px-4 py-4'>
+      <CardFooter className='flex flex-col gap-3 border-t border-gray-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-2'>
         <p className='text-base font-bold text-accent-red'>{formatCurrency(doctor?.consultationFee || 0)}</p>
-        <div className='flex items-center gap-2'>
+        <div className='flex w-full items-center gap-2 sm:w-auto'>
           <Button
             variant='outline'
-            className='px-5 rounded-full'
+            className='w-full rounded-full px-5 sm:w-auto'
             hidden={appointment.status !== AppointmentStatus.COMPLETED}
           >
             <Link to='/reviews/$appointmentId/create' params={{ appointmentId: appointment._id }}>
               Review
             </Link>
           </Button>
-          <Button asChild className='px-5 rounded-full'>
+          <Button asChild className='w-full rounded-full px-5 sm:w-auto'>
             <Link to='/appointments/$appointmentId/details' params={{ appointmentId: appointment._id }}>
               Details
             </Link>
@@ -131,7 +131,7 @@ export function CardAppointment({ appointment }: CardAppointmentProps) {
 export function CardAppointmentSkeleton() {
   return (
     <Card className='rounded-3xl bg-white py-0 shadow-sm animate-pulse'>
-      <CardContent className='space-y-4 px-4 py-5'>
+      <CardContent className='space-y-4 px-4 py-5 sm:px-5 sm:py-5'>
         <header className='flex items-start gap-3'>
           <Skeleton className='size-14 shrink-0 rounded-2xl' />
 
@@ -165,7 +165,7 @@ export function CardAppointmentSkeleton() {
         </div>
       </CardContent>
 
-      <CardFooter className='flex items-center justify-between gap-2 border-t border-gray-100 px-4 py-4'>
+      <CardFooter className='flex flex-col gap-3 border-t border-gray-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-2'>
         <Skeleton className='h-4 w-40 rounded-full' />
         <Skeleton className='h-4 w-16 rounded-full' />
       </CardFooter>
@@ -175,7 +175,7 @@ export function CardAppointmentSkeleton() {
 
 export function CardAppointmentNotFound() {
   return (
-    <div className='flex min-h-80 flex-col items-center justify-center rounded-3xl border border-dashed border-gray-300 bg-white p-8 text-center'>
+    <div className='flex min-h-80 flex-col items-center justify-center rounded-3xl border border-dashed border-gray-300 bg-white p-6 text-center sm:p-8'>
       <div className='mb-5 flex size-16 items-center justify-center rounded-full bg-gray-100 text-gray-400'>
         <SearchX className='size-8 text-gray-400' />
       </div>
