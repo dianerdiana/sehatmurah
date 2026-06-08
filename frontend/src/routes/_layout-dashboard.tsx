@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
+import { createFileRoute, Link, Outlet, redirect, useRouterState } from '@tanstack/react-router';
 
 import { CompanyBrand } from '@/components/layouts/company-brand';
 import { NavMain } from '@/components/layouts/nav-main';
@@ -43,6 +43,10 @@ export const Route = createFileRoute('/_layout-dashboard')({
 
 function DashboardLayout() {
   const { userData } = useAuth();
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  });
+  const currentPageLabel = getDashboardBreadcrumbLabel(pathname);
 
   return (
     <SidebarProvider>
@@ -66,11 +70,13 @@ function DashboardLayout() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className='hidden md:block'>
-                  <BreadcrumbLink href='#'>Build Your Application</BreadcrumbLink>
+                  <BreadcrumbLink asChild>
+                    <Link to='/dashboard'>Dashboard</Link>
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className='hidden md:block' />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                  <BreadcrumbPage>{currentPageLabel}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -83,4 +89,52 @@ function DashboardLayout() {
       </SidebarInset>
     </SidebarProvider>
   );
+}
+
+function getDashboardBreadcrumbLabel(pathname: string) {
+  if (pathname === '/dashboard') {
+    return 'Overview';
+  }
+
+  if (pathname.startsWith('/app/appointments')) {
+    return 'Appointments';
+  }
+
+  if (pathname.startsWith('/app/doctors/create')) {
+    return 'Create Doctor';
+  }
+
+  if (pathname.startsWith('/app/doctors')) {
+    return pathname.includes('/edit') ? 'Edit Doctor' : 'Doctors';
+  }
+
+  if (pathname.startsWith('/app/patients')) {
+    return pathname.includes('/edit') ? 'Edit Patient' : 'Patients';
+  }
+
+  if (pathname.startsWith('/app/reviews')) {
+    return pathname.includes('/edit') ? 'Edit Review' : 'Reviews';
+  }
+
+  if (pathname.startsWith('/app/specialists/create')) {
+    return 'Create Specialist';
+  }
+
+  if (pathname.startsWith('/app/specialists')) {
+    return pathname.includes('/edit') ? 'Edit Specialist' : 'Specialists';
+  }
+
+  if (pathname.startsWith('/app/users/create')) {
+    return 'Create User';
+  }
+
+  if (pathname.startsWith('/app/users')) {
+    return pathname.includes('/edit') ? 'Edit User' : 'Users';
+  }
+
+  if (pathname.startsWith('/settings/doctors/schedule')) {
+    return 'Doctor Schedule';
+  }
+
+  return 'Overview';
 }
