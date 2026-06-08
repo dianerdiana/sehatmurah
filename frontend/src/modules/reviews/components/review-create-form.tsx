@@ -68,13 +68,13 @@ export function ReviewCreateForm({ doctorId, appointmentId, review }: CreateRevi
   });
 
   return (
-    <Card className='mx-auto w-full max-w-xl rounded-2xl'>
-      <CardHeader>
+    <Card className='mx-auto w-full max-w-xl rounded-3xl border-none shadow-none'>
+      <CardHeader className='px-4 pt-4 sm:px-6 sm:pt-6'>
         <CardTitle>Give a Review</CardTitle>
         <CardDescription>Provide a rating and comment based on your consultation experience.</CardDescription>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className='px-4 pb-4 sm:px-6 sm:pb-6'>
         <form
           className='space-y-6'
           onSubmit={(event) => {
@@ -101,7 +101,7 @@ export function ReviewCreateForm({ doctorId, appointmentId, review }: CreateRevi
                 <div className='space-y-2'>
                   <Label>Rating</Label>
 
-                  <div className='flex items-center gap-2' onMouseLeave={() => setHoverRating(null)}>
+                  <div className='flex flex-wrap items-center gap-1.5 sm:gap-2' onMouseLeave={() => setHoverRating(null)}>
                     {Array.from({ length: 5 }, (_, index) => {
                       const ratingValue = index + 1;
                       const isActive = ratingValue <= activeRating;
@@ -117,7 +117,7 @@ export function ReviewCreateForm({ doctorId, appointmentId, review }: CreateRevi
                         >
                           <Star
                             className={[
-                              'size-8 transition-colors',
+                              'size-7 transition-colors sm:size-8',
                               isActive ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground',
                             ].join(' ')}
                           />
@@ -125,7 +125,7 @@ export function ReviewCreateForm({ doctorId, appointmentId, review }: CreateRevi
                       );
                     })}
 
-                    <span className='ml-2 text-sm text-muted-foreground'>
+                    <span className='ml-1 text-sm text-muted-foreground sm:ml-2'>
                       {selectedRating > 0 ? `${selectedRating}/5` : 'No rating yet'}
                     </span>
                   </div>
@@ -168,7 +168,7 @@ export function ReviewCreateForm({ doctorId, appointmentId, review }: CreateRevi
                   onChange={(event) => field.handleChange(event.target.value)}
                 />
 
-                <div className='flex items-center justify-between'>
+                <div className='flex items-center justify-between gap-2'>
                   {field.state.meta.errors.length > 0 ? (
                     <p className='text-sm text-destructive'>{field.state.meta.errors[0]}</p>
                   ) : (
