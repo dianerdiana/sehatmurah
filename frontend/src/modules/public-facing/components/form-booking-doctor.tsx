@@ -260,7 +260,7 @@ export function FormBookingDoctor({
               <div className='mx-auto max-w-170'>
                 <div className='flex h-30 w-full items-center justify-between space-x-2 rounded-t-3xl bg-white px-4'>
                   <div>
-                    <p className='mb-0.5 whitespace-nowrap text-[24px] font-bold leading-[30.24px] text-accent-red'>
+                    <p className='mb-0.5 whitespace-nowrap text-2xl font-bold leading-[30.24px] text-accent-red'>
                       {formatCurrency(consultationFee)}
                     </p>
                     <p className='font-semibold leading-[20.16px] text-gray-500'>/hours</p>
@@ -270,10 +270,10 @@ export function FormBookingDoctor({
                     children={([canSubmit, isSubmitting]) => (
                       <Button
                         type='submit'
-                        className='flex h-13 w-49.25 items-center justify-center rounded-[100px] bg-primary font-bold leading-[20.16px] text-white'
+                        className='flex h-13 px-12 items-center justify-center rounded-[100px] bg-primary font-bold leading-[20.16px] text-white'
                         disabled={!canSubmit || createAppointmentMutation.isPending || isSubmitting}
                       >
-                        {createAppointmentMutation.isPending ? 'Submitting...' : 'Submit Appointment'}
+                        {createAppointmentMutation.isPending ? 'Submitting...' : 'Submit'}
                       </Button>
                     )}
                   />
