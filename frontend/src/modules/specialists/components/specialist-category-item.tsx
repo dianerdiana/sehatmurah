@@ -9,7 +9,7 @@ export function SpecialistCategoryItem({ specialist }: { specialist: Specialist 
     <Link
       title={specialist.name}
       key={specialist._id}
-      to='/doctors/results'
+      to='/doctors/search'
       search={{ specialist: specialist.name }}
       className='categori-1 flex h-24 w-full max-w-28 flex-col items-center sm:h-25.5 sm:max-w-27.75'
     >
