@@ -57,12 +57,12 @@ export function AppointmentsTableToolbar({
   const hasActiveFilters = Boolean(search || status !== 'all' || startDate || endDate);
 
   return (
-    <Card className='rounded-xl shadow-none border-none'>
-      <CardHeader>
+    <Card className='rounded-3xl border-none shadow-none'>
+      <CardHeader className='space-y-1 px-4 pt-4 sm:px-6 sm:pt-6'>
         <p className='text-sm font-medium text-muted-foreground'>Appointments</p>
-        <h1 className='text-2xl font-bold tracking-tight text-gray-900'>My Appointment List</h1>
+        <h1 className='text-xl font-bold tracking-tight text-gray-900 sm:text-2xl'>My Appointment List</h1>
       </CardHeader>
-      <CardContent className='grid gap-4 lg:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,1fr))_max-content]'>
+      <CardContent className='grid gap-4 px-4 pb-4 sm:px-6 sm:pb-6 lg:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,1fr))_max-content]'>
         <div className='space-y-2 lg:col-span-1'>
           <label htmlFor='appointment-search' className='text-sm font-medium'>
             Search
