@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import type { SortingState, Updater } from '@tanstack/react-table';
 import { SearchX } from 'lucide-react';
 
@@ -14,15 +14,13 @@ import type { ListPatientsSearchState } from '@/modules/patients/patient.schema'
 import { listPatientsSchema } from '@/modules/patients/patient.schema';
 import type { PatientListItem } from '@/modules/patients/patient.type';
 
-import { hasPermission } from '@/utils/auth/has-permission';
+import { hasPermissionPage } from '@/utils/auth/has-permission';
 
 export const Route = createFileRoute('/_layout-dashboard/app/patients/')({
   validateSearch: listPatientsSchema,
   component: PatientsListPage,
   beforeLoad: ({ context }) => {
-    if (!hasPermission(context.ability, 'read', 'ListPatient')) {
-      throw redirect({ to: '/not-found' });
-    }
+    hasPermissionPage(context, 'read', 'ListPatient');
   },
 });
 

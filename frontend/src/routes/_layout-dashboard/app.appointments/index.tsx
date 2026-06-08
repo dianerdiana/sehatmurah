@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import type { SortingState, Updater } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { SearchX } from 'lucide-react';
@@ -15,15 +15,13 @@ import { AppointmentsTable } from '@/modules/appointments/components/appointment
 import { AppointmentsTablePagination } from '@/modules/appointments/components/appointments-table-pagination';
 import { AppointmentsTableToolbar } from '@/modules/appointments/components/appointments-table-toolbar';
 
-import { hasPermission } from '@/utils/auth/has-permission';
+import { hasPermissionPage } from '@/utils/auth/has-permission';
 
 export const Route = createFileRoute('/_layout-dashboard/app/appointments/')({
   validateSearch: listAppointmentsSchema,
   component: AppointmentsListPage,
   beforeLoad: ({ context }) => {
-    if (!hasPermission(context.ability, 'read', 'ListAppointment')) {
-      throw redirect({ to: '/not-found' });
-    }
+    hasPermissionPage(context, 'read', 'ListAppointment');
   },
 });
 

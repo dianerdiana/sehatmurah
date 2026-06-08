@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { SearchX } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -12,15 +12,13 @@ import { reviewKeys } from '@/modules/reviews/review.key';
 import { reviewMutationOptions } from '@/modules/reviews/review.mutation';
 import { reviewQueryOptions } from '@/modules/reviews/review.query';
 
-import { hasPermission } from '@/utils/auth/has-permission';
+import { hasPermissionPage } from '@/utils/auth/has-permission';
 import { formatDateTime } from '@/utils/utils';
 
 export const Route = createFileRoute('/_layout-dashboard/app/reviews/$reviewId/edit')({
   component: ReviewsEditPage,
   beforeLoad: ({ context }) => {
-    if (!hasPermission(context.ability, 'update', 'Review')) {
-      throw redirect({ to: '/not-found' });
-    }
+    hasPermissionPage(context, 'update', 'Review');
   },
 });
 

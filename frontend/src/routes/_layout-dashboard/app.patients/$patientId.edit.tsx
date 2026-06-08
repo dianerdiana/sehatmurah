@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { SearchX } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -12,14 +12,12 @@ import { patientKeys } from '@/modules/patients/patient.key';
 import { patientMutationOptions } from '@/modules/patients/patient.mutation';
 import { patientQueryOptions } from '@/modules/patients/patient.query';
 
-import { hasPermission } from '@/utils/auth/has-permission';
+import { hasPermissionPage } from '@/utils/auth/has-permission';
 
 export const Route = createFileRoute('/_layout-dashboard/app/patients/$patientId/edit')({
   component: RouteComponent,
   beforeLoad: ({ context }) => {
-    if (!hasPermission(context.ability, 'update', 'PatientProfile')) {
-      throw redirect({ to: '/not-found' });
-    }
+    hasPermissionPage(context, 'update', 'PatientProfile');
   },
 });
 

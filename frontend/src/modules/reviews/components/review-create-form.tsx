@@ -101,7 +101,10 @@ export function ReviewCreateForm({ doctorId, appointmentId, review }: CreateRevi
                 <div className='space-y-2'>
                   <Label>Rating</Label>
 
-                  <div className='flex flex-wrap items-center gap-1.5 sm:gap-2' onMouseLeave={() => setHoverRating(null)}>
+                  <div
+                    className='flex flex-wrap items-center gap-1.5 sm:gap-2'
+                    onMouseLeave={() => setHoverRating(null)}
+                  >
                     {Array.from({ length: 5 }, (_, index) => {
                       const ratingValue = index + 1;
                       const isActive = ratingValue <= activeRating;

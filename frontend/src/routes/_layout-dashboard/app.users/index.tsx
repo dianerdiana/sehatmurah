@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import type { SortingState, Updater } from '@tanstack/react-table';
 import { SearchX } from 'lucide-react';
 
@@ -14,15 +14,13 @@ import type { ListUsersSearchState } from '@/modules/users/user.schema';
 import { listUsersSchema } from '@/modules/users/user.schema';
 import type { UserListItem } from '@/modules/users/user.type';
 
-import { hasPermission } from '@/utils/auth/has-permission';
+import { hasPermissionPage } from '@/utils/auth/has-permission';
 
 export const Route = createFileRoute('/_layout-dashboard/app/users/')({
   validateSearch: listUsersSchema,
   component: UsersListPage,
   beforeLoad: ({ context }) => {
-    if (!hasPermission(context.ability, 'read', 'User')) {
-      throw redirect({ to: '/not-found' });
-    }
+    hasPermissionPage(context, 'read', 'User');
   },
 });
 

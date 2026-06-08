@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, Link, redirect } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { format } from 'date-fns';
 import {
   Activity,
@@ -42,7 +42,7 @@ import type {
   DashboardSummary,
 } from '@/modules/dashboard/dashboard.type';
 
-import { hasPermission } from '@/utils/auth/has-permission';
+import { hasPermissionPage } from '@/utils/auth/has-permission';
 import { useAuth } from '@/utils/hooks/use-auth';
 import { cn, formatAppointmentTime, formatCurrency, formatDateTime } from '@/utils/utils';
 
@@ -52,9 +52,7 @@ import { UserRole } from '@/types/enums/user-role.enum';
 
 export const Route = createFileRoute('/_layout-dashboard/dashboard')({
   beforeLoad: ({ context }) => {
-    if (!hasPermission(context.ability, 'read', 'Dashboard') && !context.auth.isInitialLoading) {
-      throw redirect({ to: '/not-found', replace: true });
-    }
+    hasPermissionPage(context, 'read', 'Dashboard');
   },
   component: DashboardPage,
 });

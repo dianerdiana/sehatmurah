@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import type { SortingState, Updater } from '@tanstack/react-table';
 import { SearchX } from 'lucide-react';
 
@@ -14,15 +14,13 @@ import type { ListReviewsSearchState } from '@/modules/reviews/review.schema';
 import { listReviewsSchema } from '@/modules/reviews/review.schema';
 import type { Review } from '@/modules/reviews/review.type';
 
-import { hasPermission } from '@/utils/auth/has-permission';
+import { hasPermissionPage } from '@/utils/auth/has-permission';
 
 export const Route = createFileRoute('/_layout-dashboard/app/reviews/')({
   validateSearch: listReviewsSchema,
   component: ReviewsListPage,
   beforeLoad: ({ context }) => {
-    if (!hasPermission(context.ability, 'read', 'ListReview')) {
-      throw redirect({ to: '/not-found' });
-    }
+    hasPermissionPage(context, 'read', 'ListReview');
   },
 });
 
