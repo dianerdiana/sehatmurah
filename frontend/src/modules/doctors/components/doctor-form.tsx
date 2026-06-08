@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -170,6 +170,9 @@ export function DoctorForm({
   onUserSearchChange,
   onSubmit,
 }: DoctorFormProps) {
+  const [isCityUnavailable, setIsCityUnavailable] = useState(false);
+  const hasInitializedCityMode = useRef(false);
+
   const subtitle = useMemo(() => {
     if (mode === 'create') {
       if (hideUserSelector) {
@@ -221,6 +224,22 @@ export function DoctorForm({
       form.setFieldValue('userId', fixedUserId);
     }
   }, [fixedUserId, form, mode]);
+
+  useEffect(() => {
+    if (hasInitializedCityMode.current) {
+      return;
+    }
+
+    hasInitializedCityMode.current = true;
+
+    if (!initialValue?.practiceLocation.city) {
+      return;
+    }
+
+    const hasMatchingCity = cityOptions.some((item) => item.value === initialValue.practiceLocation.city);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsCityUnavailable(!hasMatchingCity);
+  }, [cityOptions, initialValue?.practiceLocation.city]);
 
   return (
     <Card className='rounded-3xl border-none shadow-none'>
@@ -478,37 +497,66 @@ export function DoctorForm({
                   name='practiceLocation.city'
                   children={(field) => (
                     <Field>
-                      <FieldLabel htmlFor='doctor-city'>City</FieldLabel>
-                      <Combobox
-                        items={cityOptions}
-                        value={cityOptions.find((item) => item.value === field.state.value) ?? null}
-                        onValueChange={(value) => field.handleChange(value?.value ?? '')}
-                        onInputValueChange={(value, eventDetails) => {
-                          field.handleChange(value);
-                          if (eventDetails.reason === 'input-change') {
-                            onCitySearchChange?.(value);
-                          }
-                        }}
-                        itemToStringLabel={(item) => item.label}
-                        itemToStringValue={(item) => item.value}
-                      >
-                        <ComboboxInput id='doctor-city' placeholder='Search city or type a new one' showClear />
-                        <ComboboxContent>
-                          <ComboboxEmpty>No city found. Keep typing to use a new city.</ComboboxEmpty>
-                          <ComboboxList>
-                            {isCitiesLoading ? (
-                              <p className='px-2 py-1.5 text-xs text-muted-foreground'>Loading cities...</p>
-                            ) : null}
-                            <ComboboxCollection>
-                              {(item: ComboboxOption) => (
-                                <ComboboxItem key={item.value} value={item}>
-                                  {item.label}
-                                </ComboboxItem>
-                              )}
-                            </ComboboxCollection>
-                          </ComboboxList>
-                        </ComboboxContent>
-                      </Combobox>
+                      <div className='flex items-center justify-between gap-3'>
+                        <FieldLabel htmlFor='doctor-city'>City</FieldLabel>
+                        <div className='flex items-center gap-2'>
+                          <span className='text-xs text-muted-foreground'>New</span>
+                          <Switch
+                            checked={isCityUnavailable}
+                            onCheckedChange={(checked) => {
+                              setIsCityUnavailable(checked);
+
+                              if (!checked) {
+                                const hasMatchingCity = cityOptions.some((item) => item.value === field.state.value);
+
+                                if (!hasMatchingCity) {
+                                  field.handleChange('');
+                                }
+                              }
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      {isCityUnavailable ? (
+                        <Input
+                          id='doctor-city'
+                          value={field.state.value}
+                          placeholder='Enter new city name'
+                          onBlur={field.handleBlur}
+                          onChange={(event) => field.handleChange(event.target.value)}
+                        />
+                      ) : (
+                        <Combobox
+                          items={cityOptions}
+                          value={cityOptions.find((item) => item.value === field.state.value) ?? null}
+                          onValueChange={(value) => field.handleChange(value?.value ?? '')}
+                          onInputValueChange={(value, eventDetails) => {
+                            if (eventDetails.reason === 'input-change') {
+                              onCitySearchChange?.(value);
+                            }
+                          }}
+                          itemToStringLabel={(item) => item.label}
+                          itemToStringValue={(item) => item.value}
+                        >
+                          <ComboboxInput id='doctor-city' placeholder='Search city' showClear />
+                          <ComboboxContent>
+                            <ComboboxEmpty>No city found. Turn on "New" to type a new city.</ComboboxEmpty>
+                            <ComboboxList>
+                              {isCitiesLoading ? (
+                                <p className='px-2 py-1.5 text-xs text-muted-foreground'>Loading cities...</p>
+                              ) : null}
+                              <ComboboxCollection>
+                                {(item: ComboboxOption) => (
+                                  <ComboboxItem key={item.value} value={item}>
+                                    {item.label}
+                                  </ComboboxItem>
+                                )}
+                              </ComboboxCollection>
+                            </ComboboxList>
+                          </ComboboxContent>
+                        </Combobox>
+                      )}
                       {!field.state.meta.isValid && (
                         <FieldError>{String(field.state.meta.errors?.[0] ?? '')}</FieldError>
                       )}
