@@ -154,6 +154,7 @@ function AppointmentsListPage() {
       </Card>
 
       <AppointmentsTableToolbar
+        isDashboard
         search={search.search}
         status={search.status}
         startDate={search.startDate}
