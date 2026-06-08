@@ -38,6 +38,9 @@ export function FormRegister() {
             toast.error(props.message);
           }
         },
+        onError: (error) => {
+          toast.error(error.message || 'Registration failed. Please try again.');
+        },
       }),
   });
 
