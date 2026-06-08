@@ -16,6 +16,9 @@ import { specialistQueryOptions } from '@/modules/specialists/specialist.query';
 import { useDebounce } from '@/utils/hooks/use-debounce';
 
 export const Route = createFileRoute('/_layout-public-nav/doctors/search')({
+  head: () => ({
+    meta: [{ title: 'Search Doctors | Sehatmurah' }],
+  }),
   component: DoctorsSearchPage,
   validateSearch: listDoctorsSchema,
 });

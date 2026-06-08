@@ -10,6 +10,9 @@ import { CardDoctor, CardDoctorNotFound, CardDoctorSkeleton } from '@/modules/pu
 import { FormBookingDoctor } from '@/modules/public-facing/components/form-booking-doctor';
 
 export const Route = createFileRoute('/_layout-public-blank/doctors/$doctorId/booking')({
+  head: () => ({
+    meta: [{ title: 'Book Appointment | Sehatmurah' }],
+  }),
   component: BookingDoctorPage,
 });
 

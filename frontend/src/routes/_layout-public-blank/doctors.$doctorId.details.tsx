@@ -13,6 +13,9 @@ import { CardDoctorReviews } from '@/modules/public-facing/components/card-docto
 import { FixedBookingCta } from '@/modules/public-facing/components/fixed-booking-cta';
 
 export const Route = createFileRoute('/_layout-public-blank/doctors/$doctorId/details')({
+  head: () => ({
+    meta: [{ title: 'Doctor Details | Sehatmurah' }],
+  }),
   component: RouteComponent,
 });
 

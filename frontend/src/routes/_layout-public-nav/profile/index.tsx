@@ -15,6 +15,9 @@ import { formatDate } from '@/utils/utils';
 import { Gender } from '@/types/enums/gender.enum';
 
 export const Route = createFileRoute('/_layout-public-nav/profile/')({
+  head: () => ({
+    meta: [{ title: 'Profile | Sehatmurah' }],
+  }),
   component: RouteComponent,
 });
 

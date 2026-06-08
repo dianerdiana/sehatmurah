@@ -15,6 +15,9 @@ import { patientQueryOptions } from '@/modules/patients/patient.query';
 import { hasPermissionPage } from '@/utils/auth/has-permission';
 
 export const Route = createFileRoute('/_layout-dashboard/app/patients/$patientId/edit')({
+  head: () => ({
+    meta: [{ title: 'Edit Patient | Sehatmurah' }],
+  }),
   component: RouteComponent,
   beforeLoad: ({ context }) => {
     hasPermissionPage(context, 'update', 'PatientProfile');

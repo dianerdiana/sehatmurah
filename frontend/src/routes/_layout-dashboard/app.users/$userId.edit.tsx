@@ -16,6 +16,9 @@ import { hasPermissionPage } from '@/utils/auth/has-permission';
 import { useAuth } from '@/utils/hooks/use-auth';
 
 export const Route = createFileRoute('/_layout-dashboard/app/users/$userId/edit')({
+  head: () => ({
+    meta: [{ title: 'Edit User | Sehatmurah' }],
+  }),
   component: UsersEditPage,
   beforeLoad: ({ context }) => {
     hasPermissionPage(context, 'update', 'User');

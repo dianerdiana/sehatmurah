@@ -8,6 +8,9 @@ import { reviewQueryOptions } from '@/modules/reviews/review.query';
 import { getPartyId } from '@/utils/appointment-party';
 
 export const Route = createFileRoute('/_layout-public-nav/reviews/$appointmentId/create')({
+  head: () => ({
+    meta: [{ title: 'Write Review | Sehatmurah' }],
+  }),
   component: RouteComponent,
 });
 

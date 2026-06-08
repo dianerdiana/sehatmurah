@@ -15,6 +15,9 @@ import { specialistQueryOptions } from '@/modules/specialists/specialist.query';
 import { hasPermissionPage } from '@/utils/auth/has-permission';
 
 export const Route = createFileRoute('/_layout-dashboard/app/specialists/$specialistId/edit')({
+  head: () => ({
+    meta: [{ title: 'Edit Specialist | Sehatmurah' }],
+  }),
   component: SpecialistsEditPage,
   beforeLoad: ({ context }) => {
     hasPermissionPage(context, 'update', 'Specialist');

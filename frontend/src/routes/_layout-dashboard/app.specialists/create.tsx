@@ -11,6 +11,9 @@ import { specialistMutationOptions } from '@/modules/specialists/specialist.muta
 import { hasPermissionPage } from '@/utils/auth/has-permission';
 
 export const Route = createFileRoute('/_layout-dashboard/app/specialists/create')({
+  head: () => ({
+    meta: [{ title: 'Create Specialist | Sehatmurah' }],
+  }),
   component: SpecialistsCreatePage,
   beforeLoad: ({ context }) => {
     hasPermissionPage(context, 'create', 'Specialist');

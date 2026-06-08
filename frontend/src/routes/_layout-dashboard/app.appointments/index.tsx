@@ -18,6 +18,9 @@ import { AppointmentsTableToolbar } from '@/modules/appointments/components/appo
 import { hasPermissionPage } from '@/utils/auth/has-permission';
 
 export const Route = createFileRoute('/_layout-dashboard/app/appointments/')({
+  head: () => ({
+    meta: [{ title: 'Appointments | Sehatmurah' }],
+  }),
   validateSearch: listAppointmentsSchema,
   component: AppointmentsListPage,
   beforeLoad: ({ context }) => {

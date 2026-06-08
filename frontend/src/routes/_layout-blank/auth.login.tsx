@@ -5,6 +5,9 @@ import { themeConfig } from '@/configs/theme-config';
 import { FormLogin } from '@/modules/auth/components/form-login';
 
 export const Route = createFileRoute('/_layout-blank/auth/login')({
+  head: () => ({
+    meta: [{ title: 'Login | Sehatmurah' }],
+  }),
   component: LoginPage,
 });
 

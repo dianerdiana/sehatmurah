@@ -17,6 +17,9 @@ import type { UserListItem } from '@/modules/users/user.type';
 import { hasPermissionPage } from '@/utils/auth/has-permission';
 
 export const Route = createFileRoute('/_layout-dashboard/app/users/')({
+  head: () => ({
+    meta: [{ title: 'Users | Sehatmurah' }],
+  }),
   validateSearch: listUsersSchema,
   component: UsersListPage,
   beforeLoad: ({ context }) => {

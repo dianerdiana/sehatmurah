@@ -11,6 +11,9 @@ import { userMutationOptions } from '@/modules/users/user.mutation';
 import { hasPermissionPage } from '@/utils/auth/has-permission';
 
 export const Route = createFileRoute('/_layout-dashboard/app/users/create')({
+  head: () => ({
+    meta: [{ title: 'Create User | Sehatmurah' }],
+  }),
   component: UsersCreatePage,
   beforeLoad: ({ context }) => {
     hasPermissionPage(context, 'create', 'User');

@@ -13,6 +13,9 @@ import {
 import { specialistQueryOptions } from '@/modules/specialists/specialist.query';
 
 export const Route = createFileRoute('/_layout-public-nav/')({
+  head: () => ({
+    meta: [{ title: 'Home | Sehatmurah' }],
+  }),
   component: HomePage,
 });
 

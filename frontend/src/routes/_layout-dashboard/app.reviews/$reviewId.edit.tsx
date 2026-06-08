@@ -16,6 +16,9 @@ import { hasPermissionPage } from '@/utils/auth/has-permission';
 import { formatDateTime } from '@/utils/utils';
 
 export const Route = createFileRoute('/_layout-dashboard/app/reviews/$reviewId/edit')({
+  head: () => ({
+    meta: [{ title: 'Edit Review | Sehatmurah' }],
+  }),
   component: ReviewsEditPage,
   beforeLoad: ({ context }) => {
     hasPermissionPage(context, 'update', 'Review');

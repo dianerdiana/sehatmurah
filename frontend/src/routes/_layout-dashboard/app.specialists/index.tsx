@@ -18,6 +18,9 @@ import { hasPermissionPage } from '@/utils/auth/has-permission';
 import { Can } from '@/utils/context/ability-context';
 
 export const Route = createFileRoute('/_layout-dashboard/app/specialists/')({
+  head: () => ({
+    meta: [{ title: 'Specialists | Sehatmurah' }],
+  }),
   validateSearch: listSpecialistsSchema,
   component: SpecialistsListPage,
   beforeLoad: ({ context }) => {

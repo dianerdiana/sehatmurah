@@ -4,6 +4,9 @@ import { Link } from '@tanstack/react-router';
 import { useTheme } from '@/utils/hooks/use-theme';
 
 export const Route = createFileRoute('/_layout-public-nav')({
+  head: () => ({
+    meta: [{ title: 'Sehatmurah' }],
+  }),
   component: PublicNavLayout,
 });
 

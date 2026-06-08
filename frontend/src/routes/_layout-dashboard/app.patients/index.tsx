@@ -17,6 +17,9 @@ import type { PatientListItem } from '@/modules/patients/patient.type';
 import { hasPermissionPage } from '@/utils/auth/has-permission';
 
 export const Route = createFileRoute('/_layout-dashboard/app/patients/')({
+  head: () => ({
+    meta: [{ title: 'Patients | Sehatmurah' }],
+  }),
   validateSearch: listPatientsSchema,
   component: PatientsListPage,
   beforeLoad: ({ context }) => {

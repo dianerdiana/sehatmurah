@@ -16,6 +16,9 @@ import { cn, formatAppointmentDate, formatAppointmentTime } from '@/utils/utils'
 import { AppointmentStatus } from '@/types/enums/appointment-status.enum';
 
 export const Route = createFileRoute('/_layout-public-blank/appointments/$appointmentId/details')({
+  head: () => ({
+    meta: [{ title: 'Appointment Details | Sehatmurah' }],
+  }),
   component: BookingAppointmentSuccess,
 });
 

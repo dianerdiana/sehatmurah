@@ -13,6 +13,9 @@ import { patientMutationOptions } from '@/modules/patients/patient.mutation';
 import { patientQueryOptions } from '@/modules/patients/patient.query';
 
 export const Route = createFileRoute('/_layout-public-nav/profile/edit')({
+  head: () => ({
+    meta: [{ title: 'Edit Profile | Sehatmurah' }],
+  }),
   component: RouteComponent,
 });
 

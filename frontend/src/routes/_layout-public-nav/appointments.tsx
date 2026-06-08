@@ -29,6 +29,9 @@ import { requireAuthenticated } from '@/utils/auth/route-guard';
 import { UserRole } from '@/types/enums/user-role.enum';
 
 export const Route = createFileRoute('/_layout-public-nav/appointments')({
+  head: () => ({
+    meta: [{ title: 'My Bookings | Sehatmurah' }],
+  }),
   validateSearch: listAppointmentsSchema,
   beforeLoad: ({ context, location }) => {
     const redirectTarget = location.href;

@@ -19,6 +19,9 @@ import type { RouterContext } from '../router';
 import '../styles.css';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+  head: () => ({
+    meta: [{ title: 'Sehatmurah' }],
+  }),
   component: RootDocument,
   notFoundComponent: NotFound,
   errorComponent: NotFound,

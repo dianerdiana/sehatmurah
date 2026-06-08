@@ -21,6 +21,9 @@ import { hasPermissionPage } from '@/utils/auth/has-permission';
 import { useDebounce } from '@/utils/hooks/use-debounce';
 
 export const Route = createFileRoute('/_layout-dashboard/settings/doctors/schedule')({
+  head: () => ({
+    meta: [{ title: 'Doctor Schedule | Sehatmurah' }],
+  }),
   component: RouteComponent,
   beforeLoad: ({ context }) => {
     hasPermissionPage(context, 'update', 'DoctorProfile');

@@ -17,6 +17,9 @@ import type { Review } from '@/modules/reviews/review.type';
 import { hasPermissionPage } from '@/utils/auth/has-permission';
 
 export const Route = createFileRoute('/_layout-dashboard/app/reviews/')({
+  head: () => ({
+    meta: [{ title: 'Reviews | Sehatmurah' }],
+  }),
   validateSearch: listReviewsSchema,
   component: ReviewsListPage,
   beforeLoad: ({ context }) => {

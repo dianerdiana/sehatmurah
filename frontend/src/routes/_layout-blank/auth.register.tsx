@@ -5,6 +5,9 @@ import { themeConfig } from '@/configs/theme-config';
 import { FormRegister } from '../../modules/auth/components/form-register';
 
 export const Route = createFileRoute('/_layout-blank/auth/register')({
+  head: () => ({
+    meta: [{ title: 'Register | Sehatmurah' }],
+  }),
   component: RegisterPage,
 });
 

@@ -5,6 +5,9 @@ import { requireAuthenticated } from '@/utils/auth/route-guard';
 import { UserRole } from '@/types/enums/user-role.enum';
 
 export const Route = createFileRoute('/_layout-public-nav/profile')({
+  head: () => ({
+    meta: [{ title: 'Sehatmurah' }],
+  }),
   component: Outlet,
   beforeLoad: ({ context, location }) => {
     const canAccessProfile = context.auth.userData.role === UserRole.PATIENT;

@@ -4,6 +4,9 @@ import z from 'zod';
 import { getSafeRedirectTarget } from '@/utils/auth/route-guard';
 
 export const Route = createFileRoute('/_layout-blank/auth')({
+  head: () => ({
+    meta: [{ title: 'Sehatmurah' }],
+  }),
   validateSearch: z.object({
     redirect: z.string().optional(),
     reason: z.enum(['booking-auth']).optional(),

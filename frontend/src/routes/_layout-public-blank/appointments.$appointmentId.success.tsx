@@ -9,6 +9,9 @@ import { appointmentQueryOptions } from '@/modules/appointments/appointment.quer
 import { getPartyId } from '@/utils/appointment-party';
 
 export const Route = createFileRoute('/_layout-public-blank/appointments/$appointmentId/success')({
+  head: () => ({
+    meta: [{ title: 'Booking Success | Sehatmurah' }],
+  }),
   component: BookingAppointmentSuccess,
 });
 

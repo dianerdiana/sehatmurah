@@ -21,6 +21,9 @@ import { useDebounce } from '@/utils/hooks/use-debounce';
 import { UserRole } from '@/types/enums/user-role.enum';
 
 export const Route = createFileRoute('/_layout-dashboard/app/doctors/create')({
+  head: () => ({
+    meta: [{ title: 'Create Doctor | Sehatmurah' }],
+  }),
   component: DoctorsCreatePage,
   beforeLoad: ({ context }) => {
     hasPermissionPage(context, 'create', 'DoctorProfile');

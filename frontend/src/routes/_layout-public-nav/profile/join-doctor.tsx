@@ -20,6 +20,9 @@ import { useAuth } from '@/utils/hooks/use-auth';
 import { useDebounce } from '@/utils/hooks/use-debounce';
 
 export const Route = createFileRoute('/_layout-public-nav/profile/join-doctor')({
+  head: () => ({
+    meta: [{ title: 'Join as a Doctor | Sehatmurah' }],
+  }),
   component: RouteComponent,
 });
 

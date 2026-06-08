@@ -23,6 +23,9 @@ import { navigation } from '@/utils/navigation';
 import { UserRole } from '@/types/enums/user-role.enum';
 
 export const Route = createFileRoute('/_layout-dashboard')({
+  head: () => ({
+    meta: [{ title: 'Sehatmurah' }],
+  }),
   beforeLoad: ({ context, location }) => {
     const canAccessDashboard = [UserRole.ADMIN, UserRole.DOCTOR].includes(context.auth.userData.role);
 
