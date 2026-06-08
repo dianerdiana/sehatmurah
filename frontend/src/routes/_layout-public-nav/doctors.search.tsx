@@ -70,23 +70,25 @@ function DoctorsSearchPage() {
 
   return (
     <div className='pb-8'>
-      <header className='h-67 w-full rounded-b-2xl bg-primary px-4 pt-12'>
-        <Button onClick={() => router.history.back()}>
-          <img src='/assets/icons/arrow-left-blue.svg' alt='Image' />
-        </Button>
-        <div className='absolute left-1/2 top-12 -translate-x-1/2'>
-          <h1 className='mb-0.75 whitespace-nowrap text-center text-xl font-bold leading-[25.2px] text-white'>
-            Recommended Doctors
-          </h1>
-          <h2 className='whitespace-nowrap text-center font-semibold leading-[20.16px] text-primary-light'>
-            {city}
-            <span className='mx-1.5'>•</span>
-            {specialist} Specialist
-          </h2>
+      <header className='h-67 w-full rounded-b-2xl bg-primary px-4 pt-6 lg:pt-12'>
+        <div className='flex flex-wrap items-center gap-4'>
+          <Button onClick={() => router.history.back()} className='px-0 md:px-4'>
+            <img src='/assets/icons/arrow-left-blue.svg' alt='Image' />
+          </Button>
+          <div className='lg:absolute lg:left-1/2 lg:top-12 lg:-translate-x-1/2 flex flex-col items-center w-full'>
+            <h1 className='mb-0.75 whitespace-nowrap text-center text-xl font-bold leading-[25.2px] text-white'>
+              Recommended Doctors
+            </h1>
+            <h2 className='whitespace-nowrap text-center font-semibold leading-[20.16px] text-primary-light'>
+              {city}
+              <span className='mx-1.5'>•</span>
+              {specialist} Specialist
+            </h2>
+          </div>
         </div>
-        <div className='mt-4 flex items-center justify-center'>
+        <div className='mt-6 flex items-center justify-center'>
           <div className='flex flex-wrap w-full gap-2'>
-            <div className='max-w-lg flex-1'>
+            <div className='max-w-lg md:flex-1 w-full'>
               <Input
                 name='search'
                 value={searchInput}
@@ -96,7 +98,7 @@ function DoctorsSearchPage() {
               />
             </div>
 
-            <div className='grid grid-cols-5 place-content-between lg:place-items-end gap-3'>
+            <div className='grid grid-cols-5 place-content-between md:place-items-end gap-3'>
               <div className='col-span-3'>
                 <Select
                   value={specialistInput || 'all'}
@@ -138,7 +140,7 @@ function DoctorsSearchPage() {
           </div>
         </div>
       </header>
-      <section id='ContainerCards' className='-mt-14 lg:-mt-26 w-full space-y-4 px-4'>
+      <section id='ContainerCards' className='-mt-4 md:-mt-14 lg:-mt-26 w-full space-y-4 px-4'>
         {queryDoctors.isPending ? (
           <CardDoctorSkeleton />
         ) : doctors && doctors.length ? (
