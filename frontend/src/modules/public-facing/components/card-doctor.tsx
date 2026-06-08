@@ -16,7 +16,7 @@ type CardDoctorProps = {
 export function CardDoctor({ doctor, footer = false }: CardDoctorProps) {
   return (
     <section key={doctor._id} id={doctor._id} className='relative space-y-5 rounded-3xl bg-white p-4 shadow-sm sm:p-5'>
-      <Badge variant='primary' className='absolute top-4 right-4'>
+      <Badge variant='primary' className='absolute top-4 right-4 hidden md:inline-flex'>
         {doctor.practiceLocation.city}
       </Badge>
 
