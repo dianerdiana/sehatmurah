@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { SearchX } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
 import { ImageServer } from '@/components/ui/image-server';
 
 import type { Doctor } from '@/modules/doctors/doctor.type';
@@ -14,7 +15,11 @@ type CardDoctorProps = {
 
 export function CardDoctor({ doctor, footer = false }: CardDoctorProps) {
   return (
-    <section key={doctor._id} id={doctor._id} className='space-y-5 rounded-3xl shadow-sm bg-white p-5'>
+    <section key={doctor._id} id={doctor._id} className='space-y-5 rounded-3xl shadow-sm bg-white p-5 relative'>
+      <Badge variant='primary' className='absolute top-4 right-4'>
+        {doctor.practiceLocation.city}
+      </Badge>
+
       <header className='cardHeader flex items-center gap-x-3'>
         <div className='relative h-30 w-25'>
           <ImageServer
