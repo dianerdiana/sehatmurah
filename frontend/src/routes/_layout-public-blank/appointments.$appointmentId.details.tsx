@@ -83,20 +83,22 @@ function BookingAppointmentSuccess() {
 
   return (
     <div className='pb-24'>
-      <header className='h-67 w-full rounded-b-2xl bg-primary px-4 pt-12'>
-        <Button onClick={() => router.history.back()}>
-          <img src='/assets/icons/arrow-left-blue.svg' alt='Image' />
-        </Button>
-        <div className='absolute left-1/2 top-12 -translate-x-1/2'>
-          <h1 className='mb-0.75 whitespace-nowrap text-center text-xl font-bold leading-[25.2px] text-white'>
-            Appointment Details
-          </h1>
-          <h2 className='whitespace-nowrap text-center font-semibold leading-[20.16px] text-primary-light'>
-            {appointmentStatusDescriptions[appointment?.status || AppointmentStatus.PENDING]}
-          </h2>
+      <header className='h-67 w-full rounded-b-2xl bg-primary px-4 pt-6 lg:pt-12'>
+        <div className='flex flex-wrap items-center gap-4'>
+          <Button onClick={() => router.history.back()} className='px-0'>
+            <img src='/assets/icons/arrow-left-blue.svg' alt='Image' />
+          </Button>
+          <div className='lg:absolute lg:left-1/2 lg:top-12 lg:-translate-x-1/2 lg:max-w-fit flex flex-col items-center w-full'>
+            <h1 className='mb-0.75 whitespace-nowrap text-center text-xl font-bold leading-[25.2px] text-white'>
+              Appointment Details
+            </h1>
+            <h2 className='whitespace-nowrap text-center font-semibold leading-[20.16px] text-primary-light'>
+              {appointmentStatusDescriptions[appointment?.status || AppointmentStatus.PENDING]}
+            </h2>
+          </div>
         </div>
       </header>
-      <section id='ContainertDetails' className='-mt-37.25 w-full space-y-4 pb-4'>
+      <section id='ContainertDetails' className='-mt-34 md:-mt-37.25 w-full space-y-4 pb-4'>
         <section id='DetailsAppointment' className='mx-4 overflow-hidden rounded-3xl'>
           <div
             className={cn(
