@@ -15,6 +15,7 @@ import type { Doctor } from '@/modules/doctors/doctor.type';
 import { specialistQueryOptions } from '@/modules/specialists/specialist.query';
 
 import { hasPermissionPage } from '@/utils/auth/has-permission';
+import { Can } from '@/utils/context/ability-context';
 
 export const Route = createFileRoute('/_layout-dashboard/app/doctors/')({
   validateSearch: listDoctorsSchema,
@@ -144,9 +145,11 @@ function DoctorsListPage() {
                 <span className='font-medium text-foreground'>{totalItems}</span> doctors
               </div>
 
-              <Button className='rounded-full' asChild>
-                <Link to='/app/doctors/create'>Add Doctor</Link>
-              </Button>
+              <Can I='create' a='DoctorProfile'>
+                <Button className='rounded-full' asChild>
+                  <Link to='/app/doctors/create'>Add Doctor</Link>
+                </Button>
+              </Can>
             </div>
           </div>
         </CardContent>
