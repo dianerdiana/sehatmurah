@@ -84,8 +84,8 @@ function DoctorsSearchPage() {
             {specialist} Specialist
           </h2>
         </div>
-        <div className='mt-4 flex items-center justify-center px-4'>
-          <div className='flex flex-wrap w-full space-y-3 gap-3'>
+        <div className='mt-4 flex items-center justify-center'>
+          <div className='flex flex-wrap w-full gap-2'>
             <div className='max-w-lg flex-1'>
               <Input
                 name='search'
@@ -96,42 +96,49 @@ function DoctorsSearchPage() {
               />
             </div>
 
-            <div className='grid grid-cols-2 gap-3'>
-              <Select
-                value={specialistInput || 'all'}
-                onValueChange={(value) => setSpecialistInput(value === 'all' ? '' : value)}
-              >
-                <SelectTrigger className='py-5 rounded-full bg-white px-4 font-medium text-gray-500'>
-                  <SelectValue placeholder='All specialists' />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value='all'>All specialists</SelectItem>
-                  {querySpecialists.data?.items.map((item) => (
-                    <SelectItem key={item._id} value={item.name}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className='grid grid-cols-5 place-content-between lg:place-items-end gap-3'>
+              <div className='col-span-3'>
+                <Select
+                  value={specialistInput || 'all'}
+                  onValueChange={(value) => setSpecialistInput(value === 'all' ? '' : value)}
+                >
+                  <SelectTrigger className='py-5 rounded-full bg-white px-4 font-medium text-gray-500'>
+                    <SelectValue placeholder='All specialists' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value='all'>All specialists</SelectItem>
+                    {querySpecialists.data?.items.map((item) => (
+                      <SelectItem key={item._id} value={item.name}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-              <Select value={cityInput || 'all'} onValueChange={(value) => setCityInput(value === 'all' ? '' : value)}>
-                <SelectTrigger className='py-5 rounded-full bg-white px-4 font-medium text-gray-500'>
-                  <SelectValue placeholder='All cities' />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value='all'>All cities</SelectItem>
-                  {queryCities.data?.map((item) => (
-                    <SelectItem key={item} value={item}>
-                      {item}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className='col-span-2'>
+                <Select
+                  value={cityInput || 'all'}
+                  onValueChange={(value) => setCityInput(value === 'all' ? '' : value)}
+                >
+                  <SelectTrigger className='py-5 rounded-full bg-white px-4 font-medium text-gray-500'>
+                    <SelectValue placeholder='All cities' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value='all'>All cities</SelectItem>
+                    {queryCities.data?.map((item) => (
+                      <SelectItem key={item} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
         </div>
       </header>
-      <section id='ContainerCards' className='-mt-26 w-full space-y-4 px-4'>
+      <section id='ContainerCards' className='-mt-14 lg:-mt-26 w-full space-y-4 px-4'>
         {queryDoctors.isPending ? (
           <CardDoctorSkeleton />
         ) : doctors && doctors.length ? (
