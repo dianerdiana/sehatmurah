@@ -37,7 +37,7 @@ function HomePage() {
             <img
               src={themeConfig.app.logoBrandName}
               alt='Image'
-              className='h-auto w-33 max-w-full sm:w-auto sm:max-h-12.5'
+              className='h-auto w-44 max-w-full md:w-auto md:max-h-12.5'
             />
           </Link>
           <a
