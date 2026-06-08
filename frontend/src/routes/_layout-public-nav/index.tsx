@@ -58,7 +58,7 @@ function HomePage() {
         <div className='flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
           <h2 className='text-[20px] font-bold leading-[25.2px] text-gray-900'>Specialist Categories</h2>
           <Link
-            to='/doctors/results'
+            to='/doctors/search'
             search={{ specialist: '', city: '' }}
             className='text-sm font-bold leading-[17.64px] text-gray-500'
           >
