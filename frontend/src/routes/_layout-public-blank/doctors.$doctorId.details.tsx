@@ -68,7 +68,7 @@ function RouteComponent() {
               continueTo={`/doctors/${doctor._id}/booking`}
               label='Book Now'
             />
-            <CardDoctorReviews reviews={reviews ? reviews : []} />
+            <CardDoctorReviews doctor={doctor} reviews={reviews ? reviews : []} />
           </React.Fragment>
         ) : (
           <CardDoctorNotFound />

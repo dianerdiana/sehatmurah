@@ -1,11 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
 
+import type { Doctor } from '@/modules/doctors/doctor.type';
 import type { Review } from '@/modules/reviews/review.type';
 
 import { formatTimeAgo } from '@/utils/format-time-ago.util';
 
-export function CardDoctorReviews({ reviews }: { reviews: Review[] }) {
+export function CardDoctorReviews({ reviews, doctor }: { reviews: Review[]; doctor: Doctor | null }) {
   return (
     <section id='Reviews' className='w-full rounded-3xl bg-white px-4 py-8 shadow-md'>
       <div className='mb-4 flex justify-between items-center'>
@@ -18,10 +19,12 @@ export function CardDoctorReviews({ reviews }: { reviews: Review[] }) {
       <Card className='rounded-3xl border border-gray-200 shadow-none py-0 pb-6'>
         <CardContent className='space-y-6 p-6'>
           <div id='rating' className='flex items-center justify-between'>
-            <strong className='text-[40px] font-extrabold leading-[50.4px] tracking-[-8%] text-black'>4.5/5.0</strong>
+            <strong className='text-[40px] font-extrabold leading-[50.4px] tracking-[-8%] text-black'>
+              {doctor?.ratingAverage}/5.0
+            </strong>
             <div>
               <img src='/assets/icons/doctordetails-stars.svg' alt='Stars Rating' className='mb-2' loading='lazy' />
-              <p className='font-semibold leading-[20.16px] text-gray-500'>1250+ Reviews</p>
+              <p className='font-semibold leading-[20.16px] text-gray-500'>{doctor?.ratingCount}+ Reviews</p>
             </div>
           </div>
 
