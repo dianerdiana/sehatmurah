@@ -7,6 +7,7 @@ import { connectDatabase } from './config/database';
 import { errorHandler, notFoundHandler } from './middlewares/error.middleware';
 import { appointmentRouter } from './modules/appointments/appointment.routes';
 import { authRouter } from './modules/auth/auth.routes';
+import { dashboardRouter } from './modules/dashboard/dashboard.routes';
 import { doctorRouter } from './modules/doctors/doctor.routes';
 import { patientRouter } from './modules/patients/patient.routes';
 import { reviewRouter } from './modules/reviews/review.routes';
@@ -42,6 +43,7 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/dashboard', dashboardRouter);
 app.use('/api/doctors', doctorRouter);
 app.use('/api/appointments', appointmentRouter);
 app.use('/api/patients', patientRouter);
