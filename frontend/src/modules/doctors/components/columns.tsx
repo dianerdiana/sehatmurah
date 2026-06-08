@@ -60,12 +60,14 @@ function RowActions({ doctor }: { doctor: Doctor }) {
             params={{ doctorId: doctor._id }}
             aria-label={`Edit ${doctor.fullName}`}
           >
-            <Pencil className='size-4 stroke-amber-500 stroke-amber-500' />
+            <Pencil className='size-4 stroke-amber-500' />
           </Link>
         </Button>
       </Can>
       <DoctorDetailDialog doctor={doctor} />
-      <DoctorDeletePopover doctorId={doctor._id} doctorName={doctor.fullName} />
+      <Can I='delete' a='DoctorProfile'>
+        <DoctorDeletePopover doctorId={doctor._id} doctorName={doctor.fullName} />
+      </Can>
     </div>
   );
 }
