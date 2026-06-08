@@ -10,6 +10,8 @@ import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { TopLoadingBar } from '@/components/ui/top-loading-bar';
 
+import { env } from '@/configs/env';
+
 import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools';
 import TanstackQueryProvider from '@/integrations/tanstack-query/root-provider';
 
@@ -31,18 +33,20 @@ function RootDocument() {
           <Outlet />
           <TopLoadingBar />
         </TooltipProvider>
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-            TanStackQueryDevtools,
-          ]}
-        />
+        {env.nodeEnv === 'development' && (
+          <TanStackDevtools
+            config={{
+              position: 'bottom-right',
+            }}
+            plugins={[
+              {
+                name: 'Tanstack Router',
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+              TanStackQueryDevtools,
+            ]}
+          />
+        )}
         <Toaster position='top-right' />
       </TanstackQueryProvider>
     </React.Suspense>
