@@ -71,7 +71,7 @@ export function FormSearchDoctor() {
           </div>
         </div>
         <div className='mb-8'>
-          <h3 className='font-jakarta font-semibold leading-[20.16px] text-gray-500'>What Speciality you need?</h3>
+          <h3 className='font-semibold leading-[20.16px] text-gray-500'>What Speciality you need?</h3>
           <Dialog>
             <DialogTrigger asChild>
               <button
@@ -134,7 +134,7 @@ export function FormSearchDoctor() {
                                 <h2 className='mb-1.5 text-[18px] font-bold leading-[22.68px] text-gray-900'>
                                   {specialist.name}
                                 </h2>
-                                <p className='font-jakarta text-[16px] font-semibold leading-[20.16px] text-gray-500'>
+                                <p className='text-[16px] font-semibold leading-[20.16px] text-gray-500'>
                                   {specialist.countDoctors} doctors
                                 </p>
                               </div>
