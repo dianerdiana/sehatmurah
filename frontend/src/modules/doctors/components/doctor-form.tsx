@@ -223,12 +223,12 @@ export function DoctorForm({
   }, [fixedUserId, form, mode]);
 
   return (
-    <Card className='rounded-2xl shadow-sm'>
-      <CardHeader>
+    <Card className='rounded-3xl border-none shadow-none'>
+      <CardHeader className='px-4 pt-4 sm:px-6 sm:pt-6'>
         <CardTitle className='text-xl font-semibold'>{mode === 'create' ? 'Create Doctor' : 'Edit Doctor'}</CardTitle>
         <p className='text-sm text-muted-foreground'>{subtitle}</p>
       </CardHeader>
-      <CardContent>
+      <CardContent className='px-4 pb-4 sm:px-6 sm:pb-6'>
         <form
           className='grid gap-5'
           onSubmit={(event) => {
@@ -433,9 +433,9 @@ export function DoctorForm({
               )}
             />
 
-            <div className='rounded-xl border p-4'>
+            <div className='rounded-2xl border p-4'>
               <p className='mb-3 text-sm font-semibold'>Practice Location</p>
-              <div className='grid gap-4 md:grid-cols-3'>
+              <div className='grid gap-4 lg:grid-cols-3'>
                 <form.Field
                   name='practiceLocation.clinicName'
                   children={(field) => (
@@ -521,7 +521,7 @@ export function DoctorForm({
             <form.Field
               name='isAvailable'
               children={(field) => (
-                <div className='flex items-center justify-between rounded-lg border p-3'>
+                <div className='flex items-center justify-between gap-3 rounded-lg border p-3'>
                   <div>
                     <p className='text-sm font-medium'>Availability Status</p>
                     <p className='text-xs text-muted-foreground'>Control whether doctor appears as available.</p>
