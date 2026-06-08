@@ -15,6 +15,5 @@ export const appointmentQueryOptions = {
     queryOptions({
       queryKey: appointmentKeys.detail(id),
       queryFn: () => appointmentApi.getById(id),
-      enabled: !!id,
     }),
 };
