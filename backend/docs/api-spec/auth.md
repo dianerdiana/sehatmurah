@@ -73,14 +73,12 @@ POST /api/auth/register
   "status": "success",
   "message": "ok",
   "data": {
-    "data": {
-      "token": "<JWT_ACCESS_TOKEN>",
-      "user": {
-        "id": "68321ac367b4c6e7d7a01111",
-        "name": "John Doe",
-        "email": "john.doe@example.com",
-        "role": "PATIENT"
-      }
+    "token": "<JWT_ACCESS_TOKEN>",
+    "user": {
+      "id": "68321ac367b4c6e7d7a01111",
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "role": "PATIENT"
     }
   }
 }
@@ -162,20 +160,18 @@ POST /api/auth/login
   "status": "success",
   "message": "ok",
   "data": {
-    "data": {
-      "token": "<JWT_ACCESS_TOKEN>",
-      "user": {
-        "id": "68321ac367b4c6e7d7a01111",
-        "name": "John Doe",
-        "email": "john.doe@example.com",
-        "role": "PATIENT",
-        "permissions": [
-          {
-            "resource": "appointments",
-            "actions": ["create", "read", "delete"]
-          }
-        ]
-      }
+    "token": "<JWT_ACCESS_TOKEN>",
+    "user": {
+      "id": "68321ac367b4c6e7d7a01111",
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "role": "PATIENT",
+      "permissions": [
+        {
+          "resource": "appointments",
+          "actions": ["create", "read", "delete"]
+        }
+      ]
     }
   }
 }
@@ -273,19 +269,17 @@ Authorization: Bearer <JWT_ACCESS_TOKEN>
   "status": "success",
   "message": "ok",
   "data": {
-    "data": {
-      "id": "68321ac367b4c6e7d7a01111",
-      "name": "John Doe",
-      "email": "john.doe@example.com",
-      "role": "PATIENT",
-      "isActive": true,
-      "permissions": [
-        {
-          "resource": "appointments",
-          "actions": ["create", "read", "delete"]
-        }
-      ]
-    }
+    "id": "68321ac367b4c6e7d7a01111",
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "role": "PATIENT",
+    "isActive": true,
+    "permissions": [
+      {
+        "resource": "appointments",
+        "actions": ["create", "read", "delete"]
+      }
+    ]
   }
 }
 ```
