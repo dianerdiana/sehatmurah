@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowDown, ArrowUp, ArrowUpDown, Pencil } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, Pencil, Star } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -103,8 +103,8 @@ export const reviewsColumns: ColumnDef<Review>[] = [
     ),
     cell: ({ row }) => (
       <Badge variant='primary' className='gap-1'>
-        <span>Star</span>
-        <span>{row.original.rating}/5</span>
+        <Star className='size-4 stroke-primary fill-primary' />
+        <span>{row.original.rating}</span>
       </Badge>
     ),
   },
