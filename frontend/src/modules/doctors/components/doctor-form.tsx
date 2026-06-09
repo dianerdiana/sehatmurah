@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import {
   Combobox,
   ComboboxCollection,
@@ -171,6 +172,7 @@ export function DoctorForm({
   onSubmit,
 }: DoctorFormProps) {
   const [isCityUnavailable, setIsCityUnavailable] = useState(false);
+  const [cityDraftValue, setCityDraftValue] = useState('');
   const hasInitializedCityMode = useRef(false);
 
   const subtitle = useMemo(() => {
@@ -233,12 +235,14 @@ export function DoctorForm({
     hasInitializedCityMode.current = true;
 
     if (!initialValue?.practiceLocation.city) {
+      setCityDraftValue('');
       return;
     }
 
     const hasMatchingCity = cityOptions.some((item) => item.value === initialValue.practiceLocation.city);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsCityUnavailable(!hasMatchingCity);
+    setCityDraftValue(initialValue.practiceLocation.city);
   }, [cityOptions, initialValue?.practiceLocation.city]);
 
   return (
@@ -506,12 +510,18 @@ export function DoctorForm({
                             onCheckedChange={(checked) => {
                               setIsCityUnavailable(checked);
 
-                              if (!checked) {
-                                const hasMatchingCity = cityOptions.some((item) => item.value === field.state.value);
+                              if (checked) {
+                                setCityDraftValue(field.state.value);
+                                return;
+                              }
 
-                                if (!hasMatchingCity) {
-                                  field.handleChange('');
-                                }
+                              const hasMatchingCity = cityOptions.some((item) => item.value === field.state.value);
+
+                              if (!hasMatchingCity) {
+                                field.handleChange('');
+                                setCityDraftValue('');
+                              } else {
+                                setCityDraftValue(field.state.value);
                               }
                             }}
                           />
@@ -535,6 +545,7 @@ export function DoctorForm({
                           onValueChange={(value) => {
                             field.handleChange(value?.value ?? '');
                             setIsCityUnavailable(false);
+                            setCityDraftValue(value?.value ?? '');
                           }}
                           onInputValueChange={(value, eventDetails) => {
                             if (eventDetails.reason !== 'input-change') {
@@ -548,12 +559,6 @@ export function DoctorForm({
                               (item) => item.value.toLowerCase() === normalizedValue.toLowerCase(),
                             );
 
-                            if (normalizedValue && !hasMatchingCity) {
-                              setIsCityUnavailable(true);
-                              field.handleChange(value);
-                              return;
-                            }
-
                             if (hasMatchingCity) {
                               const matchedCity = cityOptions.find(
                                 (item) => item.value.toLowerCase() === normalizedValue.toLowerCase(),
@@ -563,10 +568,11 @@ export function DoctorForm({
                                 field.handleChange(matchedCity.value);
                               }
                               setIsCityUnavailable(false);
+                              setCityDraftValue('');
                               return;
                             }
 
-                            field.handleChange(value);
+                            setCityDraftValue(value);
                           }}
                           itemToStringLabel={(item) => item.label}
                           itemToStringValue={(item) => item.value}
@@ -579,7 +585,7 @@ export function DoctorForm({
                             spellCheck={false}
                           />
                           <ComboboxContent>
-                            <ComboboxEmpty>No city found. Turn on "New" to type a new city.</ComboboxEmpty>
+                            <ComboboxEmpty>No city found.</ComboboxEmpty>
                             <ComboboxList>
                               {isCitiesLoading ? (
                                 <p className='px-2 py-1.5 text-xs text-muted-foreground'>Loading cities...</p>
@@ -595,6 +601,34 @@ export function DoctorForm({
                           </ComboboxContent>
                         </Combobox>
                       )}
+                      {!isCityUnavailable &&
+                      cityDraftValue.trim() &&
+                      !cityOptions.some((item) => item.value.toLowerCase() === cityDraftValue.trim().toLowerCase()) ? (
+                        <div className='pt-2'>
+                          <Badge
+                            asChild
+                            variant='outline'
+                            className='cursor-pointer px-3 py-1 text-xs font-medium text-muted-foreground hover:text-foreground'
+                          >
+                            <button
+                              type='button'
+                              onClick={() => {
+                                const nextCity = cityDraftValue.trim();
+
+                                if (!nextCity) {
+                                  return;
+                                }
+
+                                setIsCityUnavailable(true);
+                                field.handleChange(nextCity);
+                                setCityDraftValue(nextCity);
+                              }}
+                            >
+                              City baru: {cityDraftValue}
+                            </button>
+                          </Badge>
+                        </div>
+                      ) : null}
                       {!field.state.meta.isValid && (
                         <FieldError>{String(field.state.meta.errors?.[0] ?? '')}</FieldError>
                       )}
