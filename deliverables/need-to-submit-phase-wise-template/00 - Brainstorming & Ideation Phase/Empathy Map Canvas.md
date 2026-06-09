@@ -1,38 +1,52 @@
-# **Ideation Phase**
+**Ideation Phase**  
+**Empathize & Discover**
 
-# **Empathize & Discover**
-
-| Date | 06 May 2026 |
+| Date | 03 May 2026 |
 | :---- | :---- |
 | Team ID | dianerdiana.de@gmail.com |
-| Project Name | SEHATMURAH \- Doctor Appointment |
+| Project Name | SEHATMURAH - Doctor Appointment |
 | Maximum Marks | 4 Marks |
 
-## **SehatMurah Empathy Map Canvases**
+## Empathy Map Canvases
 
-*To ensure a holistic design approach, our team created two comprehensive Empathy Map Canvases targeting the two main user groups of the SehatMurah Doctor Appointment booking platform: The Patient and The Doctor.*
+To understand the problem from multiple angles, we mapped three primary users of the platform: patients, doctors, and administrators.
 
-### **User Persona 1: The Patient (e.g., Andi, 30-year-old Corporate Employee)**
+### User Persona 1: The Patient
 
-| Quadrant | Patient Empathy Mapping Details |
+| Quadrant | Details |
 | ----- | ----- |
-| **SAYS** *(What the patient states aloud)* | \- "Clinic waiting queues are extremely long and unpredictable." \- "How can I verify if this doctor is legitimate and holds a valid STR license?" \- "Carrying folders of paper medical history files every time is highly inconvenient." |
-| **THINKS** *(What the patient is thinking silently)* | \- *I hope I do not have to wait in the clinic lobby for hours.* \- *Is my sensitive medical history secure when uploaded to this application?* \- *Are the user ratings for these doctors authentic or manipulated?* |
-| **DOES** *(Actions and behaviors observed)* | \- Searches doctor directories online by specialty, price, and schedule. \- Relies heavily on reviews and peer recommendations. \- Manages physical folders containing paper prescriptions, laboratory reports, and hospital files manually. |
-| **FEELS** *(The emotional state of the patient)* | \- **Frustrated** by archaic booking slots and delayed consultation starts. \- **Anxious** about doctor credential integrity and the safety of medical uploads. \- **Overwhelmed** by coordinating multiple paper health records. |
-| **PAINS** *(Frustrations & Obstacles)* | \- Time-consuming physical waiting times. \- Lack of transparent, public, and easily accessible licensing validation. \- Security anxiety over sharing private files digitally. |
-| **GAINS** *(Desires & Success Metrics)* | \- Instant booking with real-time schedule slot confirmation. \- Total trust established through validated STR/SIP doctor listings. \- A secure digital vault for medical documents that are shared instantly with doctors (planned as a future improvement). |
+| **SAYS** | "I need to find a trusted doctor quickly." "I do not want to wait in a long clinic queue." "I want to know that my booking is confirmed." |
+| **THINKS** | *Is this doctor verified?* *Will I get a slot that fits my schedule?* *Can I trust the platform with my data?* |
+| **DOES** | Searches by specialty or location, compares doctor profiles, checks availability, and looks for reviews before booking. |
+| **FEELS** | Frustrated by manual booking, anxious about trust, and relieved when the process is simple. |
+| **PAINS** | Long waiting times, unclear verification, scattered information, and too many manual steps. |
+| **GAINS** | Fast doctor discovery, clear booking status, and a cleaner digital experience. |
 
----
+### User Persona 2: The Doctor
 
-### **User Persona 2: The Doctor (e.g., Dr. Ratih, 42-year-old General Practitioner)**
-
-| Quadrant | Doctor Empathy Mapping Details |
+| Quadrant | Details |
 | ----- | ----- |
-| **SAYS** *(What the doctor states aloud)* | \- "Manual calendar adjustments and booking overlaps waste valuable hours." \- "I need to review the patient's medical records before they step into my office." \- "I want a clean dashboard to update my timings and see patient lists." |
-| **THINKS** *(What the doctor is thinking silently)* | \- *No-shows and late cancellations highly disrupt my clinic's schedule.* \- *Accessing historical reports beforehand would significantly improve my initial diagnoses.* \- *Uploading my profile and STR license needs to be secure and compliant.* |
-| **DOES** *(Actions and behaviors observed)* | \- Manages booking schedules on offline spreadsheets or manual ledgers. \- Consults patients with zero pre-consultation medical record visibility. \- Manually accepts or declines incoming patient slot requests. |
-| **FEELS** *(The emotional state of the doctor)* | \- **Stressed** by inefficient schedule coordination and administrative chores. \- **Apprehensive** about diagnosing complex cases without previous medical histories. \- **Eager** to adopt a modern platform that saves practice management hours. |
-| **PAINS** *(Frustrations & Obstacles)* | \- High patient no-show rates and fragmented calendar blocks. \- Minimal visibility of patient medical background before checkups. \- Inefficient manual administrative approval loops. |
-| **GAINS** *(Desires & Success Metrics)* | \- A centralized, automated practice calendar checking booking conflicts. \- Secure access to pre-uploaded patient records prior to consultation (planned as a future improvement). \- Higher diagnosis confidence and streamlined administrative workflows. |
+| **SAYS** | "I need to manage my schedule in one place." "I want my profile to look professional and accurate." "I need a system that helps me keep appointments organized." |
+| **THINKS** | *Am I missing bookings?* *Is my availability up to date?* *Can I focus more on patients than admin work?* |
+| **DOES** | Updates practice information, adjusts schedule availability, reviews bookings, and responds to appointment requests. |
+| **FEELS** | Busy, cautious, and eager for a tool that reduces repetitive admin work. |
+| **PAINS** | Manual scheduling, overlaps, profile updates spread across multiple tools, and limited visibility. |
+| **GAINS** | Better schedule control, cleaner profile management, and less time spent on coordination. |
 
+### User Persona 3: The Administrator
+
+| Quadrant | Details |
+| ----- | ----- |
+| **SAYS** | "I need to keep doctor data accurate." "I have to make sure only valid users access the right pages." "I want a clean dashboard to manage the platform." |
+| **THINKS** | *How do I keep the platform reliable as it grows?* *Are new doctor accounts verified properly?* *Can I monitor the system without manual chaos?* |
+| **DOES** | Approves doctor accounts, manages specialists and users, reviews content, and checks platform activity. |
+| **FEELS** | Responsible, alert, and focused on trust and governance. |
+| **PAINS** | Manual verification, inconsistent user data, and fragmented admin workflows. |
+| **GAINS** | Centralized control, faster moderation, and a more trustworthy platform. |
+
+## Key Insights
+
+- Patients need speed, trust, and clear status updates.
+- Doctors need a practical dashboard that reduces scheduling overhead.
+- Administrators need central control over platform quality and access.
+- The platform should be simple enough for a capstone timeline, but structured well enough to grow later.
