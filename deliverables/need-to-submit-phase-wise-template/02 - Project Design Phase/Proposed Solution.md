@@ -1,23 +1,46 @@
-# **Project Design Phase**
+# Proposed Solution
 
-# **Proposed Solution Template**
-
-| Date | 11 May 2026 |
+| Date | 16 May 2026 |
 | :---- | :---- |
 | Team ID | dianerdiana.de@gmail.com |
-| Project Name | SEHATMURAH \- Doctor Appointment |
-| Maximum Marks | 2 Marks |
+| Project Name | SEHATMURAH - Doctor Appointment |
+| Maximum Marks | 4 Marks |
 
-# **Proposed Solution Proposal**
+## Solution Overview
 
-Project team has filled the following parameters detailing the proposed solution for the **SehatMurah Doctor Appointment Platform**.
+SehatMurah is a role-based healthcare booking platform that connects patients, doctors, and administrators through one application. The solution focuses on the booking journey first, then extends into profile management, moderation, and platform governance.
 
-| S.No. | Parameter | Description |
-| ----- | ----- | ----- |
-| **1** | **Problem Statement (Problem to be solved)** | **1\. Inefficient Clinic Queueing:** Patients waste substantial time in physical queues or on busy phone lines just to book simple medical appointments. **2\. Information Asymmetry:** Patients lack direct access to doctor credentials, real-time schedule calendars, and consultation fees before booking. **3\. Insecure Medical Record Transfers:** Patients are forced to share sensitive diagnostic histories (PDFs/Images) through insecure personal channels like WhatsApp or email. **4\. Disorganized Provider Schedules:** Doctor clinics struggle with manual paper schedules leading to scheduling overlaps and administrative overbooking. **5\. Medical Provider Fraud:** Risks associated with unverified doctor accounts offering consulting services without clinical licensing. |
-| **2** | **Idea / Solution description** | **SehatMurah** is a secure, role-based Doctor Appointment web application built on the **MERN (MongoDB, Express, React, Node.js) stack**: **1\. Patient Dashboard:** Allows patients to filter approved doctors by specialty/location, browse live slots, and book appointments (with diagnostic document uploads planned as a future improvement). **2\. Doctor Dashboard:** Enables healthcare professionals to configure active timetable schedules and manage bookings (Approve/Reject requests), with secure patient file streaming/downloading planned as a future improvement. **3\. Admin Dashboard:** Allows administrative staff to audit and verify new doctor credentials, manage global system states, and enforce platform safety rules. **4\. Security Integrations:** Incorporates JWT (JSON Web Tokens) for session persistence and Bcrypt for password hashing, with Multer secure file streaming planned for future development. |
-| **3** | **Novelty / Uniqueness** | **1\. Administrative Verification Lock:** A built-in security architecture that prevents doctor accounts from appearing in patient searches unless reviewed and approved by administrators. **2\. Integrated Clinical File Vault (Future Roadmap):** Securely uploads and streams patient files (e.g. test results) directly inside the booking transaction. Only the assigned, authenticated doctor can stream and download the files, avoiding third-party sharing tools. **3\. Clean Role-Based Architecture (RBAC):** Perfectly isolated workflows designed uniquely for Patients, Doctors, and Admins in a unified stack. **4\. NoSQL Schema Flexibility:** Utilizes NoSQL database capabilities to map changing diagnostic file structures to booking records dynamically without database downtime. |
-| **4** | **Social Impact / Customer Satisfaction** | **1\. Drastically Minimizes Waiting Times:** Patients book slots from their homes, reducing physical hospital congestion and lowering community health risks. **2\. Empowers Small & Private Clinics:** Provides independent doctors and local clinics with premium enterprise scheduling tools at no high entry cost. **3\. Promotes Patient Privacy & Agency (Future Roadmap):** Protects sensitive medical records through secure MERN file streams. **4\. Democratic Medical Access:** Simplifies the process of finding specialists for residents in remote areas, bridging healthcare gaps. |
-| **5** | **Business Model (Revenue Model)** | **1\. Transactional Commission Fee:** A small, flat transaction or booking fee charged per completed appointment processed through the platform. **2\. Subscription SaaS for Clinics:** Multi-tenant monthly/annual subscription plans offering clinics advanced booking calendars, patient analytics, and SMS reminders. **3\. Verified Featured Listings:** Promoted search listings for certified doctors looking to increase patient reach (clearly marked as sponsored). **4\. Enterprise Clinical Vault Storage (Future Roadmap):** Charging medical centers a fee for high-capacity, long-term secure archiving of patients' historical medical records. |
-| **6** | **Scalability of the Solution** | **1\. NoSQL Scalability:** MongoDB scales horizontally to accommodate millions of patient records, booking inputs, and histories. **2\. Modular Express Rest API:** The backend is divided cleanly into role-based controllers and routers (userRoutes, doctorRoutes, adminRoutes), facilitating an easy transition to microservices when traffic grows. **3\. Cloud-Ready Media Streaming (Future Roadmap):** The Multer file uploads are easily redirectable to cloud buckets (e.g. AWS S3, Google Cloud Storage) for infinite storage scaling. **4\. SaaS White-Labeling:** The MERN architecture allows SehatMurah to scale into a white-label multi-tenant platform for large hospital chains. |
+## Core User Journeys
 
+### Patient Journey
+
+1. Register or log in securely.
+2. Search doctors by name, specialty, location, or availability.
+3. Open doctor details and review available schedules.
+4. Book an appointment and receive booking details.
+5. View appointment history and leave a review after the visit.
+
+### Doctor Journey
+
+1. Log in and access doctor-specific pages.
+2. Update profile information and practice details.
+3. Manage schedule availability.
+4. Review incoming appointments and keep practice data current.
+
+### Administrator Journey
+
+1. Review platform users and doctor accounts.
+2. Approve or manage doctor-related records.
+3. Maintain specialist categories.
+4. Moderate review and user data as needed.
+
+## What Makes the Solution Practical
+
+- The application uses a modular backend, so each major domain can be maintained independently.
+- The frontend is route-driven, which keeps the public and dashboard experiences separated.
+- The current feature set matches the actual implementation, so the documentation does not depend on future assumptions.
+- Upload support and static asset serving already exist in the stack, which makes media-driven features easier to expand later.
+
+## Future Expansion
+
+The solution can grow into a broader healthcare platform after the MVP is stable. The most natural next steps are notifications, payment integration, telemedicine, smarter analytics, and a richer medical document workflow.
