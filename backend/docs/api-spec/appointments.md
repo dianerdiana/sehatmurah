@@ -5,7 +5,10 @@ Base path: `/api/appointments`
 ## Security and Method Notes
 
 - All endpoints require `Authorization: Bearer <token>`.
-- `PATCH /api/appointments/:id/status` is the dedicated partial-update endpoint for status changes.
+- `POST /api/appointments` is patient-only.
+- `GET /api/appointments` and `GET /api/appointments/:id` are available to patients, doctors, and admins.
+- `PATCH /api/appointments/:id/status` is doctor/admin only.
+- `DELETE /api/appointments/:id` is available to patients and admins.
 
 ## Endpoint: Create Appointment
 
@@ -73,6 +76,15 @@ POST /api/appointments
 {
   "status": "error",
   "message": "Doctor is not available"
+}
+```
+
+#### 400 Bad Request
+
+```json
+{
+  "status": "error",
+  "message": "Doctor is not approved"
 }
 ```
 
@@ -309,7 +321,7 @@ Authorization: Bearer <JWT_ACCESS_TOKEN>
 
 ### Description
 
-Update only the `status` field of an appointment.
+Update only the `status` field of an appointment. Doctors can only update appointments that belong to their own profile.
 
 ### HTTP Method and URL
 
@@ -409,7 +421,7 @@ PATCH /api/appointments/:id/status
 
 ### Description
 
-Delete an appointment. Patients can only delete their own pending appointments.
+Delete an appointment. Patients can only delete their own pending appointments, while admins can delete any appointment.
 
 ### HTTP Method and URL
 
