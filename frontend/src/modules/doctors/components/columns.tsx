@@ -52,8 +52,8 @@ function SortableHeader({
 function RowActions({ doctor }: { doctor: Doctor }) {
   return (
     <div className='flex items-center justify-center gap-1'>
-      <DoctorApprovalActions doctor={doctor} />
       <Can I='update' a='GeneralDoctorProfile'>
+        <DoctorApprovalActions doctor={doctor} />
         <Button type='button' variant='ghost' size='icon-sm' asChild>
           <Link
             to='/app/doctors/$doctorId/edit'
