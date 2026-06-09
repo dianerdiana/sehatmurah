@@ -521,6 +521,8 @@ export function DoctorForm({
                       {isCityUnavailable ? (
                         <Input
                           id='doctor-city'
+                          autoComplete='doctor-city'
+                          spellCheck={false}
                           value={field.state.value}
                           placeholder='Enter new city name'
                           onBlur={field.handleBlur}
@@ -530,16 +532,52 @@ export function DoctorForm({
                         <Combobox
                           items={cityOptions}
                           value={cityOptions.find((item) => item.value === field.state.value) ?? null}
-                          onValueChange={(value) => field.handleChange(value?.value ?? '')}
+                          onValueChange={(value) => {
+                            field.handleChange(value?.value ?? '');
+                            setIsCityUnavailable(false);
+                          }}
                           onInputValueChange={(value, eventDetails) => {
-                            if (eventDetails.reason === 'input-change') {
-                              onCitySearchChange?.(value);
+                            if (eventDetails.reason !== 'input-change') {
+                              return;
                             }
+
+                            onCitySearchChange?.(value);
+
+                            const normalizedValue = value.trim();
+                            const hasMatchingCity = cityOptions.some(
+                              (item) => item.value.toLowerCase() === normalizedValue.toLowerCase(),
+                            );
+
+                            if (normalizedValue && !hasMatchingCity) {
+                              setIsCityUnavailable(true);
+                              field.handleChange(value);
+                              return;
+                            }
+
+                            if (hasMatchingCity) {
+                              const matchedCity = cityOptions.find(
+                                (item) => item.value.toLowerCase() === normalizedValue.toLowerCase(),
+                              );
+
+                              if (matchedCity) {
+                                field.handleChange(matchedCity.value);
+                              }
+                              setIsCityUnavailable(false);
+                              return;
+                            }
+
+                            field.handleChange(value);
                           }}
                           itemToStringLabel={(item) => item.label}
                           itemToStringValue={(item) => item.value}
                         >
-                          <ComboboxInput id='doctor-city' placeholder='Search city' showClear />
+                          <ComboboxInput
+                            id='doctor-city'
+                            placeholder='Search city'
+                            showClear
+                            autoComplete='new-password'
+                            spellCheck={false}
+                          />
                           <ComboboxContent>
                             <ComboboxEmpty>No city found. Turn on "New" to type a new city.</ComboboxEmpty>
                             <ComboboxList>
