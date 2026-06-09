@@ -1,17 +1,20 @@
 **Ideation Phase**  
 **Define the Problem Statements**
 
-| Date | 04 May 2026 |
+| Date | 02 May 2026 |
 | :---- | :---- |
 | Team ID | dianerdiana.de@gmail.com |
-| Project Name | SEHATMURAH \- Doctor Appointment |
+| Project Name | SEHATMURAH - Doctor Appointment |
 | Maximum Marks | 2 Marks |
 
-# **Define Problem Statements Table**
+# **Define Problem Statements**
 
-| Problem Statement (PS) | I am (Customer/Stakeholder) | I’m trying to | But | Because | Which makes me feel |
+| Problem Statement | I am | I'm trying to | But | Because | Which makes me feel |
 | ----- | ----- | ----- | ----- | ----- | ----- |
-| **PS-1: The Patient** | An active healthcare patient in Indonesia who needs a routine checkup or specialized consultation with a trusted family doctor. | Browse verified doctors, filter by availability or specialty, and select a convenient time slot (with secure medical history and lab result uploads planned as a future improvement). | I encounter long, unpredictable queue times at clinics, struggle to verify doctor licensing, and have no easy way to coordinate appointment schedules (sharing and viewing medical documents securely is planned for a future release). | The current scheduling system is completely manual and lacks verification checks (an integrated electronic document pipeline is deferred to a future phase). | Anxious about doctor credentials, frustrated by waiting, and overwhelmed by managing scattered physical medical records. |
-| **PS-2: The Doctor** | A licensed healthcare professional managing a busy practice and coordinating multiple clinical consultation sessions. | Keep my practice schedule organized and update my slot availability (reviewing patient-uploaded medical documents beforehand is planned as a future improvement). | Patients frequently miss slots due to lack of reminders, scheduling conflicts occur, and I cannot access patient records before the actual checkup begins. | There is no unified scheduling calendar that links my real-time availability with the booking system. | Stressed, disorganized, and worried that the lack of patient history will compromise the quality of my diagnosis. |
-| **PS-3: The Admin** | A platform administrator responsible for governing the platform, verifying credentials, and maintaining system compliance. | Onboard new doctors, verify their STR/SIP medical licensing, manage platform policies, and resolve booking system conflicts efficiently. | The verification process is completely manual and highly vulnerable to human error, risking legal liability and potential platform security breaches. | The administration dashboard lacks automated approval pipelines, audit logging, and centralized role-based access control (RBAC). | Vulnerable to compliance risks, highly inefficient, and anxious about platform security and credential integrity. |
+| **PS-1: The Patient** | A patient who needs a quick, trusted way to find and book a doctor. | Search verified doctors by specialty, location, and availability, then book a convenient appointment. | I usually face long queues, uncertain schedules, and unclear doctor credentials. | The existing process is fragmented and mostly manual. | Frustrated, unsure, and tired of wasting time. |
+| **PS-2: The Doctor** | A doctor who manages a busy practice. | Keep my profile accurate, manage my schedule, and handle incoming appointments in one place. | I often have to coordinate appointments manually and it is easy to lose track of availability. | There is no single dashboard that connects my practice details and appointment flow. | Stressed, overloaded, and worried about missed bookings. |
+| **PS-3: The Admin** | A platform administrator responsible for platform quality and trust. | Approve doctor accounts, manage users, moderate content, and maintain platform order. | Verification and user administration can become slow and error-prone when handled manually. | The platform needs centralized governance and role-based controls. | Cautious, responsible, and under pressure to keep the platform reliable. |
 
+## Problem Summary
+
+The main problem is that patients still struggle to find reliable healthcare providers, while doctors and administrators lack a simple system to coordinate schedules, approval flows, and platform governance. SehatMurah addresses this gap by combining search, booking, profile management, and administrative control in one web application.
