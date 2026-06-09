@@ -2,8 +2,11 @@
   - [Overview](README.md)
   - API Specification
     - [Auth](./api-spec/auth.md)
+    - [Health](./api-spec/health.md)
+    - [Dashboard](./api-spec/dashboard.md)
     - [Specialists](./api-spec/specialists.md)
     - [Doctors](./api-spec/doctors.md)
     - [Patients](./api-spec/patients.md)
     - [Appointments](./api-spec/appointments.md)
     - [Reviews](./api-spec/reviews.md)
+    - [Users](./api-spec/users.md)
